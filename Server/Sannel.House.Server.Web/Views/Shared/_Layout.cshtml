@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title></title>
+	@Styles.Render("~/Css/Main")
+	@Scripts.Render("~/Scripts/modernizr")
+</head>
+<body>
+	@RenderBody()
+	@Scripts.Render("~/Scripts/Main")
+	@RenderSection("scripts", false)
+</body>
+</html>

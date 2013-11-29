@@ -1,0 +1,43 @@
+﻿<ul data-bind="foreach: folders">
+	<li data-bind="text: $data,
+					css: { selected: $data == $root.chosenFolderId() },
+				   click: $root.goToFolder"></li>
+</ul>
+<fieldset id="RegisterUser">
+	<legend>New User</legend>
+	<div>
+		<label
+	</div>
+</fieldset>
+<div id="RegisterUser">
+	<fieldset>
+		<le
+		<label></label>
+	</fieldset>
+</div>
+
+@section scripts
+{
+	<script type="text/javascript">
+		/// <reference path="../../Scripts/knockout-3.0.0.js" />
+		function GlobalViewModel()
+		{
+			var self = this;
+			self.folders = ['Index', 'Register'];
+			self.chosenFolderId = ko.observable();
+
+			// Behaviours
+			self.loadSection = function (section)
+			{
+				if (section == 'Register')
+				{
+
+				}
+			};
+		}
+
+		var gvm = new GlobalViewModel();
+
+		ko.applyBindings(gvm);
+	</script>
+}

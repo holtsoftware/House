@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Web", "Sannel.House.Server.Web\Sannel.House.Server.Web.csproj", "{30539FFE-1873-4D70-AE20-8E18AA708AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Web.Tests", "Sannel.House.Server.Web.Tests\Sannel.House.Server.Web.Tests.csproj", "{3150DD8F-A3D2-4F96-BBCD-1673E903F563}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Interfaces", "Sannel.House.Server.Interfaces\Sannel.House.Server.Interfaces.csproj", "{DD451393-F59F-426F-827F-91EC910A9AA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8506E96C-DBAA-4C30-AF8A-855160623C2D}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Data", "Sannel.House.Server.Data\Sannel.House.Server.Data.csproj", "{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30539FFE-1873-4D70-AE20-8E18AA708AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30539FFE-1873-4D70-AE20-8E18AA708AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30539FFE-1873-4D70-AE20-8E18AA708AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30539FFE-1873-4D70-AE20-8E18AA708AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3150DD8F-A3D2-4F96-BBCD-1673E903F563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3150DD8F-A3D2-4F96-BBCD-1673E903F563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3150DD8F-A3D2-4F96-BBCD-1673E903F563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3150DD8F-A3D2-4F96-BBCD-1673E903F563}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD451393-F59F-426F-827F-91EC910A9AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD451393-F59F-426F-827F-91EC910A9AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD451393-F59F-426F-827F-91EC910A9AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD451393-F59F-426F-827F-91EC910A9AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
