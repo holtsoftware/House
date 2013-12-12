@@ -1,0 +1,78 @@
+﻿<fieldset id="Login" data-bind="with: loginUser, css: { loading: loginUser().IsLoading() }">
+	<legend>Login</legend>
+	<div data-field="Username">
+		<label>Username</label>
+		<input type="text" name="LoginUsername" data-bind="value: Username" />
+		<div class="errorMessage">
+			<div></div>
+			Invalid username and password.
+		</div>
+	</div>
+	<div data-field="Password">
+		<label>Password</label>
+		<input type="password" name="LoginPassword" data-bind="value: Password" />
+	</div>
+	<div>
+		<label></label>
+		<input type="button" data-bind="click: LoginAction" value="Login" />
+		<input type="button" data-bind="click: RegisterAction" value="Register" />
+	</div>
+	<div class="loading">
+		<img src="@Url.Content("~/Images/Loading.gif")" alt="Loading Image" />
+	</div>
+</fieldset>
+<fieldset id="RegisterUser" data-bind="with: registeredUser, css: { loading: registeredUser().IsLoading() }">
+	<legend>New User</legend>
+	<div data-field="Username">
+		<label for="RegisterUsername">Username</label>
+		<input type="text" name="RegisterUsername" data-bind="value: Username" />
+		<div class="errorMessage">
+			<div></div>
+			Username is required and must be at least 3 characters long but no longer then 256 charaters.
+		</div>
+		<div class="errorMessage2">
+			<div></div>
+			The username <span data-bind="text: Username"></span> already exists.
+		</div>
+	</div>
+	<div data-field="DisplayName">
+		<label for="RegisterDisplayName">Display Name</label>
+		<input type="text" name="RegisterDisplayName" data-bind="value: DisplayName" />
+		<div class="errorMessage">
+			<div></div>
+			Display Name is required and must be at least 3 characters long but no longer then 256 characters.
+		</div>
+	</div>
+	<div data-field="EmailAddress">
+		<label for="RegisterEmailAddress">Email Address</label>
+		<input type="email" name="RegisterEmailAddress" data-bind="value: EmailAddress" />
+		<div class="errorMessage">
+			<div></div>
+			Invalid Email Address.
+		</div>
+	</div>
+	<div data-field="Password">
+		<label>Password</label>
+		<input type="password" name="RegisterPassword" data-bind="value: Password" />
+		<div class="errorMessage">
+			<div></div>
+			Password must be 4 characters long and cannot exceed 500 characters.
+		</div>
+	</div>
+	<div data-field="ConfirmPassword">
+		<label>Confirm Password</label>
+		<input type="password" name="RegisterConfirmPassword" data-bind="value: ConfirmPassword" />
+		<div class="errorMessage">
+			<div></div>
+			Password and Confirm Password do not match.
+		</div>
+	</div>
+	<div>
+		<label></label>
+		<input type="button" data-bind="click: AddUser" value="Add User" />
+		<input type="button" data-bind="click: Login" value="Login" />
+	</div>
+	<div class="loading">
+		<img src="@Url.Content("~/Images/Loading.gif")" alt="Loading Image" />
+	</div>
+</fieldset>

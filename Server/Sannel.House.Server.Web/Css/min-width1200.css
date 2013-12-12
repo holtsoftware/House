@@ -1,0 +1,21 @@
+﻿@media screen and (min-width: 1200px) {
+  fieldset .hasError .errorMessage,
+  fieldset .hasError2 .errorMessage2 {
+    position: absolute;
+    left: 487px;
+    top: -6px;
+    right: 9px;
+    width: auto;
+    padding: 3px 12px;
+  }
+  fieldset .hasError .errorMessage div,
+  fieldset .hasError2 .errorMessage2 div {
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    margin-top: 0;
+    top: 4px;
+    margin-left: -18px;
+  }
+}

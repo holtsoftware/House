@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Data", "Sannel.House.Server.Data\Sannel.House.Server.Data.csproj", "{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Mocks", "Sannel.House.Server.Mocks\Sannel.House.Server.Mocks.csproj", "{10D3DBDA-4A94-4B51-9C5E-790F56498FFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Server.Tests", "Sannel.House.Server.Tests\Sannel.House.Server.Tests.csproj", "{4967CB12-E7FF-48AB-A622-99DE5FAE3355}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +45,14 @@ Global
 		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7102BD05-BC3E-429A-8C3A-2A338B21CE0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D3DBDA-4A94-4B51-9C5E-790F56498FFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D3DBDA-4A94-4B51-9C5E-790F56498FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D3DBDA-4A94-4B51-9C5E-790F56498FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D3DBDA-4A94-4B51-9C5E-790F56498FFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4967CB12-E7FF-48AB-A622-99DE5FAE3355}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4967CB12-E7FF-48AB-A622-99DE5FAE3355}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4967CB12-E7FF-48AB-A622-99DE5FAE3355}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4967CB12-E7FF-48AB-A622-99DE5FAE3355}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

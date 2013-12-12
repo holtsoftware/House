@@ -32,6 +32,12 @@ namespace Sannel.House.Server.Interfaces
 			set;
 		}
 
+		String Color
+		{
+			get;
+			set;
+		}
+
 		ICollection<ICircuit> Circuits
 		{
 			get;

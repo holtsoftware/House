@@ -13,6 +13,11 @@ namespace Sannel.House.Server.Interfaces
 			get;
 		}
 
+		IEnumerable<ICircuit> Circuits
+		{
+			get;
+		}
+
 		void AddRoom(IRoom room);
 
 		void SaveChanges();

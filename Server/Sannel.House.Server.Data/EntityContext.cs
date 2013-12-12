@@ -16,13 +16,39 @@ namespace Sannel.House.Server.Data
 		public DbSet<Device> Devices { get; set; }
 		public DbSet<Temperature> Temperatures { get; set; }
 
+		public EntityContext() : base("DefaultConnection")
+		{
+
+		}
+
 		IEnumerable<IRoom> IDataContext.Rooms
 		{
 			get { return this.Rooms; }
 		}
 
+		IEnumerable<ICircuit> IDataContext.Circuits
+		{
+			get
+			{
+				return this.Circuits;
+			}
+		}
+
 		public void AddRoom(IRoom room)
 		{
+			var eroom = room as Room;
+			if(eroom != null)
+			{
+				room.RoomId = Guid.NewGuid();
+			}
+			else
+			{
+				eroom = new Room();
+				room.CopyTo(eroom);
+				eroom.RoomId = Guid.NewGuid();
+			}
+
+			Rooms.Add(eroom);
 		}
 
 		void IDataContext.SaveChanges()

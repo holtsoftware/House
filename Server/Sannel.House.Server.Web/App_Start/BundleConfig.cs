@@ -25,16 +25,24 @@ namespace Sannel.House.Server.Web.App_Start
 	{
 		public static void RegisterBundles(BundleCollection bundles)
 		{
-			bundles.Add(new ScriptBundle("~/Scripts/Main")
+			bundles.Add(new ScriptBundle("~/Scripts/Libraries")
 				.Include("~/Scripts/jquery-2.0.3.js",
 				"~/Scripts/knockout-3.0.0.js",
+				"~/Scripts/jquery.signalR-2.0.0.js"));
+			bundles.Add(new ScriptBundle("~/Scripts/Main")
+				.Include("~/Scripts/Account.js",
+				"~/Scripts/Room.js",
 				"~/Scripts/Site.js"));
 
 			bundles.Add(new ScriptBundle("~/Scripts/modernizr")
 				.Include("~/modernizr-*"));
 
 			bundles.Add(new StyleBundle("~/Css/Main")
-				.Include("~/Css/Site.css"));
+				.Include("~/Css/Animation.css",
+				"~/Css/Site.css",
+				"~/Css/min-width500.css",
+				"~/Css/min-width700.css",
+				"~/Css/min-width1200.css"));
 		}
 	}
 }

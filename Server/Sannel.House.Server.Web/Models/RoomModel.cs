@@ -2,17 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace Sannel.House.Server.Data
+namespace Sannel.House.Server.Web.Models
 {
-	[Table("Rooms")]
-	public class Room : IRoom
+	public class RoomModel : IRoom
 	{
-		[Key]
 		public Guid RoomId
 		{
 			get;
@@ -46,11 +42,15 @@ namespace Sannel.House.Server.Data
 			set;
 		}
 
-		private ICollection<ICircuit> circuits;
+		public int CircitCount
+		{
+			get;
+			set;
+		}
 
 		public ICollection<ICircuit> Circuits
 		{
-			get { return circuits ?? (circuits = new List<ICircuit>()); }
+			get { return null; }
 		}
 	}
 }

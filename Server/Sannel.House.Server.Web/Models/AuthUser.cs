@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Sannel.House.Server.Web.Models
 {
-	public class RegisterUser
+	public class AuthUser
 	{
 		[Required]
 		[StringLength(256, MinimumLength = 3)]
@@ -35,6 +35,18 @@ namespace Sannel.House.Server.Web.Models
 
 		[Required]
 		public String Password
+		{
+			get;
+			set;
+		}
+
+		public bool IsAllowed
+		{
+			get;
+			set;
+		}
+
+		public bool IsAdmin
 		{
 			get;
 			set;

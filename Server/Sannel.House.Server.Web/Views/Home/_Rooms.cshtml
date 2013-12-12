@@ -1,0 +1,100 @@
+﻿<fieldset id="Rooms" data-bind="with: rooms">
+	<legend>Rooms</legend>
+	<input type="button" value="Add Room" data-bind="click: OpenAddRoomAction" />
+	<div id="AddRoomPopup" class="popup" data-bind="with: CurrentRoom">
+		<div data-field="Name">
+			<label>Name</label>
+			<input type="text" name="AddRoomName" data-bind="value: Name" />
+			<div class="errorMessage">
+				<div></div>
+				Name must be between 1 and 256 characters.
+			</div>
+		</div>
+		<div data-field="Description">
+			<label>Description</label>
+			<textarea name="AddRoomDescription" rows="4" data-bind="value: Description"></textarea>
+		</div>
+		<div data-field="Color">
+			<label for="AddRoomColor">Color</label>
+			<input id="AddRoomColor" name="AddRoomColor" type="hidden" data-bind="value: Color" />
+			<div class="dropdown" data-hidden-input="AddRoomColor">
+				<div class="selected" data-value="blue">
+					<span></span> Blue
+				</div>
+				<div class="options">
+					<div data-value="blue">
+						<span></span> Blue
+					</div>
+					<div data-value="red">
+						<span></span> Red
+					</div>
+					<div data-value="green">
+						<span></span> Green
+					</div>
+					<div data-value="orange">
+						<span></span> Orange
+					</div>
+					<div data-value="blueViolet">
+						<span></span> Blue Violet
+					</div>
+					<div data-value="darkCyan">
+						<span></span> Dark Cyan
+					</div>
+					<div data-value="darkGray">
+						<span></span> Dark Gray
+					</div>
+					<div data-value="darkMagenta">
+						<span></span> Dark Magenta
+					</div>
+					<div data-value="darkOrange">
+						<span></span> Dark Orange
+					</div>
+					<div data-value="indigo">
+						<span></span> Indigo
+					</div>
+					<div data-value="sienna">
+						<span></span> Sienna
+					</div>
+					<div data-value="steelBlue">
+						<span></span> Steel Blue
+					</div>
+					<div data-value="tomato">
+						<span></span> Tomato
+					</div>
+				</div>
+			</div>
+			<!--select name="AddRoomColor" data-bind="value: Color">
+				<option value="" style="color: #0030a7">Blue</option>
+				<option value="red">Red</option>
+				<option value="green">Green</option>
+				<option value="orange">Orange</option>
+			</select-->
+			<div class="errorMessage">
+				<div></div>
+				Color cannot be over 24 characters.
+			</div>
+		</div>
+		<div>
+			<label></label>
+			<input type="button" value="Add Room" data-bind="click: AddAction" />
+			<input type="button" value="Close" data-bind="click: $root.closePopup" />
+		</div>
+	</div>
+	<div data-bind="foreach: Rooms" class="roomsContainer">
+		<div data-bind="css: Color">
+			<div class="front">
+				<div data-bind="text: Name"></div>
+				<div data-bind="text: Description"></div>
+				<div>
+					Circuits <span data-bind="text: CircitCount"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clear">
+
+	</div>
+	<div class="loading">
+		<img src="@Url.Content("~/Images/Loading.gif")" alt="Loading Image" />
+	</div>
+</fieldset>
