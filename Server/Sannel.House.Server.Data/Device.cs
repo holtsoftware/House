@@ -60,11 +60,5 @@ namespace Sannel.House.Server.Data
 			get;
 			set;
 		}
-
-		public long State
-		{
-			get;
-			set;
-		}
 	}
 }

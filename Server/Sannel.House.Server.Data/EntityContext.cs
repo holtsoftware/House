@@ -14,13 +14,12 @@ namespace Sannel.House.Server.Data
 		public DbSet<Room> Rooms { get; set; }
 		public DbSet<Circuit> Circuits { get; set; }
 		public DbSet<Device> Devices { get; set; }
-		public DbSet<Temperature> Temperatures { get; set; }
 
 		public EntityContext() : base("DefaultConnection")
 		{
 
 		}
-
+		
 		IEnumerable<IRoom> IDataContext.Rooms
 		{
 			get { return this.Rooms; }

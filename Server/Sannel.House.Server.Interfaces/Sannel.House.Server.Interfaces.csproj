@@ -45,7 +45,6 @@
     <Compile Include="IDataContext.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="IRoom.cs" />
-    <Compile Include="ITemperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

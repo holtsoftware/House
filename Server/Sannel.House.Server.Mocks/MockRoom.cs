@@ -39,5 +39,12 @@ namespace Sannel.House.Server.Mocks
 		{
 			get { return circuits; }
 		}
+
+
+		public string Color
+		{
+			get;
+			set;
+		}
 	}
 }

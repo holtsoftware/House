@@ -42,11 +42,5 @@ namespace Sannel.House.Server.Interfaces
 			get;
 			set;
 		}
-
-		long State
-		{
-			get;
-			set;
-		}
 	}
 }
