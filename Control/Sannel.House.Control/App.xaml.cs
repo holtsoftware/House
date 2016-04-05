@@ -13,10 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 using Caliburn.Micro;
+using Sannel.House.Control.Data;
 using Sannel.House.Control.ViewModels;
 using Sannel.House.Control.Views;
 using System;
 using System.Collections.Generic;
+using Microsoft.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -51,6 +53,10 @@ namespace Sannel.House.Control
 				Microsoft.ApplicationInsights.WindowsCollectors.Session);
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
+            using (Context context = new Context())
+            {
+                context.Database.Migrate();
+            }
 		}
 
 		protected override void Configure()

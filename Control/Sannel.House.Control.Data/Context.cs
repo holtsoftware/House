@@ -11,6 +11,7 @@ namespace Sannel.House.Control.Data
 	public class Context : DbContext
 	{
 		public DbSet<Temperature> TemperatureLog { get; set; }
+		public DbSet<CurrentWeather> CurrentWeather { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

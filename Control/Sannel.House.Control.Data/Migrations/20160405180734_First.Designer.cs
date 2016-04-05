@@ -8,9 +8,10 @@ using Sannel.House.Control.Data;
 namespace Sannel.House.Control.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20160405180734_First")]
+    partial class First
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
@@ -21,8 +22,6 @@ namespace Sannel.House.Control.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate");
-
-                    b.Property<string>("IconUrl");
 
                     b.Property<long>("LocalEpoch");
 

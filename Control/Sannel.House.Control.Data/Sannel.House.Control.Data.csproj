@@ -108,11 +108,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
-    <Compile Include="Migrations\20160403195946_FirstMigration.cs" />
-    <Compile Include="Migrations\20160403195946_FirstMigration.designer.cs">
-      <DependentUpon>20160403195946_FirstMigration.cs</DependentUpon>
+    <Compile Include="Migrations\20160405180734_First.cs" />
+    <Compile Include="Migrations\20160405180734_First.designer.cs">
+      <DependentUpon>20160405180734_First.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20160405184412_AddedIconUrl.cs" />
+    <Compile Include="Migrations\20160405184412_AddedIconUrl.designer.cs">
+      <DependentUpon>20160405184412_AddedIconUrl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\ContextModelSnapshot.cs" />
+    <Compile Include="Models\CurrentWeather.cs" />
     <Compile Include="Models\Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Control.Data.rd.xml" />
