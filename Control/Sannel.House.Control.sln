@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Control", "Sannel.House.Control\Sannel.House.Control.csproj", "{A9B4A815-D3F7-458C-B7A3-445F6CE41E4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Control.Business", "Sannel.House.Control.Business\Sannel.House.Control.Business.csproj", "{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Control.Data", "Sannel.House.Control.Data\Sannel.House.Control.Data.csproj", "{DC34708A-DA63-4576-9565-A3B501D6F053}"
 EndProject
 Global
@@ -41,22 +39,6 @@ Global
 		{A9B4A815-D3F7-458C-B7A3-445F6CE41E4E}.Release|x86.ActiveCfg = Release|x86
 		{A9B4A815-D3F7-458C-B7A3-445F6CE41E4E}.Release|x86.Build.0 = Release|x86
 		{A9B4A815-D3F7-458C-B7A3-445F6CE41E4E}.Release|x86.Deploy.0 = Release|x86
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|ARM.ActiveCfg = Debug|ARM
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|ARM.Build.0 = Debug|ARM
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|x64.ActiveCfg = Debug|x64
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|x64.Build.0 = Debug|x64
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|x86.ActiveCfg = Debug|x86
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Debug|x86.Build.0 = Debug|x86
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|ARM.ActiveCfg = Release|ARM
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|ARM.Build.0 = Release|ARM
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|x64.ActiveCfg = Release|x64
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|x64.Build.0 = Release|x64
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|x86.ActiveCfg = Release|x86
-		{56EF2CCA-6B7A-4A87-AA5F-CB6AB239364D}.Release|x86.Build.0 = Release|x86
 		{DC34708A-DA63-4576-9565-A3B501D6F053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC34708A-DA63-4576-9565-A3B501D6F053}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC34708A-DA63-4576-9565-A3B501D6F053}.Debug|ARM.ActiveCfg = Debug|ARM
