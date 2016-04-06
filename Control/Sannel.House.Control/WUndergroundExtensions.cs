@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sannel.House.Control.Data.Models;
 using Sannel.House.Control.Models;
+using Sannel.House.Control.Models.WUnderground;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,20 @@ namespace Sannel.House.Control
 			}
 
 			return null;
+		}
+
+		public static async Task<Hourly10Day> GetHourly10Day(this HttpClient client)
+		{
+			var set = AppSettings.Current;
+			var result = await client.GetStringAsync(new Uri($"http://api.wunderground.com/api/{set.WUndergroundApiKey}/hourly10day/q/{set.WUndergroundState}/{set.WUndergroundCity}.json"));
+			try
+			{
+				return JsonConvert.DeserializeObject<Hourly10Day>(result);
+			}
+			catch
+			{
+				return null;
+			}
 		}
 	}
 }

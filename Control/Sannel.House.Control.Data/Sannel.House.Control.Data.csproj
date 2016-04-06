@@ -108,19 +108,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
-    <Compile Include="Migrations\20160405180734_First.cs" />
-    <Compile Include="Migrations\20160405180734_First.designer.cs">
-      <DependentUpon>20160405180734_First.cs</DependentUpon>
+    <Compile Include="Migrations\20160406025401_First.cs" />
+    <Compile Include="Migrations\20160406025401_First.designer.cs">
+      <DependentUpon>20160406025401_First.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20160405184412_AddedIconUrl.cs" />
-    <Compile Include="Migrations\20160405184412_AddedIconUrl.designer.cs">
-      <DependentUpon>20160405184412_AddedIconUrl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20160406005238_FilledoutCurrentWeather.cs" />
-    <Compile Include="Migrations\20160406005238_FilledoutCurrentWeather.designer.cs">
-      <DependentUpon>20160406005238_FilledoutCurrentWeather.cs</DependentUpon>
+    <Compile Include="Migrations\20160406054330_AddedHourlyWeather.cs" />
+    <Compile Include="Migrations\20160406054330_AddedHourlyWeather.designer.cs">
+      <DependentUpon>20160406054330_AddedHourlyWeather.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\ContextModelSnapshot.cs" />
+    <Compile Include="Models\HourlyWeather.cs" />
     <Compile Include="Models\CurrentWeather.cs" />
     <Compile Include="Models\Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

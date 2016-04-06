@@ -48,6 +48,7 @@ namespace Sannel.House.Control.ViewModels
 			base.OnInitialize();
 			TimerViewModel.Current.Tick += updateTime;
 			HomeAction();
+			updateTime();
 		}
 
 		private void updateTime()

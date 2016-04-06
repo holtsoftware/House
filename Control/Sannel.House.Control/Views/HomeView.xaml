@@ -12,6 +12,20 @@
             <Image x:Name="IconUrl" Width="50" Height="50" HorizontalAlignment="Left" />
             <TextBlock x:Name="Weather" />
             <TextBlock x:Name="TemperatureF" />
+            <ListView x:Name="HourlyWeather">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="25" Height="25" Source="{Binding IconUrl}" />
+                            <StackPanel>
+                                <TextBlock Text="{Binding FriendlyHour}" />
+                                <TextBlock Text="{Binding Condition}" />
+                                <TextBlock Text="{Binding TempF}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
     </Grid>
 </Page>

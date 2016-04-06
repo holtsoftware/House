@@ -107,6 +107,74 @@ namespace Sannel.House.Control.Data.Migrations
                     b.HasKey("Id");
                 });
 
+            modelBuilder.Entity("Sannel.House.Control.Data.Models.HourlyWeather", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Condition");
+
+                    b.Property<string>("DewPointC");
+
+                    b.Property<string>("DewPointF");
+
+                    b.Property<string>("FeelsLikeC");
+
+                    b.Property<string>("FeelsLikeF");
+
+                    b.Property<string>("HeatIndexC");
+
+                    b.Property<string>("HeatIndexF");
+
+                    b.Property<DateTime>("Hour");
+
+                    b.Property<string>("Humidity");
+
+                    b.Property<string>("Icon");
+
+                    b.Property<string>("IconUrl");
+
+                    b.Property<string>("MSLPInches");
+
+                    b.Property<string>("MSLPMetric");
+
+                    b.Property<string>("POP");
+
+                    b.Property<string>("QPFInches");
+
+                    b.Property<string>("QPFMetric");
+
+                    b.Property<string>("Sky");
+
+                    b.Property<string>("SnowInches");
+
+                    b.Property<string>("SnowMetric");
+
+                    b.Property<string>("TempC");
+
+                    b.Property<string>("TempF");
+
+                    b.Property<string>("UVI");
+
+                    b.Property<string>("WX");
+
+                    b.Property<string>("WindChillC");
+
+                    b.Property<string>("WindChillF");
+
+                    b.Property<string>("WindDirection");
+
+                    b.Property<string>("WindDirectionDegrees");
+
+                    b.Property<string>("WindSpeedKPH");
+
+                    b.Property<string>("WindSpeedMPH");
+
+                    b.Property<string>("fctcode");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Sannel.House.Control.Data.Models.Temperature", b =>
                 {
                     b.Property<long>("Id")

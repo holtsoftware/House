@@ -13,6 +13,8 @@ namespace Sannel.House.Control.Data
 		public DbSet<Temperature> TemperatureLog { get; set; }
 		public DbSet<CurrentWeather> CurrentWeather { get; set; }
 
+		public DbSet<HourlyWeather> HourlyWeather { get; set; }
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			optionsBuilder.UseSqlite("Filename=Control.db");
@@ -24,6 +26,8 @@ namespace Sannel.House.Control.Data
 				temp.Property(i => i.Id)
 				.IsRequired();
 			temp.Property(i => i.Value).IsRequired();
+
+			modelBuilder.Entity<HourlyWeather>().Ignore(i => i.FriendlyHour);
 		}
 	}
 }
