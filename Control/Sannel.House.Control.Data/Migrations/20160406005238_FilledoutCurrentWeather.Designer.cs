@@ -8,9 +8,10 @@ using Sannel.House.Control.Data;
 namespace Sannel.House.Control.Data.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20160406005238_FilledoutCurrentWeather")]
+    partial class FilledoutCurrentWeather
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");

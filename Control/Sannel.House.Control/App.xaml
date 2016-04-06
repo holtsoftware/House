@@ -19,7 +19,6 @@ limitations under the License.
 	xmlns:cm="using:Caliburn.Micro"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:Sannel.House.Control"
-	xmlns:vm="using:Sannel.House.Control.Business.ViewModels"
-	RequestedTheme="Light">
+	RequestedTheme="Dark">
 
 </cm:CaliburnApplication>

@@ -26,104 +26,34 @@ namespace Sannel.House.Control.Models
 
 		private void firePropertyChanged(String property)
 		{
-			if (PropertyChanged != null)
-			{
-				lock (PropertyChanged)
-				{
-					PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(property));
-				}
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
 		}
 
-		private void setBoolean(bool value, [CallerMemberName]String key = null)
+		private void set<T>(T value, [CallerMemberName]String key = null)
 		{
 			settings.Values[key] = value;
 			firePropertyChanged(key);
 		}
 
-		private bool getBoolean([CallerMemberName]String key = null, bool def = false)
+		private T get<T>([CallerMemberName]String key = null, T def = default(T))
 		{
-			bool? b = settings.Values[key] as bool?;
-			if (b.HasValue)
+			Object v = settings.Values[key];
+			if(v is T)
 			{
-				return b.Value;
+				return (T)v;
 			}
-
-			settings.Values[key] = def;
-
 			return def;
-		}
-
-		private int getInt([CallerMemberName]String key = null, int def = 0)
-		{
-			int? b = settings.Values[key] as int?;
-			if (b.HasValue)
-			{
-				return b.Value;
-			}
-
-			settings.Values[key] = def;
-
-			return def;
-		}
-
-		private void setInt(int value, [CallerMemberName]String key = null)
-		{
-			settings.Values[key] = value;
-			firePropertyChanged(key);
-		}
-
-		private long getLong([CallerMemberName]String key = null, long def = 0)
-		{
-			long? b = settings.Values[key] as long?;
-			if (b.HasValue)
-			{
-				return b.Value;
-			}
-
-			settings.Values[key] = def;
-
-			return def;
-		}
-
-		private void setLong(long value, [CallerMemberName]String key = null)
-		{
-			settings.Values[key] = value;
-			firePropertyChanged(key);
-		}
-
-		private String getString([CallerMemberName]String key = null, String def = null)
-		{
-			String s = settings.Values[key] as String;
-			if (s != null)
-			{
-				return s;
-			}
-
-			return def;
-		}
-
-		private void setString(String value, [CallerMemberName]String key = null)
-		{
-			if (value == null)
-			{
-				settings.Values[key] = null;
-			}
-			else
-			{
-				settings.Values[key] = value;
-			}
 		}
 
 		public String Username
 		{
 			get
 			{
-				return getString();
+				return get<String>();
 			}
 			set
 			{
-				setString(value);
+				set<String>(value);
 			}
 		}
 
@@ -173,23 +103,11 @@ namespace Sannel.House.Control.Models
 		{
 			get
 			{
-				return getString();
+				return get<String>();
 			}
 			set
 			{
-				setString(value);
-			}
-		}
-
-		public bool AutoLogin
-		{
-			get
-			{
-				return getBoolean();
-			}
-			set
-			{
-				setBoolean(value);
+				set<String>(value);
 			}
 		}
 
@@ -197,11 +115,11 @@ namespace Sannel.House.Control.Models
 		{
 			get
 			{
-				return getString();
+				return get<String>();
 			}
-			internal set
+			set
 			{
-				setString(value);
+				set<String>(value);
 			}
 		}
 
@@ -209,11 +127,11 @@ namespace Sannel.House.Control.Models
 		{
 			get
 			{
-				return getString();
+				return get<String>();
 			}
-			internal set
+			set
 			{
-				setString(value);
+				set<String>(value);
 			}
 		}
 	}

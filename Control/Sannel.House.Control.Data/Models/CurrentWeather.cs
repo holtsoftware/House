@@ -33,8 +33,6 @@ namespace Sannel.House.Control.Data.Models
 		public String LocalTimeZoneOffset { get; set; }
 		[JsonProperty("weather")]
 		public String Weather { get; set; }
-		[JsonProperty("temperature_string")]
-		public String TemperatureString { get; set; }
 		[JsonProperty("temp_f")]
 		public float TemperatureF { get; set; }
 		[JsonProperty("temp_c")]
@@ -45,40 +43,62 @@ namespace Sannel.House.Control.Data.Models
 		public String WindString { get; set; }
 		[JsonProperty("icon_url")]
 		public String IconUrl { get; set; }
-		//"wind_dir":"SW",
-		//"wind_degrees":227,
-		//"wind_mph":2.7,
-		//"wind_gust_mph":"4.9",
-		//"wind_kph":4.3,
-		//"wind_gust_kph":"7.9",
-		//"pressure_mb":"1020",
-		//"pressure_in":"30.12",
-		//"pressure_trend":"-",
-		//"dewpoint_string":"30 F (-1 C)",
-		//"dewpoint_f":30,
-		//"dewpoint_c":-1,
-		//"heat_index_string":"NA",
-		//"heat_index_f":"NA",
-		//"heat_index_c":"NA",
-		//"windchill_string":"NA",
-		//"windchill_f":"NA",
-		//"windchill_c":"NA",
-		//"feelslike_string":"68.2 F (20.1 C)",
-		//"feelslike_f":"68.2",
-		//"feelslike_c":"20.1",
-		//"visibility_mi":"10.0",
-		//"visibility_km":"16.1",
-		//"solarradiation":"170",
-		//"UV":"1.0","precip_1hr_string":"0.00 in ( 0 mm)",
-		//"precip_1hr_in":"0.00",
-		//"precip_1hr_metric":" 0",
-		//"precip_today_string":"0.00 in (0 mm)",
-		//"precip_today_in":"0.00",
-		//"precip_today_metric":"0",
-		//"icon":"cloudy",
-		//"forecast_url":"http://www.wunderground.com/US/UT/West_Jordan.html",
-		//"history_url":"http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=KUTWESTJ25",
-		//"ob_url":"http://www.wunderground.com/cgi-bin/findweather/getForecast?query=40.614223,-111.962837",
-		//"nowcast":""
+		[JsonProperty("wind_dir")]
+		public String WindDirection { get; set; }
+		[JsonProperty("wind_degrees")]
+		public String WindDegrees { get; set; }
+		[JsonProperty("wind_mph")]
+		public String WindMPH { get; set; }
+
+		[JsonProperty("wind_gust_mph")]
+		public String WindGustMPH { get; set; }
+		[JsonProperty("wind_kph")]
+		public String WindKPH { get; set; }
+		[JsonProperty("wind_gust_kph")]
+		public String WindGustKPH { get; set; }
+		[JsonProperty("pressure_mb")]
+		public String PressureMB { get; set; }
+		[JsonProperty("pressure_in")]
+		public String PressureIN { get; set; }
+		[JsonProperty("pressure_trend")]
+		public String PressureTrend { get; set; }
+		[JsonProperty("dewpoint_f")]
+		public float DewPointF { get; set; }
+		[JsonProperty("dewpoint_c")]
+		public float DewPointC { get; set; }
+		[JsonProperty("heat_index_f")]
+		public String HeatIndexF { get; set; }
+		[JsonProperty("heat_index_c")]
+		public String HeatIndexC { get; set; }
+		[JsonProperty("windchill_f")]
+		public String WindChillF { get; set; }
+		[JsonProperty("windchill_c")]
+		public String WindChillC { get; set; }
+		[JsonProperty("feelslike_f")]
+		public String FeelsLikeF { get; set; }
+		[JsonProperty("feelslike_c")]
+		public String FeelsLikeC { get; set; }
+		[JsonProperty("visibility_mi")]
+		public String VisibilityMiles { get; set; }
+		[JsonProperty("visibility_km")]
+		public String VisibilityKilometer { get; set; }
+		[JsonProperty("solarradiation")]
+		public String SolarRadiation { get; set; }
+		[JsonProperty("UV")]
+		public String UV { get; set; }
+		[JsonProperty("precip_1hr_in")]
+		public String PrecipitationPerHourInches { get; set; }
+		[JsonProperty("precip_1hr_metric")]
+		public String PrecipitationPerHourMetric { get; set; }
+		[JsonProperty("precip_today_in")]
+		public String PrecipitationTodayInches { get; set; }
+		[JsonProperty("precip_today_metric")]
+		public String PrecipitationTodayMetric { get; set; }
+		[JsonProperty("icon")]
+		public String Icon { get; set; }
+		[JsonProperty("history_url")]
+		public String HistoryUrl { get; set; }
+		[JsonProperty("nowcast")]
+		public String NowCast { get; set; }
 	}
 }
