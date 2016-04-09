@@ -26,6 +26,6 @@
 			</StackPanel>
 			<AppBarButton x:Name="SettingsAction" Icon="Setting" IsCompact="True" />
 		</StackPanel>
-		<ContentControl x:Name="ActiveItem" Grid.ColumnSpan="2" Grid.Row="1" Margin="24,0" />
+		<Frame x:Name="ActiveItem" Grid.ColumnSpan="2" Grid.Row="1" Margin="24,0" />
 	</Grid>
 </Page>

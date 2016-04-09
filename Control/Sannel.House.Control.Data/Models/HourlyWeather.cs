@@ -13,13 +13,6 @@ namespace Sannel.House.Control.Data.Models
 		public Guid Id { get; set; } = Guid.NewGuid();
 
 		public DateTime Hour { get; set; }
-		public String FriendlyHour
-		{
-			get
-			{
-				return Hour.ToString("hh tt");
-			}
-		}
 		public String TempF { get; set; }
 		public String TempC { get; set; }
 		public String DewPointF { get; set; }

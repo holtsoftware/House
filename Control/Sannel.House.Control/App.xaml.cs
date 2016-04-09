@@ -33,6 +33,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Diagnostics;
 
 namespace Sannel.House.Control
 {
@@ -48,15 +49,28 @@ namespace Sannel.House.Control
 		/// </summary>
 		public App()
 		{
-			Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
-				Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
-				Microsoft.ApplicationInsights.WindowsCollectors.Session);
+#if CODE_ANALYSIS
+			//Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
+			//	Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
+			//	Microsoft.ApplicationInsights.WindowsCollectors.Session);
+#endif
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
-            using (Context context = new Context())
-            {
-                context.Database.Migrate();
-            }
+			this.UnhandledException += App_UnhandledException;
+			using (Context context = new Context())
+			{
+				context.Database.Migrate();
+			}
+		}
+
+		private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+#if DEBUG
+			if (Debugger.IsAttached)
+			{
+				Debugger.Break();
+			}
+#endif
 		}
 
 		protected override void Configure()

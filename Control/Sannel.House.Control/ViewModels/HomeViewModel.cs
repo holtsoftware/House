@@ -27,8 +27,7 @@ namespace Sannel.House.Control.ViewModels
 				{
 					var w = context.CurrentWeather.OrderByDescending(i => i.CreatedDate).FirstOrDefault();
 					updateCurrentConditions(w);
-					HourlyWeather = context.HourlyWeather.Where(i => i.Hour > DateTime.Now).OrderBy(i => i.Hour).Take(4).ToList();
-
+					HourlyWeather = context.HourlyWeather.Where(i => i.Hour > DateTime.Now).OrderBy(i => i.Hour).Take(4).ToList().Select(i => new HourlyItem(i)).ToList();
 				}
 			});
 		}
@@ -119,7 +118,7 @@ namespace Sannel.House.Control.ViewModels
 					}
 					context.SaveChanges();
 
-					HourlyWeather = context.HourlyWeather.Where(i => i.Hour > DateTime.Now).OrderBy(i => i.Hour).Take(4).ToList();
+					HourlyWeather = context.HourlyWeather.Where(i => i.Hour > DateTime.Now).OrderBy(i => i.Hour).Take(4).ToList().Select(i => new HourlyItem(i)).ToList();
 				}
 			}
 		}
@@ -213,7 +212,7 @@ namespace Sannel.House.Control.ViewModels
 		}
 
 
-		private IList<HourlyWeather> hourlyWeather;
+		private IList<HourlyItem> hourlyWeather;
 
 		/// <summary>
 		/// Gets or sets HourlyWeather.
@@ -221,7 +220,7 @@ namespace Sannel.House.Control.ViewModels
 		/// <value>
 		/// The HourlyWeather.
 		/// </value>
-		public IList<HourlyWeather> HourlyWeather
+		public IList<HourlyItem> HourlyWeather
 		{
 			get { return hourlyWeather; }
 			set

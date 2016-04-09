@@ -5,10 +5,14 @@ using Sannel.House.Control.Models;
 using Sannel.House.Control.Models.WUnderground;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Web.Http;
+using WinRTXamlToolkit.Async;
+using WinRTXamlToolkit.IO.Extensions;
 
 namespace Sannel.House.Control
 {
@@ -40,6 +44,44 @@ namespace Sannel.House.Control
 			{
 				return null;
 			}
+		}
+
+		private static AsyncLock iconCacheLock = new AsyncLock();
+
+		public static async Task<String> GetCachedIconAsync(this String url)
+		{
+			if(url == null)
+			{
+				return url;
+			}
+
+			Uri u = new Uri(url);
+			var path = u.GetComponents(UriComponents.Path, UriFormat.SafeUnescaped);
+			var folder = await ApplicationData.Current.LocalCacheFolder.CreateFolderAsync("WUndergroundIcons", CreationCollisionOption.OpenIfExists);
+			var fileName = Path.GetFileName(path);
+			if(!await folder.ContainsFileAsync(fileName))
+			{
+				using (await iconCacheLock.LockAsync())
+				{
+					if (!await folder.ContainsFileAsync(fileName))
+					{
+						UriBuilder builder = new UriBuilder(u);
+						builder.Path = $"/i/c/k/{fileName}";
+						using (var client = new HttpClient())
+						{
+							var iconStream = await client.GetBufferAsync(builder.Uri);
+							var fi = await folder.CreateFileAsync(fileName);
+							using (var fstream = await fi.OpenAsync(FileAccessMode.ReadWrite))
+							{
+								await fstream.WriteAsync(iconStream);
+							}
+						}
+					}
+				}
+			}
+
+			var file = await folder.GetFileAsync(fileName);
+			return file.Path;
 		}
 	}
 }
