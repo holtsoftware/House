@@ -104,6 +104,9 @@
     </Compile>
     <Compile Include="Models\AppSettings.cs" />
     <Compile Include="Models\HourlyItem.cs" />
+    <Compile Include="Models\WUnderground\Astronomy.cs" />
+    <Compile Include="Models\WUnderground\Conditions.cs" />
+    <Compile Include="Models\WUnderground\Hourly.cs" />
     <Compile Include="Models\WUnderground\Hourly10Day.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="ViewModels\SubViewModel.cs" />
     <Compile Include="ViewModels\TimerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\WeatherViewModel.cs" />
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -121,6 +125,9 @@
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WeatherView.xaml.cs">
+      <DependentUpon>WeatherView.xaml</DependentUpon>
     </Compile>
     <Compile Include="WUndergroundExtensions.cs" />
   </ItemGroup>
@@ -131,6 +138,80 @@
     <None Include="Sannel.House.Control_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icons\25\chanceflurries.gif" />
+    <Content Include="Assets\Icons\25\chancerain.gif" />
+    <Content Include="Assets\Icons\25\chancesleet.gif" />
+    <Content Include="Assets\Icons\25\chancesnow.gif" />
+    <Content Include="Assets\Icons\25\chancetstorms.gif" />
+    <Content Include="Assets\Icons\25\clear.gif" />
+    <Content Include="Assets\Icons\25\cloudy.gif" />
+    <Content Include="Assets\Icons\25\flurries.gif" />
+    <Content Include="Assets\Icons\25\fog.gif" />
+    <Content Include="Assets\Icons\25\hazy.gif" />
+    <Content Include="Assets\Icons\25\mostlycloudy.gif" />
+    <Content Include="Assets\Icons\25\mostlysunny.gif" />
+    <Content Include="Assets\Icons\25\nt_chanceflurries.gif" />
+    <Content Include="Assets\Icons\25\nt_chancerain.gif" />
+    <Content Include="Assets\Icons\25\nt_chancesleet.gif" />
+    <Content Include="Assets\Icons\25\nt_chancetstorms.gif" />
+    <Content Include="Assets\Icons\25\nt_clear.gif" />
+    <Content Include="Assets\Icons\25\nt_cloudy.gif" />
+    <Content Include="Assets\Icons\25\nt_flurries.gif" />
+    <Content Include="Assets\Icons\25\nt_fog.gif" />
+    <Content Include="Assets\Icons\25\nt_hazy.gif" />
+    <Content Include="Assets\Icons\25\nt_mostlycloudy.gif" />
+    <Content Include="Assets\Icons\25\nt_mostlysunny.gif" />
+    <Content Include="Assets\Icons\25\nt_partlycloudy.gif" />
+    <Content Include="Assets\Icons\25\nt_partlysunny.gif" />
+    <Content Include="Assets\Icons\25\nt_rain.gif" />
+    <Content Include="Assets\Icons\25\nt_sleet.gif" />
+    <Content Include="Assets\Icons\25\nt_snow.gif" />
+    <Content Include="Assets\Icons\25\nt_sunny.gif" />
+    <Content Include="Assets\Icons\25\nt_tstorms.gif" />
+    <Content Include="Assets\Icons\25\partlycloudy.gif" />
+    <Content Include="Assets\Icons\25\partlysunny.gif" />
+    <Content Include="Assets\Icons\25\rain.gif" />
+    <Content Include="Assets\Icons\25\sleet.gif" />
+    <Content Include="Assets\Icons\25\snow.gif" />
+    <Content Include="Assets\Icons\25\sunny.gif" />
+    <Content Include="Assets\Icons\25\tstorms.gif" />
+    <Content Include="Assets\Icons\chanceflurries.gif" />
+    <Content Include="Assets\Icons\chancerain.gif" />
+    <Content Include="Assets\Icons\chancesleet.gif" />
+    <Content Include="Assets\Icons\chancesnow.gif" />
+    <Content Include="Assets\Icons\chancetstorms.gif" />
+    <Content Include="Assets\Icons\clear.gif" />
+    <Content Include="Assets\Icons\cloudy.gif" />
+    <Content Include="Assets\Icons\flurries.gif" />
+    <Content Include="Assets\Icons\fog.gif" />
+    <Content Include="Assets\Icons\hazy.gif" />
+    <Content Include="Assets\Icons\mostlycloudy.gif" />
+    <Content Include="Assets\Icons\mostlysunny.gif" />
+    <Content Include="Assets\Icons\nt_chanceflurries.gif" />
+    <Content Include="Assets\Icons\nt_chancerain.gif" />
+    <Content Include="Assets\Icons\nt_chancesleet.gif" />
+    <Content Include="Assets\Icons\nt_chancetstorms.gif" />
+    <Content Include="Assets\Icons\nt_clear.gif" />
+    <Content Include="Assets\Icons\nt_cloudy.gif" />
+    <Content Include="Assets\Icons\nt_flurries.gif" />
+    <Content Include="Assets\Icons\nt_fog.gif" />
+    <Content Include="Assets\Icons\nt_hazy.gif" />
+    <Content Include="Assets\Icons\nt_mostlycloudy.gif" />
+    <Content Include="Assets\Icons\nt_mostlysunny.gif" />
+    <Content Include="Assets\Icons\nt_partlycloudy.gif" />
+    <Content Include="Assets\Icons\nt_partlysunny.gif" />
+    <Content Include="Assets\Icons\nt_rain.gif" />
+    <Content Include="Assets\Icons\nt_sleet.gif" />
+    <Content Include="Assets\Icons\nt_snow.gif" />
+    <Content Include="Assets\Icons\nt_sunny.gif" />
+    <Content Include="Assets\Icons\nt_tstorms.gif" />
+    <Content Include="Assets\Icons\partlycloudy.gif" />
+    <Content Include="Assets\Icons\partlysunny.gif" />
+    <Content Include="Assets\Icons\rain.gif" />
+    <Content Include="Assets\Icons\sleet.gif" />
+    <Content Include="Assets\Icons\snow.gif" />
+    <Content Include="Assets\Icons\sunny.gif" />
+    <Content Include="Assets\Icons\tstorms.gif" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -170,6 +251,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WeatherView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

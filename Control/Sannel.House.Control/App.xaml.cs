@@ -57,7 +57,7 @@ namespace Sannel.House.Control
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
 			this.UnhandledException += App_UnhandledException;
-			using (Context context = new Context())
+			using (SqliteContext context = new SqliteContext())
 			{
 				context.Database.Migrate();
 			}
@@ -77,7 +77,11 @@ namespace Sannel.House.Control
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
-			container.PerRequest<MainViewModel>();
+			container.Singleton<TimerViewModel>();
+			container.Singleton<MainViewModel>();
+			container.Singleton<HomeViewModel>();
+			container.Singleton<SettingsViewModel>();
+			container.Singleton<WeatherViewModel>();
 		}
 
 		/// <summary>

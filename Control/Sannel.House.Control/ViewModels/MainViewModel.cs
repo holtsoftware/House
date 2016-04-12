@@ -1,4 +1,19 @@
-﻿using Caliburn.Micro;
+﻿/*
+   Copyright 2016 Adam Holt
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+	   http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+*/
+using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +26,36 @@ namespace Sannel.House.Control.ViewModels
 {
 	public class MainViewModel : Conductor<SubViewModel>.Collection.OneActive
 	{
-		private SettingsViewModel settingsViewModel;
-		private SettingsViewModel SettingsViewModel
+		private WinRTContainer container;
+		public MainViewModel(WinRTContainer container)
 		{
-			get
-			{
-				return settingsViewModel ?? (settingsViewModel = new SettingsViewModel());
-			}
+			this.container = container;
+			HomeViewModel = container.GetInstance<HomeViewModel>();
+			SettingsViewModel = container.GetInstance<SettingsViewModel>();
 		}
 
 		private HomeViewModel homeViewModel;
-		private HomeViewModel HomeViewModel
+		public HomeViewModel HomeViewModel
 		{
 			get
 			{
-				return homeViewModel ?? (homeViewModel = new HomeViewModel());
+				return homeViewModel;
+			}
+			set
+			{
+				Set(ref homeViewModel, value);
+			}
+		}
+		private SettingsViewModel settingsViewModel;
+		public SettingsViewModel SettingsViewModel
+		{
+			get
+			{
+				return settingsViewModel;
+			}
+			set
+			{
+				Set(ref settingsViewModel, value);
 			}
 		}
 
@@ -46,7 +76,6 @@ namespace Sannel.House.Control.ViewModels
 		protected override void OnInitialize()
 		{
 			base.OnInitialize();
-			TimerViewModel.Current.Tick += updateTime;
 			HomeAction();
 			updateTime();
 		}

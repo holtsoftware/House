@@ -107,18 +107,19 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Context.cs" />
-    <Compile Include="Migrations\20160406025401_First.cs" />
-    <Compile Include="Migrations\20160406025401_First.designer.cs">
-      <DependentUpon>20160406025401_First.cs</DependentUpon>
+    <Compile Include="Migrations\20160412083829_First.cs" />
+    <Compile Include="Migrations\20160412083829_First.designer.cs">
+      <DependentUpon>20160412083829_First.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20160406054330_AddedHourlyWeather.cs" />
-    <Compile Include="Migrations\20160406054330_AddedHourlyWeather.designer.cs">
-      <DependentUpon>20160406054330_AddedHourlyWeather.cs</DependentUpon>
+    <Compile Include="Migrations\20160412184417_AddedAstronomy.cs" />
+    <Compile Include="Migrations\20160412184417_AddedAstronomy.designer.cs">
+      <DependentUpon>20160412184417_AddedAstronomy.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\ContextModelSnapshot.cs" />
+    <Compile Include="Migrations\SqliteContextModelSnapshot.cs" />
+    <Compile Include="SqliteContext.cs" />
+    <Compile Include="Models\WeatherAstronomy.cs" />
     <Compile Include="Models\HourlyWeather.cs" />
-    <Compile Include="Models\CurrentWeather.cs" />
+    <Compile Include="Models\WeatherCondition.cs" />
     <Compile Include="Models\Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Control.Data.rd.xml" />

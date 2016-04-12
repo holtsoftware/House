@@ -8,33 +8,6 @@
 	mc:Ignorable="d">
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<StackPanel>
-			<Image x:Name="IconUrl" Width="50" Height="50" HorizontalAlignment="Left" />
-			<TextBlock x:Name="Weather" />
-			<TextBlock x:Name="TemperatureF" />
-			<ListView x:Name="HourlyWeather">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<Grid Margin="0,12">
-							<Grid.RowDefinitions>
-								<RowDefinition />
-								<RowDefinition />
-							</Grid.RowDefinitions>
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition />
-								<ColumnDefinition />
-							</Grid.ColumnDefinitions>
-							<!--<Image Width="25" Height="25" Source="{Binding IconUrl}" />-->
-							<TextBlock Text="{Binding FriendlyHour}" Grid.Row="1" Margin="0,12,12,0" />
-							<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-								<TextBlock Text="{Binding TempF}" />
-								<TextBlock Text="°" />
-							</StackPanel>
-							<TextBlock Text="{Binding Condition}" Grid.Row="1" Grid.Column="1" Margin="0,12,0,0" />
-						</Grid>
-					</DataTemplate>
-				</ListView.ItemTemplate>
-			</ListView>
-		</StackPanel>
+		<ContentControl x:Name="Weather" />
 	</Grid>
 </Page>

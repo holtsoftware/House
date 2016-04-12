@@ -8,7 +8,8 @@
     "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Newtonsoft.Json": "8.0.3",
-    "WinRTXamlToolkit.Windows": "1.8.1"
+    "WinRTXamlToolkit.Windows": "1.8.1",
+    "WriteableBitmapEx": "1.5.0"
   },
   "frameworks": {
     "uap10.0": {}
