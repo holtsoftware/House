@@ -82,6 +82,8 @@ namespace Sannel.House.Control
 			container.Singleton<HomeViewModel>();
 			container.Singleton<SettingsViewModel>();
 			container.Singleton<WeatherViewModel>();
+			container.Singleton<SettingsDevicesViewModel>();
+			container.Singleton<SettingsWUndergroundViewModel>();
 		}
 
 		/// <summary>
@@ -117,7 +119,7 @@ namespace Sannel.House.Control
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private void OnSuspending(object sender, SuspendingEventArgs e)
+		protected override void OnSuspending(object sender, SuspendingEventArgs e)
 		{
 			var deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity

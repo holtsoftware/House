@@ -7,25 +7,20 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
 
-	<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<TextBlock Text="Weather Underground" />
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
 		<Grid>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
+				<ColumnDefinition Width="auto" />
+				<ColumnDefinition Width="auto" />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition />
-				<RowDefinition />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-			<TextBlock Text="Api Key" />
-			<TextBox x:Name="WUndergroundApiKey" Grid.Column="1" />
-			<TextBlock Text="State" Grid.Row="1" />
-			<TextBox x:Name="WUndergroundState" Grid.Row="1" Grid.Column="1" />
-			<TextBlock Text="City" Grid.Row="2" />
-			<TextBox x:Name="WUndergroundCity" Grid.Row="2" Grid.Column="1" />
-
+			<Button x:Name="WUnderground">WUnderground</Button>
+			<Button x:Name="Devices" Grid.Column="1">Devices</Button>
 		</Grid>
-	</StackPanel>
+		<Frame x:Name="ActiveItem" Grid.Row="1" />
+	</Grid>
 </Page>

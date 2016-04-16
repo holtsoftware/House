@@ -15,6 +15,7 @@
 */
 using Microsoft.Data.Entity;
 using Sannel.House.Control.Data.Models;
+using Sannel.House.WUnderground.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace Sannel.House.Control.Data
 	{
 		public DbSet<WeatherCondition> WeatherConditions { get; set; }
 		public DbSet<WeatherAstronomy> WeatherAstronomies { get; set; }
+		public DbSet<WeatherHourly> WeatherHourlies { get; set; }
+		public DbSet<StoredDevice> StoredDevices { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -39,6 +42,11 @@ namespace Sannel.House.Control.Data
 				temp.Property(i => i.Id)
 				.IsRequired();
 			modelBuilder.Entity<WeatherAstronomy>().Property(i => i.Id).IsRequired();
+			modelBuilder.Entity<WeatherHourly>().Property(i => i.Id).IsRequired();
+			var sd = modelBuilder.Entity<StoredDevice>();
+			sd.Property(i => i.Id).IsRequired();
+			sd.Property(i => i.ShortId).IsRequired();
+			sd.Property(i => i.Name).IsRequired();
 		}
 	}
 }

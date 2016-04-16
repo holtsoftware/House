@@ -16,9 +16,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Sannel.House.Control.Data;
-using Sannel.House.Control.Data.Models;
 using Sannel.House.Control.Models;
-using Sannel.House.Control.Models.WUnderground;
 using System;
 using System.Collections.Generic;
 using System.Linq;

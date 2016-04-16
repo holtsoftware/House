@@ -15,22 +15,15 @@
 */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sannel.House.Control.Data.Models
+namespace Sannel.House.WUnderground.WModels
 {
-	public class WeatherAstronomy
+	public class DayTime
 	{
-		[Key]
-		public Guid Id { get; set; }
-		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-		public int Astronomy { get; set; }
-		public DateTime Sunrise { get; set; }
-		public DateTime Sunset { get; set; }
-		public float PercentIlluminated { get; set; }
-		public float AgeOfMoon { get; set; }
+		public string hour { get; set; }
+		public string minute { get; set; }
 	}
 }

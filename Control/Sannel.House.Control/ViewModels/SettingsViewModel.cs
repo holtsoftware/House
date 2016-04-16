@@ -23,55 +23,22 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Control.ViewModels
 {
-	public class SettingsViewModel : SubViewModel
+	public class SettingsViewModel : ViewModelBase
 	{
-		protected override void OnInitialize()
+		private WinRTContainer container;
+		public SettingsViewModel(WinRTContainer container)
 		{
-			base.OnInitialize();
-			wundergroundApiKey = AppSettings.Current.WUndergroundApiKey;
-			wundergroundState = AppSettings.Current.WUndergroundState;
-			wundergroundCity = AppSettings.Current.WUndergroundCity;
+			this.container = container;
 		}
 
-		private String wundergroundApiKey;
-
-		public String WUndergroundApiKey
+		public void WUnderground()
 		{
-			get { return wundergroundApiKey; }
-			set
-			{
-				AppSettings.Current.WUndergroundApiKey = value;
-				Set(ref wundergroundApiKey, value);
-			}
+			ActivateItem(container.GetInstance<SettingsWUndergroundViewModel>());
 		}
 
-		private String wundergroundState;
-
-		public String WUndergroundState
+		public void Devices()
 		{
-			get { return wundergroundState; }
-			set
-			{
-				AppSettings.Current.WUndergroundState = value;
-				Set(ref wundergroundState, value);
-			}
+			ActivateItem(container.GetInstance<SettingsDevicesViewModel>());
 		}
-
-		private String wundergroundCity;
-
-		public String WUndergroundCity
-		{
-			get
-			{
-				return wundergroundCity;
-			}
-			set
-			{
-				AppSettings.Current.WUndergroundCity = value;
-				Set(ref wundergroundCity, value);
-			}
-		}
-
-
 	}
 }

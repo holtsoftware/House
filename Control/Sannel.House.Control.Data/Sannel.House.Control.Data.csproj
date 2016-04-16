@@ -107,24 +107,31 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\20160412083829_First.cs" />
-    <Compile Include="Migrations\20160412083829_First.designer.cs">
-      <DependentUpon>20160412083829_First.cs</DependentUpon>
+    <Compile Include="Migrations\20160416031952_First.cs" />
+    <Compile Include="Migrations\20160416031952_First.designer.cs">
+      <DependentUpon>20160416031952_First.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20160412184417_AddedAstronomy.cs" />
-    <Compile Include="Migrations\20160412184417_AddedAstronomy.designer.cs">
-      <DependentUpon>20160412184417_AddedAstronomy.cs</DependentUpon>
+    <Compile Include="Migrations\20160416062711_Added-StoredDevices.cs" />
+    <Compile Include="Migrations\20160416062711_Added-StoredDevices.designer.cs">
+      <DependentUpon>20160416062711_Added-StoredDevices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20160416064108_AddedNewColumn-StoredDevices.cs" />
+    <Compile Include="Migrations\20160416064108_AddedNewColumn-StoredDevices.designer.cs">
+      <DependentUpon>20160416064108_AddedNewColumn-StoredDevices.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\SqliteContextModelSnapshot.cs" />
+    <Compile Include="Models\StoredDevice.cs" />
     <Compile Include="SqliteContext.cs" />
-    <Compile Include="Models\WeatherAstronomy.cs" />
-    <Compile Include="Models\HourlyWeather.cs" />
-    <Compile Include="Models\WeatherCondition.cs" />
     <Compile Include="Models\Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Control.Data.rd.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Sannel.House.WUnderground\Sannel.House.WUnderground.csproj">
+      <Project>{8b8e8ad8-58b2-4c90-b0da-b5f12ccea7f3}</Project>
+      <Name>Sannel.House.WUnderground</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

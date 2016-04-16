@@ -24,7 +24,7 @@ using Windows.UI.Xaml;
 
 namespace Sannel.House.Control.ViewModels
 {
-	public class MainViewModel : Conductor<SubViewModel>.Collection.OneActive
+	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive
 	{
 		private WinRTContainer container;
 		public MainViewModel(WinRTContainer container)
@@ -94,7 +94,7 @@ namespace Sannel.House.Control.ViewModels
 
 		public void HomeAction()
 		{
-			ActivateItem(HomeViewModel);
+			//ActivateItem(HomeViewModel);
 		}
 
 		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)

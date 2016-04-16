@@ -22,10 +22,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
 using Windows.Storage;
+using Sannel.House.WUnderground;
 
 namespace Sannel.House.Control.Models
 {
-	public class AppSettings
+	public class AppSettings : IWUndergroundSettings
 	{
 		private const String RESOURCE = "sannel.com/House";
 		private ApplicationDataContainer settings;

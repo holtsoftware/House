@@ -24,17 +24,19 @@ namespace Sannel.House.Control.ViewModels
 {
 	public class TimerViewModel
 	{
+		private DateTime nextHalfHour = DateTime.MinValue;
 		private DateTime nextHour = DateTime.MinValue;
 		private DateTime nextDay = DateTime.MinValue;
 		private DispatcherTimer timer = new DispatcherTimer();
 
 		public event Action Tick;
+		public event Action HalfHourTick;
 		public event Action HourTick;
 		public event Action DayTick;
 
 		public TimerViewModel()
 		{
-			timer.Interval = TimeSpan.FromSeconds(10);
+			timer.Interval = TimeSpan.FromSeconds(30);
 			timer.Tick += Timer_Tick;
 			timer.Start();
 		}
@@ -43,6 +45,11 @@ namespace Sannel.House.Control.ViewModels
 		{
 			Tick?.Invoke();
 			var now = DateTime.Now;
+			if(now > nextHalfHour)
+			{
+				HalfHourTick?.Invoke();
+				nextHalfHour = now.AddMinutes(30);
+			}
 			if(now > nextHour)
 			{
 				HourTick?.Invoke();

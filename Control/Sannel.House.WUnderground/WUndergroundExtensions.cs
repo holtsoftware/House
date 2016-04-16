@@ -14,40 +14,31 @@
    limitations under the License.
 */
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Sannel.House.Control.Data.Models;
-using Sannel.House.Control.Models;
-using Sannel.House.Control.Models.WUnderground;
+using Sannel.House.WUnderground.Models;
+using Sannel.House.WUnderground.WModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.Web.Http;
-using WinRTXamlToolkit.Async;
-using WinRTXamlToolkit.IO.Extensions;
-using WinRTXamlToolkit.Imaging;
-using Windows.Graphics.Imaging;
 
-namespace Sannel.House.Control
+namespace Sannel.House.WUnderground
 {
 	public static class WUndergroundExtensions
 	{
-		public static bool WUndergroundSetup(this AppSettings set)
+		public static bool WUndergroundSetup(this IWUndergroundSettings set)
 		{
-			if(set == null)
+			if (set == null)
 			{
 				return false;
 			}
 
 			return !String.IsNullOrWhiteSpace(set.WUndergroundApiKey) && !string.IsNullOrWhiteSpace(set.WUndergroundCity) && !String.IsNullOrWhiteSpace(set.WUndergroundState);
 		}
-		public static async Task<Conditions> GetCurrentConditionsAsync(this HttpClient client)
+		public static async Task<Conditions> GetCurrentConditionsAsync(this HttpClient client, IWUndergroundSettings set)
 		{
-			var set = AppSettings.Current;
 			var result = await client.GetStringAsync(new Uri($"http://api.wunderground.com/api/{set.WUndergroundApiKey}/conditions/q/{set.WUndergroundState}/{set.WUndergroundCity}.json"));
 
 			try
@@ -60,9 +51,8 @@ namespace Sannel.House.Control
 			}
 		}
 
-		public static async Task<Hourly> GetHourly(this HttpClient client)
+		public static async Task<Hourly> GetHourly(this HttpClient client, IWUndergroundSettings set)
 		{
-			var set = AppSettings.Current;
 			var result = await client.GetStringAsync(new Uri($"http://api.wunderground.com/api/{set.WUndergroundApiKey}/hourly/q/{set.WUndergroundState}/{set.WUndergroundCity}.json"));
 			try
 			{
@@ -74,9 +64,8 @@ namespace Sannel.House.Control
 			}
 		}
 
-		public static async Task<Astronomy> GetAstronomyAsync(this HttpClient client)
+		public static async Task<Astronomy> GetAstronomyAsync(this HttpClient client, IWUndergroundSettings set)
 		{
-			var set = AppSettings.Current;
 			var result = await client.GetStringAsync(new Uri($"http://api.wunderground.com/api/{set.WUndergroundApiKey}/astronomy/q/{set.WUndergroundState}/{set.WUndergroundCity}.json"));
 			try
 			{
@@ -90,7 +79,7 @@ namespace Sannel.House.Control
 
 		public static WeatherAstronomy ToWeatherAstronomy(this Astronomy astronomy)
 		{
-			if(astronomy == null)
+			if (astronomy == null)
 			{
 				return null;
 			}
@@ -101,27 +90,27 @@ namespace Sannel.House.Control
 
 		public static void CopyTo(this Astronomy astronomy, WeatherAstronomy wa)
 		{
-			if(astronomy != null && wa != null)
+			if (astronomy != null && wa != null)
 			{
 				var mp = astronomy.moon_phase;
-				if(mp != null)
+				if (mp != null)
 				{
 					var current = DateTime.Now;
 					int h, m;
-					if(int.TryParse(mp.sunrise?.hour, out h) && int.TryParse(mp.sunrise?.minute, out m))
+					if (int.TryParse(mp.sunrise?.hour, out h) && int.TryParse(mp.sunrise?.minute, out m))
 					{
 						wa.Sunrise = new DateTime(current.Year, current.Month, current.Day, h, m, 0);
 					}
-					if(int.TryParse(mp.sunset?.hour, out h) && int.TryParse(mp.sunset?.minute, out m))
+					if (int.TryParse(mp.sunset?.hour, out h) && int.TryParse(mp.sunset?.minute, out m))
 					{
 						wa.Sunset = new DateTime(current.Year, current.Month, current.Day, h, m, 0);
 					}
 					float f;
-					if(float.TryParse(mp.percentIlluminated, out f))
+					if (float.TryParse(mp.percentIlluminated, out f))
 					{
 						wa.PercentIlluminated = f / 100.0f;
 					}
-					if(float.TryParse(mp.ageOfMoon, out f))
+					if (float.TryParse(mp.ageOfMoon, out f))
 					{
 						wa.AgeOfMoon = f;
 					}
@@ -129,9 +118,128 @@ namespace Sannel.House.Control
 			}
 		}
 
+		public static WeatherHourly ToWeatherHourly(this Hourly.HourlyForecast hourly)
+		{
+			if(hourly == null)
+			{
+				return null;
+			}
+			WeatherHourly wh = new WeatherHourly();
+			hourly.CopyTo(wh);
+			return wh;
+		}
+
+		public static void CopyTo(this Hourly.HourlyForecast hourly, WeatherHourly wh)
+		{
+			if(hourly != null && wh != null)
+			{
+				wh.Date = hourly.FCTTIME.ToDateTime();
+				float f;
+				if(float.TryParse(hourly.dewpoint?.metric, out f) && f > -999)
+				{
+					wh.DewPointCelsius = f;
+				}
+				if(float.TryParse(hourly.dewpoint?.english, out f) && f > -999)
+				{
+					wh.DewPointFahrenheit = f;
+				}
+				if(float.TryParse(hourly.feelslike?.metric, out f) && f > -999)
+				{
+					wh.FeelsLikeCelsius = f;
+				}
+				if(float.TryParse(hourly.feelslike?.english, out f) && f > -999)
+				{
+					wh.FeelsLikeFahrenheit = f;
+				}
+				if(float.TryParse(hourly.heatindex?.metric, out f) && f > -999)
+				{
+					wh.HeatIndexCelsius = f;
+				}
+				if(float.TryParse(hourly.heatindex?.english, out f) && f > -999)
+				{
+					wh.HeatIndexFahrenheit = f;
+				}
+				if(float.TryParse(hourly.humidity, out f))
+				{
+					wh.Humidity = f / 100;
+				}
+				wh.Icon = hourly.icon;
+				wh.IconUrl = hourly.icon_url;
+				//hourly.mslp
+				if(float.TryParse(hourly.mslp?.metric, out f) && f > -999)
+				{
+					wh.MSLPMetric = f;
+				}
+				if(float.TryParse(hourly.mslp?.english, out f) && f > -999)
+				{
+					wh.MSLPEnglish = f;
+				}
+				if(float.TryParse(hourly.pop, out f) && f > -999)
+				{
+					wh.ProbabilityOfPrecipitation = f / 100f;
+				}
+				if(float.TryParse(hourly.qpf?.metric, out f) && f > -999)
+				{
+					wh.QuantitativePrecipitationForecastMetric = f;
+				}
+				if(float.TryParse(hourly.qpf?.english, out f) && f > -999)
+				{
+					wh.QuantitativePrecipitationForecastEnglish = f;
+				}
+				if(float.TryParse(hourly.sky, out f) && f > -999)
+				{
+					wh.Sky = f;
+				}
+				if(float.TryParse(hourly.snow?.metric, out f) && f > -999)
+				{
+					wh.SnowMillimeter = f;
+				}
+				if(float.TryParse(hourly.snow?.english, out f) && f > -999)
+				{
+					wh.SnowInches = f;
+				}
+				//hourly.temp
+				if(float.TryParse(hourly.temp?.metric, out f) && f > -999)
+				{
+					wh.TemperatureCelsius = f;
+				}
+				if(float.TryParse(hourly.temp?.english, out f) && f > -999)
+				{
+					wh.TemperatureFahrenheit = f;
+				}
+				if(float.TryParse(hourly.uvi, out f) && f > -999)
+				{
+					wh.UVIndex = f;
+				}
+				//hourly.wdir.degrees
+				if(float.TryParse(hourly.wdir?.degrees, out f) && f > -999)
+				{
+					wh.WindDirectionDegrees = f;
+				}
+				wh.WindDirection = hourly.wdir?.dir;
+				if(float.TryParse(hourly.windchill?.metric, out f) && f > -999)
+				{
+					wh.WindChillCelsius = f;
+				}
+				if(float.TryParse(hourly.windchill?.english, out f) && f > -999)
+				{
+					wh.WindChillFahrenheit = f;
+				}
+				if(float.TryParse(hourly.wspd?.english, out f) && f > -999)
+				{
+					wh.WindSpeedMPH = f;
+				}
+				if(float.TryParse(hourly.wspd?.metric, out f) && f > -999)
+				{
+					wh.WindSpeedKPH = f;
+				}
+				wh.WX = hourly.wx;
+			}
+		}
+
 		public static WeatherCondition ToWeatherCondition(this Conditions conditions)
 		{
-			if(conditions == null)
+			if (conditions == null)
 			{
 				return null;
 			}
@@ -142,103 +250,106 @@ namespace Sannel.House.Control
 
 		public static void CopyTo(this Conditions conditions, WeatherCondition wc)
 		{
-			if(conditions != null && wc != null)
+			if (conditions != null && wc != null)
 			{
-				if(conditions.current_observation != null)
+				if (conditions.current_observation != null)
 				{
 					var co = conditions.current_observation;
 					wc.DewPointCelsius = co.dewpoint_c;
 					wc.DewPointFahrenheit = co.dewpoint_f;
+					wc.ForcastUrl = co.forecast_url;
+					wc.HistoryUrl = co.history_url;
+					wc.ObservationUrl = co.ob_url;
 					float f;
-					if(float.TryParse(co.feelslike_c, out f))
+					if (float.TryParse(co.feelslike_c, out f))
 					{
 						wc.FeelsLikeCelsius = f;
 					}
-					if(float.TryParse(co.feelslike_f, out f))
+					if (float.TryParse(co.feelslike_f, out f))
 					{
 						wc.FeelsLikeFahrenheit = f;
 					}
-					if(float.TryParse(co.heat_index_c, out f))
+					if (float.TryParse(co.heat_index_c, out f))
 					{
 						wc.HeatIndexCelsius = f;
 					}
-					if(float.TryParse(co.heat_index_f, out f))
+					if (float.TryParse(co.heat_index_f, out f))
 					{
 						wc.HeatIndexFahrenheit = f;
 					}
 					wc.Icon = co.icon;
 					wc.IconUrl = co.icon_url;
 					long l;
-					if(long.TryParse(co.local_epoch, out l))
+					if (long.TryParse(co.local_epoch, out l))
 					{
 						wc.LocalEpoch = l;
 					}
 					DateTime dt;
-					if(DateTime.TryParse(co.local_time_rfc822, out dt))
+					if (DateTime.TryParse(co.local_time_rfc822, out dt))
 					{
 						wc.LocalTime = dt;
 					}
-					if(float.TryParse(co.precip_1hr_in, out f))
+					if (float.TryParse(co.precip_1hr_in, out f))
 					{
 						wc.Precipitation1HourInches = f;
 					}
-					if(float.TryParse(co.precip_1hr_metric, out f))
+					if (float.TryParse(co.precip_1hr_metric, out f))
 					{
 						wc.Precipitation1HourMetric = f;
 					}
-					if(float.TryParse(co.precip_today_in, out f))
+					if (float.TryParse(co.precip_today_in, out f))
 					{
 						wc.PrecipitationTodayInches = f;
 					}
-					if(float.TryParse(co.precip_today_metric, out f))
+					if (float.TryParse(co.precip_today_metric, out f))
 					{
 						wc.PrecipitationTodayMetric = f;
 					}
-					if(float.TryParse(co.pressure_in, out f))
+					if (float.TryParse(co.pressure_in, out f))
 					{
 						wc.PresureInches = f;
 					}
-					if(float.TryParse(co.pressure_mb, out f))
+					if (float.TryParse(co.pressure_mb, out f))
 					{
 						wc.PresureMillibar = f;
 					}
 					wc.PresureTrending = co.pressure_trend;
-					if(float.TryParse(co.relative_humidity?.Replace("%",""), out f))
+					if (float.TryParse(co.relative_humidity?.Replace("%", ""), out f))
 					{
-						wc.RelativeHumidity = f;
+						wc.RelativeHumidity = f / 100;
 					}
 					wc.SolarRadiation = co.solarradiation;
 					wc.StationId = co.station_id;
 					wc.TempratureCelsius = co.temp_c;
 					wc.TempratureFahrenheit = co.temp_f;
-					if(float.TryParse(co.UV, out f))
+					if (float.TryParse(co.UV, out f))
 					{
 						wc.UV = f;
 					}
-					if(float.TryParse(co.visibility_mi, out f))
+					if (float.TryParse(co.visibility_mi, out f))
 					{
 						wc.VisibilityMiles = f;
 					}
-					if(float.TryParse(co.visibility_km, out f))
+					if (float.TryParse(co.visibility_km, out f))
 					{
 						wc.VisibilityKilometers = f;
 					}
 					wc.Weather = co.weather;
-					if(float.TryParse(co.windchill_f, out f))
+					if (float.TryParse(co.windchill_f, out f))
 					{
 						wc.WindChillFahrenheit = f;
 					}
-					if(float.TryParse(co.windchill_c, out f))
+					if (float.TryParse(co.windchill_c, out f))
 					{
 						wc.WindChillCelsius = f;
 					}
 					wc.WindDegrees = co.wind_degrees;
 					wc.WindDirection = co.wind_dir;
-					if(float.TryParse(co.wind_gust_mph, out f))
+					if (float.TryParse(co.wind_gust_mph, out f))
 					{
 						wc.WindGustMilesPerHour = f;
 					}
-					if(float.TryParse(co.wind_gust_kph, out f))
+					if (float.TryParse(co.wind_gust_kph, out f))
 					{
 						wc.WindGustKilometersPerHour = f;
 					}
@@ -246,6 +357,24 @@ namespace Sannel.House.Control
 					wc.WindMilesPerHour = co.wind_mph;
 				}
 			}
+		}
+
+		public static DateTime ToDateTime(this FCTTIME time)
+		{
+			//fcttime.hour = "14";
+			//fcttime.year = "2012";
+			//fcttime.mday = "3";
+			//fcttime.min = "23";
+			//fcttime.mon = "7";
+			//fcttime.ampm = "pm";
+			int h, m, d, M, y;
+			if(int.TryParse(time.hour, out h) && int.TryParse(time.min, out m)
+				&& int.TryParse(time.mon, out M) && int.TryParse(time.mday, out d)
+				&& int.TryParse(time.year, out y))
+			{
+				return new DateTime(y, M, d, h, m, 0);
+			}
+			return DateTime.MinValue;
 		}
 
 		/// <summary>
@@ -287,11 +416,9 @@ namespace Sannel.House.Control
 		//	return aw;
 		//}
 
-		private static AsyncLock iconCacheLock = new AsyncLock();
-
 		public static String GetLocalIconFromWeb(this String url)
 		{
-			if(url == null)
+			if (url == null)
 			{
 				return url;
 			}

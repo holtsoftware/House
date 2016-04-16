@@ -23,20 +23,27 @@ using System.Threading.Tasks;
 using Sannel.House.Control;
 using Sannel.House.Control.Data;
 using Windows.Web.Http;
+using Sannel.House.WUnderground;
+using Sannel.House.WUnderground.Models;
+using System.Collections.ObjectModel;
 
 namespace Sannel.House.Control.ViewModels
 {
 	public class WeatherViewModel : SubViewModel
 	{
+		private ObservableCollection<HourlyItem> hourlyItems = new ObservableCollection<HourlyItem>();
 		public WeatherViewModel(TimerViewModel tvm)
 		{
 			tvm.Tick += tick;
+			tvm.HalfHourTick += halfHourTick;
 			tvm.HourTick += hourTick;
 			tvm.DayTick += dayTick;
 			using (SqliteContext context = new SqliteContext())
 			{
 				updateCurrentConditions(context.WeatherConditions.OrderByDescending(i => i.CreatedDate).FirstOrDefault());
 				updateAstronomy(context.WeatherAstronomies.OrderBy(i => i.CreatedDate).FirstOrDefault());
+				var now = DateTime.Now;
+				updateHourly(context.WeatherHourlies.Where(i => i.Date >= now).OrderBy(i => i.Date).Take(4).ToList());
 			}
 		}
 
@@ -48,11 +55,16 @@ namespace Sannel.House.Control.ViewModels
 
 		private void tick()
 		{
+			pullCurrentConditions();
+		}
+
+		private void halfHourTick()
+		{
+			pullHourlyForcast();
 		}
 
 		private void hourTick()
 		{
-			pullCurrentConditions();
 		}
 
 		private void dayTick()
@@ -69,7 +81,7 @@ namespace Sannel.House.Control.ViewModels
 				{
 					using (var client = new HttpClient())
 					{
-						var w = await client.GetCurrentConditionsAsync();
+						var w = await client.GetCurrentConditionsAsync(AppSettings.Current);
 						cw = w.ToWeatherCondition();
 					}
 					if (cw != null)
@@ -86,6 +98,43 @@ namespace Sannel.House.Control.ViewModels
 			}
 		}
 
+		private async void pullHourlyForcast()
+		{
+			if (AppSettings.Current.WUndergroundSetup())
+			{
+				try
+				{
+					WUnderground.WModels.Hourly hourly;
+					using (var client = new HttpClient())
+					{
+						hourly = await client.GetHourly(AppSettings.Current);
+					}
+					if(hourly?.hourly_forecast != null)
+					{
+						using (SqliteContext context = new SqliteContext())
+						{
+							foreach(var hf in hourly.hourly_forecast)
+							{
+								var dt = hf.FCTTIME.ToDateTime();
+								var item = context.WeatherHourlies.FirstOrDefault(i => i.Date == dt);
+								if(item == null)
+								{
+									item = new WeatherHourly();
+									context.WeatherHourlies.Add(item);
+								}
+								hf.CopyTo(item);
+							}
+							await context.SaveChangesAsync();
+							var now = DateTime.Now;
+							updateHourly(context.WeatherHourlies.Where(i => i.Date >= now).OrderBy(i => i.Date).Take(4).ToList());
+						}
+
+					}
+				}
+				catch { }
+			}
+		}
+
 		private async void pullAstronomy()
 		{
 			if (AppSettings.Current.WUndergroundSetup())
@@ -95,7 +144,7 @@ namespace Sannel.House.Control.ViewModels
 					WeatherAstronomy wa;
 					using(var client = new HttpClient())
 					{
-						var w = await client.GetAstronomyAsync();
+						var w = await client.GetAstronomyAsync(AppSettings.Current);
 						wa = w.ToWeatherAstronomy();
 					}
 					if(wa != null)
@@ -112,6 +161,35 @@ namespace Sannel.House.Control.ViewModels
 			}
 		}
 
+		private void updateHourly(List<WeatherHourly> items)
+		{
+			var hitems = items.Select(i => new HourlyItem(i)).ToList();
+			var toRemove = new List<HourlyItem>();
+			var toAdd = new List<HourlyItem>();
+			foreach(var hi in hitems)
+			{
+				if (!hourlyItems.Contains(hi))
+				{
+					toAdd.Add(hi);
+				}
+			}
+			foreach(var hi in hourlyItems)
+			{
+				if (!hitems.Contains(hi))
+				{
+					toRemove.Add(hi);
+				}
+			}
+			foreach(var hi in toRemove)
+			{
+				hourlyItems.Remove(hi);
+			}
+			foreach(var hi in toAdd)
+			{
+				hourlyItems.Add(hi);
+			}
+		}
+
 		private void updateCurrentConditions(WeatherCondition cw)
 		{
 			if(cw != null)
@@ -119,6 +197,8 @@ namespace Sannel.House.Control.ViewModels
 				IconUrl = cw.IconUrl.GetLocalIconFromWeb();
 				Conditions = cw.Weather;
 				Temperature = $"{cw.TempratureFahrenheit:00.0}";
+				Humidity = cw.RelativeHumidity.ToString("p0");
+				UpdatedTime = cw.LocalTime.ToString("hh:mm tt");
 			}
 		}
 
@@ -128,7 +208,7 @@ namespace Sannel.House.Control.ViewModels
 			{
 				Sunrise = wa.Sunrise.ToString("hh:mm tt");
 				Sunset = wa.Sunset.ToString("hh:mm tt");
-				PercentIlluminated = $"{wa.PercentIlluminated:P}";
+				PercentIlluminated = $"{wa.PercentIlluminated:P0}";
 				AgeOfMoon = $"{wa.AgeOfMoon}";
 			}
 		}
@@ -165,11 +245,25 @@ namespace Sannel.House.Control.ViewModels
 			}
 		}
 
+		private string updatedTime;
+		public String UpdatedTime
+		{
+			get { return updatedTime; }
+			set { Set(ref updatedTime, value); }
+		}
+
 		private String temperature;
 		public String Temperature
 		{
 			get { return temperature; }
 			set { Set(ref temperature, value); }
+		}
+
+		private String humidity;
+		public String Humidity
+		{
+			get { return humidity; }
+			set { Set(ref humidity, value); }
 		}
 
 		private String sunrise;
@@ -198,6 +292,14 @@ namespace Sannel.House.Control.ViewModels
 		{
 			get { return ageOfMoon; }
 			set { Set(ref ageOfMoon, value); }
+		}
+
+		public ObservableCollection<HourlyItem> HourlyItems
+		{
+			get
+			{
+				return hourlyItems;
+			}
 		}
 	}
 }

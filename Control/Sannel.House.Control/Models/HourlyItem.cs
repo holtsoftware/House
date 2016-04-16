@@ -14,6 +14,7 @@
    limitations under the License.
 */
 using Sannel.House.Control.Data.Models;
+using Sannel.House.WUnderground.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,99 +24,91 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml;
-using WinRTXamlToolkit.IO.Extensions;
+using Sannel.House.WUnderground;
 
 namespace Sannel.House.Control.Models
 {
 	public class HourlyItem : INotifyPropertyChanged
 	{
-		//public HourlyItem(HourlyWeather weather)
-		//{
-		//	IconUrl = weather.IconUrl;
-		//	FriendlyHour = weather.Hour.ToString("hh tt");
-		//	float f = 0;
-		//	if (float.TryParse(weather.TempF, out f))
-		//	{
-		//		TempF = f;
-		//	}
-		//	Condition = weather.Condition;
-		//}
+		public HourlyItem(WeatherHourly hourly)
+		{
+			if(hourly == null)
+			{
+				throw new ArgumentNullException(nameof(hourly));
+			}
+			Key = hourly.Date;
+			DisplayTime = hourly.Date.ToString("hh tt");
+			IconUrl = hourly.IconUrl;
+			Condition = hourly.WX;
+			Temperature = hourly.TemperatureFahrenheit.ToString();
+			Humidity = hourly.Humidity.ToString("P0");
+		}
 
+		private DateTime key;
+		public DateTime Key
+		{
+			get { return key; }
+			set { Set(ref key, value); }
+		}
+		private string humidity;
+		public String Humidity
+		{
+			get { return humidity; }
+			set { Set(ref humidity, value); }
+		}
 
-		//private String iconUrl;
+		private String displayTime;
+		public String DisplayTime
+		{
+			get { return displayTime; }
+			set { Set(ref displayTime, value); }
+		}
 
-		///// <summary>
-		///// Gets or sets IconUrl.
-		///// </summary>
-		///// <value>
-		///// The IconUrl.
-		///// </value>
-		//public String IconUrl
-		//{
-		//	get { return iconUrl; }
-		//	set
-		//	{
-		//		var v = value;
-		//		if (v != null)
-		//		{
-		//			Set(ref iconUrl, v.GetSmallerLocalIconFromWeb());
-		//		}
-		//	}
-		//}
+		private String condition;
+		public String Condition
+		{
+			get { return condition; }
+			set { Set(ref condition, value); }
+		}
 
+		private String temperature;
+		public String Temperature
+		{
+			get { return temperature; }
+			set { Set(ref temperature, value); }
+		}
 
-		//private String friendlyHour;
+		private String iconUrl;
+		public String IconUrl
+		{
+			get { return iconUrl; }
+			set { Set(ref iconUrl, value.GetSmallerLocalIconFromWeb()); }
+		}
 
-		///// <summary>
-		///// Gets or sets FriendlyHour.
-		///// </summary>
-		///// <value>
-		///// The FriendlyHour.
-		///// </value>
-		//public String FriendlyHour
-		//{
-		//	get { return friendlyHour; }
-		//	set
-		//	{
-		//		Set(ref friendlyHour, value);
-		//	}
-		//}
+		public override bool Equals(object obj)
+		{
+			var hi = obj as HourlyItem;
+			if(hi != null)
+			{
+				return hi.Key == Key;
+			}
+			return false;
+		}
 
+		public static bool operator ==(HourlyItem hi1, HourlyItem hi2)
+		{
+			return hi1?.Key == hi2?.key;
+		}
+		public static bool operator !=(HourlyItem hi1, HourlyItem hi2)
+		{
+			return hi1?.Key != hi2?.key;
+		}
 
-		//private float tempf;
+		public override int GetHashCode()
+		{
+			return Key.GetHashCode();
+		}
 
-		///// <summary>
-		///// Gets or sets TempF.
-		///// </summary>
-		///// <value>
-		///// The TempF.
-		///// </value>
-		//public float TempF
-		//{
-		//	get { return tempf; }
-		//	set
-		//	{
-		//		Set(ref tempf, value);
-		//	}
-		//}
-
-
-		//private String condition;
-
-		///// <summary>
-		///// Gets or sets Condition.
-		///// </summary>
-		///// <value>
-		///// The Condition.
-		///// </value>
-		//public String Condition
-		//{
-		//	get { return condition; }
-		//	set
-		//	{
-		//		Set(ref condition, value);
-		//	}
-		//}
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)

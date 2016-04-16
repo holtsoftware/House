@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,10 +20,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sannel.House.Control.Data.Models
+namespace Sannel.House.WUnderground.Models
 {
 	public class WeatherCondition
 	{
+		[Key]
 		public Guid Id { get; set; } = Guid.NewGuid();
 
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
@@ -62,5 +62,8 @@ namespace Sannel.House.Control.Data.Models
 		public float WindGustKilometersPerHour { get; set; }
 		public float WindKilometerPerHour { get; set; }
 		public float WindMilesPerHour { get; set; }
+		public string ForcastUrl { get; set; }
+		public string HistoryUrl { get; set; }
+		public string ObservationUrl { get; set; }
 	}
 }
