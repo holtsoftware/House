@@ -31,6 +31,12 @@ namespace Sannel.House.Control.ViewModels
 			this.container = container;
 		}
 
+		protected override void OnActivate()
+		{
+			base.OnActivate();
+			WUnderground();
+		}
+
 		public void WUnderground()
 		{
 			ActivateItem(container.GetInstance<SettingsWUndergroundViewModel>());

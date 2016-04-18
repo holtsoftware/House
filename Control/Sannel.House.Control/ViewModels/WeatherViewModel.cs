@@ -50,17 +50,16 @@ namespace Sannel.House.Control.ViewModels
 		protected override void OnInitialize()
 		{
 			base.OnInitialize();
-			
 		}
 
 		private void tick()
 		{
-			pullCurrentConditions();
 		}
 
 		private void halfHourTick()
 		{
 			pullHourlyForcast();
+			pullCurrentConditions();
 		}
 
 		private void hourTick()

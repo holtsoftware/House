@@ -14,24 +14,28 @@
    limitations under the License.
 */
 using Caliburn.Micro;
+using Sannel.House.Control.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace Sannel.House.Control.ViewModels
 {
 	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive
 	{
 		private WinRTContainer container;
-		public MainViewModel(WinRTContainer container)
+		private HttpServer server;
+		public MainViewModel(WinRTContainer container, TimerViewModel tvm, HttpServer server)
 		{
 			this.container = container;
+			this.server = server;
+			tvm.Tick += Tick;
 			HomeViewModel = container.GetInstance<HomeViewModel>();
 			SettingsViewModel = container.GetInstance<SettingsViewModel>();
+		}
+
+		private void Tick()
+		{
+			updateTime();
 		}
 
 		private HomeViewModel homeViewModel;
@@ -76,8 +80,13 @@ namespace Sannel.House.Control.ViewModels
 		protected override void OnInitialize()
 		{
 			base.OnInitialize();
-			HomeAction();
 			updateTime();
+		}
+
+		protected override void OnActivate()
+		{
+			base.OnActivate();
+			//HomeAction();
 		}
 
 		private void updateTime()
@@ -89,12 +98,13 @@ namespace Sannel.House.Control.ViewModels
 
 		public void SettingsAction()
 		{
-			ActivateItem(SettingsViewModel);
+			ActivateItem(container.GetInstance<SettingsViewModel>());
 		}
 
-		public void HomeAction()
+		public async void HomeAction()
 		{
-			//ActivateItem(HomeViewModel);
+			await server.StartAsync();
+			//ActivateItem(container.GetInstance<HomeViewModel>());
 		}
 
 		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)

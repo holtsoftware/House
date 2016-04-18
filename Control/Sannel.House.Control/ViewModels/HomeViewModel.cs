@@ -27,7 +27,7 @@ using Windows.Web.Http;
 
 namespace Sannel.House.Control.ViewModels
 {
-	public class HomeViewModel : SubViewModel
+	public class HomeViewModel : ViewModelBase
 	{
 		public HomeViewModel(WeatherViewModel wvm)
 		{

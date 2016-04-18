@@ -21,12 +21,18 @@
 				</uap:DefaultTile>
 				<uap:SplashScreen Image="Assets\SplashScreen.png" />
 			</uap:VisualElements>
+			<!--Extensions>
+				<uap:Extension Category="windows.appService" EntryPoint="Sannel.House.Control.ServiceTask">
+					<uap:AppService Name="App2AppComService" />
+				</uap:Extension>
+			</Extensions-->
 		</Application>
 	</Applications>
 	<Capabilities>
 		<Capability Name="internetClient" />
+		<Capability Name="internetClientServer"/>
 		<Capability Name="privateNetworkClientServer" />
-		<uap:Capability Name="userAccountInformation" />
-		<iot:Capability Name="systemManagement" />
+		<!--<uap:Capability Name="userAccountInformation" />
+		<iot:Capability Name="systemManagement" />-->
 	</Capabilities>
 </Package>

@@ -34,6 +34,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
+using Sannel.House.Control.Http;
 
 namespace Sannel.House.Control
 {
@@ -77,6 +78,7 @@ namespace Sannel.House.Control
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
+			container.RegisterInstance(typeof(HttpServer), null, new HttpServer(8000));
 			container.Singleton<TimerViewModel>();
 			container.Singleton<MainViewModel>();
 			container.Singleton<HomeViewModel>();

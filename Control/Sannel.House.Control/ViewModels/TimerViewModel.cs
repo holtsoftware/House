@@ -36,7 +36,7 @@ namespace Sannel.House.Control.ViewModels
 
 		public TimerViewModel()
 		{
-			timer.Interval = TimeSpan.FromSeconds(30);
+			timer.Interval = TimeSpan.FromSeconds(5);
 			timer.Tick += Timer_Tick;
 			timer.Start();
 		}
