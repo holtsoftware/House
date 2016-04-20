@@ -14,6 +14,7 @@
    limitations under the License.
 */
 using Caliburn.Micro;
+using Sannel.House.Control.Data;
 using Sannel.House.Control.Http;
 using System;
 using System.Runtime.CompilerServices;
@@ -24,6 +25,7 @@ namespace Sannel.House.Control.ViewModels
 {
 	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive
 	{
+		private BME280 bme = new BME280();
 		private WinRTContainer container;
 		private HttpServer server;
 		public MainViewModel(WinRTContainer container, TimerViewModel tvm, HttpServer server)
@@ -35,34 +37,24 @@ namespace Sannel.House.Control.ViewModels
 			SettingsViewModel = container.GetInstance<SettingsViewModel>();
 		}
 
+		private async void Test()
+		{
+			using (BME280 bme = new BME280())
+			{
+				var result = await bme.Setup();
+				var tempc = bme.ReadTemperatureCelsius();
+				var tempf = bme.ReadTemperatureFahrenheit();
+			}
+		}
+
 		private async void Tick()
 		{
 			updateTime();
-			// Get a selector string for bus "I2C1"
-			//string aqs = I2cDevice.GetDeviceSelector("I2C1");
-
-			//// Find the I2C bus controller with our selector string
-			//var dis = await DeviceInformation.FindAllAsync(aqs);
-			//if (dis.Count == 0)
-			//	return; // bus not found
-
-			//// 0x40 is the I2C device address
-			//var settings = new I2cConnectionSettings(0x76);
-
-			//byte[] bits = new byte[1];
-
-			//int t1, t2, t3;
-
-			//// Create an I2cDevice with our selected bus controller and I2C settings
-			//using (I2cDevice device = await I2cDevice.FromIdAsync(dis[0].Id, settings))
-			//{
-			//	var result = device.WriteReadPartial(new byte[] { 0xFA }, bits);
-			//	t1 = bits[0] << 12;
-			//	result = device.WriteReadPartial(new byte[] { 0xFB }, bits);
-			//	t1 |= bits[0] << 4;
-			//	result = device.WriteReadPartial(new byte[] { 0xFC }, bits);
-			//	t1 |= (bits[0] >> 4) & 0x0f;
-			//}
+			if (!bme.IsSetup)
+			{
+				await bme.Setup();
+			}
+			Temprature = bme.ReadTemperatureFahrenheit();
 		}
 
 		private HomeViewModel homeViewModel;
@@ -88,6 +80,13 @@ namespace Sannel.House.Control.ViewModels
 			{
 				Set(ref settingsViewModel, value);
 			}
+		}
+
+		private float temprature;
+		public float Temprature
+		{
+			get { return temprature; }
+			set { Set(ref temprature, value); }
 		}
 
 		private String time;

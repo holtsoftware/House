@@ -20,6 +20,7 @@
 			<AppBarButton x:Name="HomeAction" Icon="Home" IsCompact="True" />
 		</StackPanel>
 		<StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+			<TextBlock x:Name="Temprature" />
 			<StackPanel>
 				<TextBlock x:Name="Time" HorizontalAlignment="Center" />
 				<TextBlock x:Name="Date" HorizontalAlignment="Center" />

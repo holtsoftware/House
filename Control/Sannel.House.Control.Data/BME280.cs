@@ -66,6 +66,8 @@ namespace Sannel.House.Control.Data
 		private short digT2;
 		private short digT3;
 		#endregion
+
+		public bool IsSetup { get { return device != null; } }
 		public async Task<bool> Setup()
 		{
 			// Get a selector string for bus "I2C1"
@@ -102,8 +104,39 @@ namespace Sannel.House.Control.Data
 			return 0;
 		}
 
+		public float ReadTemperatureCelsius()
+		{
+			// Returns temperature in DegC, resolution is 0.01 DegC. Output value of “5123” equals 51.23 DegC.
+			// t_fine carries fine temperature as global value
+
+			//get the reading (adc_T);
+			int adc_T = (int)(((uint)readRegister(BME280_TEMPERATURE_MSB_REG) << 12) | ((uint)readRegister(BME280_TEMPERATURE_LSB_REG) << 4) | (((uint)readRegister(BME280_TEMPERATURE_XLSB_REG) >> 4) & 0x0F));
+
+			//By datasheet, calibrate
+			long var1, var2;
+
+			var1 = ((((adc_T >> 3) - (digT1 << 1))) * (digT2) >> 11);
+			var2 = ((((adc_T >> 4) - (digT1) * ((adc_T >> 4) - (digT1))) >> 12) *
+			(digT3) >> 14);
+			var t_fine = var1 + var2;
+			float output = (t_fine * 5 + 128) >> 8;
+
+			output = output / 100;
+
+			return output;
+		}
+
+		public float ReadTemperatureFahrenheit()
+		{
+			float output = ReadTemperatureCelsius();
+			output = (output * 9) / 5 + 32;
+
+			return output;
+		}
+
 		public void Dispose()
 		{
+			device?.Dispose();
 		}
 	}
 }
