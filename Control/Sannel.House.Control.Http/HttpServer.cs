@@ -28,6 +28,7 @@ namespace Sannel.House.Control.Http
 			socket = new StreamSocketListener();
 			socket.Control.KeepAlive = true;
 			socket.Control.NoDelay = true;
+			socket.ConnectionReceived += onConnectionReceived;
 		}
 
 		public void RegisterRought(IRought rought)
@@ -55,8 +56,13 @@ namespace Sannel.House.Control.Http
 						var path = parts[1]?.ToLower();
 						if (path != null)
 						{
-							var uri = new Uri(path, UriKind.RelativeOrAbsolute);
-							request.Path = uri.GetComponents(UriComponents.Path, UriFormat.UriEscaped);
+							var spath = path;
+							if (path.Contains('?'))
+							{
+								var index = path.IndexOf('?');
+								spath = path.Substring(0, index);
+							}
+							request.Path = spath;
 						}
 					}
 				}
@@ -65,32 +71,48 @@ namespace Sannel.House.Control.Http
 			return request;
 		}
 
+		private String getResponseTextForStatusCode(int statusCode)
+		{
+			switch (statusCode)
+			{
+				case 404:
+					return "404 Not Found";
+
+				case 200:
+					return "200 OK";
+
+				default:
+					return "500 Server Error";
+			}
+		}
+
 		private async Task writeResponseAsync(IOutputStream stream, HttpResponse response)
 		{
-			using (var dw = new DataWriter(stream))
+			using(var sw = new StreamWriter(stream.AsStreamForWrite()))
 			{
-				dw.WriteString($"HTTP/1.1 {response.StatusCode} OK\n");
-				dw.WriteString("Cache-Control: no-store, no-cache\n");
+				await sw.WriteLineAsync($"HTTP/1.1 {getResponseTextForStatusCode(response.StatusCode)}");
+				await sw.WriteLineAsync("Cache-Control: no-store, no-cache");
 				switch (response.ContentType)
 				{
 					case ContentType.Json:
-						dw.WriteString("Content-Type: application/json\n");
+						await sw.WriteLineAsync("Content-Type: application/json");
 						break;
 
 					case ContentType.Html:
-						dw.WriteString("Content-Type: text/html\n");
+						await sw.WriteLineAsync("Content-Type: text/html; charset=utf-8");
 						break;
 
 					default:
-						dw.WriteString("Content-Type: text/txt\n");
+						await sw.WriteLineAsync("Content-Type: text/txt");
 						break;
 				}
-				dw.WriteString($"Date: {DateTime.UtcNow: dd MMM yyyy hh:mm:ss tt}\n");
-				dw.WriteString("Server: House Server\n");
-				dw.WriteString($"Content-Length: {response.Output.Length}\n");
-				dw.WriteBuffer(response.Output);
-				dw.WriteString("\n");
-				await dw.FlushAsync();
+				await sw.WriteLineAsync($"Date: {DateTime.UtcNow: dd MMM yyyy hh:mm:ss tt}");
+				await sw.WriteLineAsync("Server: House Server");
+				await sw.WriteLineAsync($"Content-Length: {response.Output.Length}");
+				await sw.WriteLineAsync();
+
+				await sw.WriteAsync(response.Output.ToString());
+				await sw.FlushAsync();
 
 				/*Cache-Control:no-store, no-cache
 Content-Length:551
@@ -110,11 +132,16 @@ Server:Microsoft-HTTPAPI/2.0*/
 					request = await getRequestAsync(inputStream);
 				}
 
+				if(request.Path == null)
+				{
+					return;
+				}
+
 				HttpResponse response = new HttpResponse();
 
 				if (roughts.ContainsKey(request.Path))
 				{
-
+					roughts[request.Path].Request(request, response);
 				}
 				else
 				{
@@ -131,7 +158,6 @@ Server:Microsoft-HTTPAPI/2.0*/
 		public async Task StartAsync()
 		{
 			await socket.BindServiceNameAsync(port.ToString());
-			socket.ConnectionReceived += onConnectionReceived;
 		}
 
 		public void Dispose()

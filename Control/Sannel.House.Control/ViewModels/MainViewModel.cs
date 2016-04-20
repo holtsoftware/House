@@ -86,7 +86,8 @@ namespace Sannel.House.Control.ViewModels
 		protected override void OnActivate()
 		{
 			base.OnActivate();
-			//HomeAction();
+			HomeAction();
+			server.StartAsync().Wait();
 		}
 
 		private void updateTime()
@@ -101,10 +102,9 @@ namespace Sannel.House.Control.ViewModels
 			ActivateItem(container.GetInstance<SettingsViewModel>());
 		}
 
-		public async void HomeAction()
+		public void HomeAction()
 		{
-			await server.StartAsync();
-			//ActivateItem(container.GetInstance<HomeViewModel>());
+			ActivateItem(container.GetInstance<HomeViewModel>());
 		}
 
 		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)

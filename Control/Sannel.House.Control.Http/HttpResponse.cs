@@ -9,8 +9,8 @@ namespace Sannel.House.Control.Http
 {
 	public class HttpResponse
 	{
-		public float StatusCode { get; set; } = 200;
+		public int StatusCode { get; set; } = 200;
 		public ContentType ContentType { get; set; }
-		public IBuffer Output { get; set; }
+		public StringBuilder Output { get; set; }
 	}
 }
