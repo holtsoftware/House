@@ -22,7 +22,7 @@
 				<RowDefinition />
 				<RowDefinition Height="auto" />
 			</Grid.RowDefinitions>
-			<ListView x:Name="Devices">
+			<ListView x:Name="Devices" SelectedItem="{Binding SelectedDevice, Mode=TwoWay}">
 				<ListView.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Vertical">

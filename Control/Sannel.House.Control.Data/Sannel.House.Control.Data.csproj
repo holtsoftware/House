@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BME280.cs" />
     <Compile Include="Migrations\20160416031952_First.cs" />
     <Compile Include="Migrations\20160416031952_First.designer.cs">
       <DependentUpon>20160416031952_First.cs</DependentUpon>
@@ -131,6 +132,11 @@
       <Project>{8b8e8ad8-58b2-4c90-b0da-b5f12ccea7f3}</Project>
       <Name>Sannel.House.WUnderground</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsIoT, Version=10.0.10586.0">
+      <Name>Windows IoT Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

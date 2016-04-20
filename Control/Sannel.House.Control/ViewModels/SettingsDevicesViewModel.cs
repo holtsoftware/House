@@ -12,12 +12,45 @@ namespace Sannel.House.Control.ViewModels
 {
 	public class SettingsDevicesViewModel : SubViewModel
 	{
+		protected override void OnActivate()
+		{
+			base.OnActivate();
+			RefreshDevices();
+		}
+
 		private ObservableCollection<StoredDevice> devices = new ObservableCollection<StoredDevice>();
 		public ObservableCollection<StoredDevice> Devices
 		{
 			get
 			{
 				return devices;
+			}
+		}
+
+		private StoredDevice selectedDevice;
+		public StoredDevice SelectedDevice
+		{
+			get
+			{
+				return selectedDevice; 
+			}
+			set
+			{
+				Set(ref selectedDevice, value);
+				if(value != null)
+				{
+					ShortDeviceId = selectedDevice.ShortId.ToString();
+					DeviceName = selectedDevice.Name;
+					CanSave = true;
+					IsShortDeviceIdEnabled = true;
+					IsDeviceNameEnabled = true;
+				}
+				else
+				{
+					CanSave = false;
+					IsShortDeviceIdEnabled = false;
+					IsDeviceNameEnabled = false;
+				}
 			}
 		}
 
@@ -92,22 +125,46 @@ namespace Sannel.House.Control.ViewModels
 
 			using (var context = new SqliteContext())
 			{
-				var item = context.StoredDevices.FirstOrDefault(i => i.ShortId == id);
-				if(item != null)
+				StoredDevice item = null;
+				if (SelectedDevice == null)
 				{
-					MessageDialog dialog = new MessageDialog("There is already a device with that short id");
-					await dialog.ShowAsync();
-					return;
+					item = context.StoredDevices.FirstOrDefault(i => i.ShortId == id);
+					if (item != null)
+					{
+						MessageDialog dialog = new MessageDialog("There is already a device with that short id");
+						await dialog.ShowAsync();
+						return;
+					}
+					item = new StoredDevice();
+					context.StoredDevices.Add(item);
 				}
+				else
+				{
+					var shortId = context.StoredDevices.FirstOrDefault(i => i.Id != SelectedDevice.Id && i.ShortId == id);
+					if(shortId != null)
+					{
+						MessageDialog dialog = new MessageDialog("There is already a devie with that short id");
+						await dialog.ShowAsync();
+						return;
+					}
 
-				item = new StoredDevice();
+					item = context.StoredDevices.FirstOrDefault(i => i.Id == SelectedDevice.Id);
+					if (item == null) // Not sure why this would be null but it could happen
+					{
+						item = new StoredDevice();
+						context.StoredDevices.Add(item);
+					}
+				}
+				
 				item.ShortId = id;
 				item.Name = DeviceName;
-				context.StoredDevices.Add(item);
 				await context.SaveChangesAsync();
 			}
 
 			RefreshDevices();
+			SelectedDevice = null;
+			DeviceName = String.Empty;
+			ShortDeviceId = String.Empty;
 		}
 
 		private bool canSave = false;
