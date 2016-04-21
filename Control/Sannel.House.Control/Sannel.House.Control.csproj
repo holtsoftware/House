@@ -114,6 +114,7 @@
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SettingsWUndergroundViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel.cs" />
+    <Compile Include="ViewModels\TemperatureViewModel.cs" />
     <Compile Include="ViewModels\TimerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\WeatherViewModel.cs" />
@@ -134,6 +135,9 @@
     </Compile>
     <Compile Include="Views\SettingsWUndergroundView.xaml.cs">
       <DependentUpon>SettingsWUndergroundView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TemperatureView.xaml.cs">
+      <DependentUpon>TemperatureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WeatherView.xaml.cs">
       <DependentUpon>WeatherView.xaml</DependentUpon>
@@ -279,6 +283,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsWUndergroundView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TemperatureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

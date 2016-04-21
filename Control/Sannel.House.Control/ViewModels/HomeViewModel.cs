@@ -29,9 +29,10 @@ namespace Sannel.House.Control.ViewModels
 {
 	public class HomeViewModel : ViewModelBase
 	{
-		public HomeViewModel(WeatherViewModel wvm)
+		public HomeViewModel(WeatherViewModel wvm, TemperatureViewModel temp)
 		{
 			Weather = wvm;
+			Temperature = temp;
 		}
 
 		private WeatherViewModel weatherViewModel;
@@ -46,6 +47,15 @@ namespace Sannel.House.Control.ViewModels
 				Set(ref weatherViewModel, value);
 			}
 		}
+
+		private TemperatureViewModel temperatureViewModel;
+
+		public TemperatureViewModel Temperature
+		{
+			get { return temperatureViewModel; }
+			set { temperatureViewModel = value; }
+		}
+
 		//protected override async void OnInitialize()
 		//{
 		//	base.OnInitialize();
@@ -133,7 +143,7 @@ namespace Sannel.House.Control.ViewModels
 
 		//	}
 		//}
-		
+
 		//private void logHourly(Hourly h10day)
 		//{
 		//	if(h10day != null)

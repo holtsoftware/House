@@ -87,6 +87,7 @@ namespace Sannel.House.Control
 			container.Singleton<WeatherViewModel>();
 			container.Singleton<SettingsDevicesViewModel>();
 			container.Singleton<SettingsWUndergroundViewModel>();
+			container.Singleton<TemperatureViewModel>();
 
 			var server = container.GetInstance<HttpServer>();
 			server.RegisterRought(new CurrentConditions());

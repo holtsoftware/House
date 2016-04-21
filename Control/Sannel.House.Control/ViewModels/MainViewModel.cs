@@ -25,7 +25,6 @@ namespace Sannel.House.Control.ViewModels
 {
 	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive
 	{
-		private BME280 bme = new BME280();
 		private WinRTContainer container;
 		private HttpServer server;
 		public MainViewModel(WinRTContainer container, TimerViewModel tvm, HttpServer server)
@@ -37,24 +36,9 @@ namespace Sannel.House.Control.ViewModels
 			SettingsViewModel = container.GetInstance<SettingsViewModel>();
 		}
 
-		private async void Test()
-		{
-			using (BME280 bme = new BME280())
-			{
-				var result = await bme.Setup();
-				var tempc = bme.ReadTemperatureCelsius();
-				var tempf = bme.ReadTemperatureFahrenheit();
-			}
-		}
-
-		private async void Tick()
+		private void Tick()
 		{
 			updateTime();
-			if (!bme.IsSetup)
-			{
-				await bme.Setup();
-			}
-			Temprature = bme.ReadTemperatureFahrenheit();
 		}
 
 		private HomeViewModel homeViewModel;
