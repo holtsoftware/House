@@ -8,22 +8,23 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Control.Roughts
 {
-	public class CurrentConditions : IRought
+	public class CurrentConditions : SyncBase
 	{
-		public string Path
+		public override string Path
 		{
 			get
 			{
-				return "/currentconditions";
+				return "currentconditions";
 			}
 		}
 
-		public void Request(HttpRequest request, HttpResponse response)
+		public override void Request(HttpRequest request, HttpResponse response)
 		{
 			response.ContentType = ContentType.Html;
 			response.StatusCode = 200;
 			var ou = response.Output = new StringBuilder();
 			ou.AppendLine("<html><head>");
+			ou.AppendLine("<link type='text/css' href='/css/default.css' rel='stylesheet' />");
 			using (var context = new SqliteContext())
 			{
 				var current = context.WeatherConditions.OrderByDescending(i => i.CreatedDate).FirstOrDefault();

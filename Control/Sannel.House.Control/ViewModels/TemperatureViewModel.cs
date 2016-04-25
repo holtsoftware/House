@@ -4,36 +4,69 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sannel.House.Control.Data;
+using Sannel.House.Control.Business;
+using Sannel.House.Control.Data.Models;
 
 namespace Sannel.House.Control.ViewModels
 {
 	public class TemperatureViewModel : SubViewModel
 	{
 		private BME280 bme = new BME280();
+		private bool busFound = false;
+		private TimerViewModel timer;
+
 		public TemperatureViewModel(TimerViewModel timer)
 		{
-			timer.Tick += Tick;
-			timer.HalfHourTick += HalfHourTick;
+			this.timer = timer;
+			
 		}
 
-		public async void Tick()
+		protected override async void OnViewLoaded(object view)
 		{
-			if (!bme.IsSetup)
+			base.OnViewLoaded(view);
+			if (BME280.IsSupported)
 			{
-				await bme.SetupAsync();
+				if (!bme.IsSetup)
+				{
+					busFound = await bme.SetupAsync();
+				}
+				if (busFound)
+				{
+					timer.Tick += Tick;
+					timer.HalfHourTick += HalfHourTick;
+				}
 			}
-
-			var tempC = bme.ReadTemperatureCelsius();
-			Temperature = BME280.ConvertToFahrenheit(tempC);
-			var alt = bme.ReadPressure();
-			Altitude = BME280.PressureAsAltitudeFeet(alt);
-			var hum = bme.ReadHumidity();
-			Humidity = BME280.HumidityToRH(hum);
+			if (!busFound)
+			{
+				Temperature = -9999;
+				Humidity = -9999;
+				Altitude = -9999;
+			}
 		}
 
-		public void HalfHourTick()
+		public void Tick()
 		{
+			if (busFound)
+			{
+				var tempC = bme.ReadTemperatureCelsius();
+				Temperature = BME280.ConvertToFahrenheit(tempC);
+				var alt = bme.ReadPressure();
+				Altitude = BME280.PressureAsAltitudeFeet(alt);
+				var hum = bme.ReadHumidity();
+				Humidity = BME280.HumidityToRH(hum);
+			}
+		}
 
+		public async void HalfHourTick()
+		{
+			using (var context = new SqliteContext())
+			{
+				var temp = new Temperature();
+				temp.StoredDeviceId = AppSettings.Current.DeviceId;
+				temp.Value = bme.ReadTemperatureCelsius();
+				context.Temperatures.Add(temp);
+				await context.SaveChangesAsync();
+			}
 		}
 
 		private float temperature;

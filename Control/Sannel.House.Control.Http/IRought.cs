@@ -13,6 +13,6 @@ namespace Sannel.House.Control.Http
 			get;
 		}
 
-		void Request(HttpRequest request, HttpResponse response);
+		Task RequestAsync(HttpRequest request, HttpResponse response);
 	}
 }

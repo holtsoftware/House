@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
@@ -38,12 +39,28 @@ namespace Sannel.House.Control.Http
 
 		private async Task<HttpRequest> getRequestAsync(IInputStream stream)
 		{
-			String line = "";
-			HttpRequest request = new HttpRequest();
-			using (var streamReader = new StreamReader(stream.AsStreamForRead()))
+			StringBuilder req = new StringBuilder();
+			uint len = 8192;
+			byte[] data = new byte[len];
+			IBuffer buffer = data.AsBuffer();
+			uint dataRead = len;
+			using (IInputStream input = stream)
 			{
-				line = await streamReader.ReadLineAsync();
-				var parts = line?.Split(' ');
+				while (dataRead == len)
+				{
+					await input.ReadAsync(buffer, len, InputStreamOptions.Partial);
+					req.Append(Encoding.UTF8.GetString(data, 0, (int)buffer.Length));
+					dataRead = buffer.Length;
+				}
+			}
+
+			HttpRequest request = new HttpRequest();
+			var lines = req.ToString().Split('\n');
+			var queue = new Queue<String>(lines);
+			req = null;
+			if(queue.Count > 0)
+			{
+				var parts = queue.Dequeue()?.Split(' ');
 				if (parts?.Length > 0)
 				{
 					HttpRequestType type;
@@ -63,9 +80,27 @@ namespace Sannel.House.Control.Http
 								spath = path.Substring(0, index);
 							}
 							request.Path = spath;
+							var l = spath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+							var first = l.FirstOrDefault();
+							request.RootPath = first;
 						}
 					}
 				}
+
+				String line = queue.Dequeue();
+				while (!String.IsNullOrWhiteSpace(line))
+				{
+					if (line.Contains(':'))
+					{
+						request.AddHeader(line.Trim());
+					}
+				}
+				String sdata = "";
+				while(queue.Count > 0)
+				{
+					sdata += queue.Dequeue();
+				}
+				request.Data = sdata;
 			}
 
 			return request;
@@ -77,6 +112,9 @@ namespace Sannel.House.Control.Http
 			{
 				case 404:
 					return "404 Not Found";
+
+				case 401:
+					return "401 Access Denied";
 
 				case 200:
 					return "200 OK";
@@ -91,7 +129,10 @@ namespace Sannel.House.Control.Http
 			using(var sw = new StreamWriter(stream.AsStreamForWrite()))
 			{
 				await sw.WriteLineAsync($"HTTP/1.1 {getResponseTextForStatusCode(response.StatusCode)}");
-				await sw.WriteLineAsync("Cache-Control: no-store, no-cache");
+				if (!response.CanCache)
+				{
+					await sw.WriteLineAsync("Cache-Control: no-store, no-cache");
+				}
 				switch (response.ContentType)
 				{
 					case ContentType.Json:
@@ -102,16 +143,34 @@ namespace Sannel.House.Control.Http
 						await sw.WriteLineAsync("Content-Type: text/html; charset=utf-8");
 						break;
 
+					case ContentType.Javascript:
+						await sw.WriteLineAsync("Content-Type: application/javascript");
+						break;
+
+					case ContentType.Css:
+						await sw.WriteLineAsync("Content-Type: text/css");
+						break;
+
 					default:
 						await sw.WriteLineAsync("Content-Type: text/txt");
 						break;
 				}
-				await sw.WriteLineAsync($"Date: {DateTime.UtcNow: dd MMM yyyy hh:mm:ss tt}");
+				await sw.WriteLineAsync("Accept-Ranges: bytes");
+				await sw.WriteLineAsync($"Date: {response.LastUpdated: dd MMM yyyy hh:mm:ss} GMT");
 				await sw.WriteLineAsync("Server: House Server");
-				await sw.WriteLineAsync($"Content-Length: {response.Output.Length}");
-				await sw.WriteLineAsync();
 
-				await sw.WriteAsync(response.Output.ToString());
+				foreach(var key in response.Headers.Keys)
+				{
+					await sw.WriteLineAsync($"{key}: {response.Headers[key]}");
+				}
+
+				if (response.Output != null)
+				{
+					await sw.WriteLineAsync($"Content-Length: {response.Output.Length}");
+					await sw.WriteLineAsync();
+
+					await sw.WriteAsync(response.Output.ToString());
+				}
 				await sw.FlushAsync();
 
 				/*Cache-Control:no-store, no-cache
@@ -139,13 +198,22 @@ Server:Microsoft-HTTPAPI/2.0*/
 
 				HttpResponse response = new HttpResponse();
 
-				if (roughts.ContainsKey(request.Path))
+				try
 				{
-					roughts[request.Path].Request(request, response);
+					if (roughts.ContainsKey(request.RootPath))
+					{
+						await roughts[request.RootPath].RequestAsync(request, response);
+					}
+					else
+					{
+						await defaultRought.RequestAsync(request, response);
+					}
 				}
-				else
+				catch(Exception ex)
 				{
-					defaultRought.Request(request, response);
+					response = new HttpResponse();
+					var err = new Error500(ex);
+					await err.RequestAsync(request, response);
 				}
 
 				using (var outStream = socket.OutputStream)

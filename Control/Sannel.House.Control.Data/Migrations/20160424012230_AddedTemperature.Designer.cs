@@ -8,9 +8,10 @@ using Sannel.House.Control.Data;
 namespace Sannel.House.Control.Data.Migrations
 {
     [DbContext(typeof(SqliteContext))]
-    partial class SqliteContextModelSnapshot : ModelSnapshot
+    [Migration("20160424012230_AddedTemperature")]
+    partial class AddedTemperature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348");
@@ -40,22 +41,6 @@ namespace Sannel.House.Control.Data.Migrations
                     b.Property<Guid?>("StoredDeviceId");
 
                     b.Property<float>("Value");
-
-                    b.HasKey("Id");
-                });
-
-            modelBuilder.Entity("Sannel.House.Control.Data.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<bool>("IsEnabled");
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("Username");
 
                     b.HasKey("Id");
                 });

@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -107,7 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BME280.cs" />
+    <Compile Include="AppSettings.cs" />
     <Compile Include="Migrations\20160416031952_First.cs" />
     <Compile Include="Migrations\20160416031952_First.designer.cs">
       <DependentUpon>20160416031952_First.cs</DependentUpon>
@@ -120,8 +120,17 @@
     <Compile Include="Migrations\20160416064108_AddedNewColumn-StoredDevices.designer.cs">
       <DependentUpon>20160416064108_AddedNewColumn-StoredDevices.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20160424012230_AddedTemperature.cs" />
+    <Compile Include="Migrations\20160424012230_AddedTemperature.designer.cs">
+      <DependentUpon>20160424012230_AddedTemperature.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20160424055511_AddedUsers.cs" />
+    <Compile Include="Migrations\20160424055511_AddedUsers.designer.cs">
+      <DependentUpon>20160424055511_AddedUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\SqliteContextModelSnapshot.cs" />
     <Compile Include="Models\StoredDevice.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="SqliteContext.cs" />
     <Compile Include="Models\Temperature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

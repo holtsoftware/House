@@ -9,6 +9,8 @@ namespace Sannel.House.Control.Http
 	public enum ContentType
 	{
 		Html,
-		Json
+		Json,
+		Javascript,
+		Css
 	}
 }

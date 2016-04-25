@@ -36,6 +36,8 @@ using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
 using Sannel.House.Control.Http;
 using Sannel.House.Control.Roughts;
+using Windows.Security.ExchangeActiveSyncProvisioning;
+using System.Reflection;
 
 namespace Sannel.House.Control
 {
@@ -90,7 +92,23 @@ namespace Sannel.House.Control
 			container.Singleton<TemperatureViewModel>();
 
 			var server = container.GetInstance<HttpServer>();
-			server.RegisterRought(new CurrentConditions());
+			var list = from t in GetType().GetTypeInfo().Assembly.GetTypes()
+					   where t.Namespace.StartsWith("Sannel.House.Control.Roughts") & !t.GetTypeInfo().IsAbstract
+					   select t;
+
+			foreach(var t in list)
+			{
+				var c = t.GetConstructor(new Type[] { });
+				if(c != null)
+				{
+					var v = c.Invoke(new Type[] { }) as IRought;
+					if (v != null)
+					{
+						server.RegisterRought(v);
+					}
+				}
+			}
+
 		}
 
 		/// <summary>
@@ -106,7 +124,23 @@ namespace Sannel.House.Control
 				this.DebugSettings.EnableFrameRateCounter = true;
 			}
 #endif
+			using (var context = new SqliteContext())
+			{
+				var device = context.StoredDevices.FirstOrDefault(i => i.Id == AppSettings.Current.DeviceId);
+				if(device == null)
+				{
+					device = new Data.Models.StoredDevice();
+					EasClientDeviceInformation di = new EasClientDeviceInformation();
+					device.Name = di.FriendlyName;
+					device.ShortId = 0;
+					device.Id = AppSettings.Current.DeviceId;
+					context.StoredDevices.Add(device);
+					context.SaveChanges();
+				}
+			}
+
 			DisplayRootView<MainView>();
+
 		}
 
 		/// <summary>

@@ -30,6 +30,8 @@ namespace Sannel.House.Control.Data
 		public DbSet<WeatherAstronomy> WeatherAstronomies { get; set; }
 		public DbSet<WeatherHourly> WeatherHourlies { get; set; }
 		public DbSet<StoredDevice> StoredDevices { get; set; }
+		public DbSet<Temperature> Temperatures { get; set; }
+		public DbSet<User> Users { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -43,6 +45,8 @@ namespace Sannel.House.Control.Data
 				.IsRequired();
 			modelBuilder.Entity<WeatherAstronomy>().Property(i => i.Id).IsRequired();
 			modelBuilder.Entity<WeatherHourly>().Property(i => i.Id).IsRequired();
+			modelBuilder.Entity<Temperature>().Property(i => i.Id).IsRequired().ValueGeneratedOnAdd();
+			modelBuilder.Entity<User>().Property(i => i.Id).IsRequired();
 			var sd = modelBuilder.Entity<StoredDevice>();
 			sd.Property(i => i.Id).IsRequired();
 			sd.Property(i => i.ShortId).IsRequired();

@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
+using Windows.Foundation.Metadata;
 
-namespace Sannel.House.Control.Data
+namespace Sannel.House.Control.Business
 {
 	// Ported from Spark funs library located here https://github.com/sparkfun/SparkFun_BME280_Arduino_Library
 	public class BME280 : IDisposable
@@ -53,7 +54,7 @@ namespace Sannel.House.Control.Data
 		public const byte BME280_CONFIG_REG = 0xF5; //Configuration Reg
 		public const byte BME280_PRESSURE_MSB_REG = 0xF7; //Pressure MSB
 		public const byte BME280_PRESSURE_LSB_REG = 0xF8; //Pressure LSB
-		public const byte BME280_PRESSURE_XLSB_REG  = 0xF9; //Pressure XLSB
+		public const byte BME280_PRESSURE_XLSB_REG = 0xF9; //Pressure XLSB
 		public const byte BME280_TEMPERATURE_MSB_REG = 0xFA; //Temperature MSB
 		public const byte BME280_TEMPERATURE_LSB_REG = 0xFB; //Temperature LSB
 		public const byte BME280_TEMPERATURE_XLSB_REG = 0xFC; //Temperature XLSB
@@ -127,6 +128,15 @@ namespace Sannel.House.Control.Data
 
 		private long tFine = -9999;
 
+		private static bool? isSupported;
+		public static bool IsSupported
+		{
+			get
+			{
+				return (isSupported ?? (isSupported = ApiInformation.IsTypePresent("Windows.Devices.I2c.I2cDevice")) == true);
+			}
+		}
+
 		public bool IsSetup { get { return device != null; } }
 		public async Task<bool> SetupAsync()
 		{
@@ -140,7 +150,7 @@ namespace Sannel.House.Control.Data
 
 			var settings = new I2cConnectionSettings(0x76);
 			device = await I2cDevice.FromIdAsync(dis[0].Id, settings);
-			if(device == null)
+			if (device == null)
 			{
 				return false;
 			}
@@ -198,13 +208,13 @@ namespace Sannel.House.Control.Data
 
 		public byte readRegister(byte id)
 		{
-			if(device == null)
+			if (device == null)
 			{
 				throw new Exception("please call Setup");
 			}
 			var bit = new byte[1];
 			var result = device.WriteReadPartial(new byte[] { id }, bit);
-			if(result.Status == I2cTransferStatus.FullTransfer)
+			if (result.Status == I2cTransferStatus.FullTransfer)
 			{
 				return bit[0];
 			}
@@ -242,7 +252,7 @@ namespace Sannel.House.Control.Data
 
 		public float ReadPressure()
 		{
-			if(tFine == -9999)
+			if (tFine == -9999)
 			{
 				ReadTemperatureCelsius();
 			}

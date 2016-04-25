@@ -7,9 +7,9 @@ using Windows.Storage.Streams;
 
 namespace Sannel.House.Control.Http
 {
-	public class Rought404 : IRought
+	public class Rought404 : SyncBase
 	{
-		public string Path
+		public override string Path
 		{
 			get
 			{
@@ -17,7 +17,7 @@ namespace Sannel.House.Control.Http
 			}
 		}
 
-		public void Request(HttpRequest request, HttpResponse response)
+		public override void Request(HttpRequest request, HttpResponse response)
 		{
 			response.StatusCode = 404;
 			var ot = response.Output = new StringBuilder();

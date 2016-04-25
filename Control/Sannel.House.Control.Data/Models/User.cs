@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Control.Data.Models
 {
-	public class Temperature
+	public class User
 	{
 		[Key]
-		public long Id
+		public Guid Id
 		{
-			get; set;
+			get;
+			set;
 		}
 
-		public Guid? StoredDeviceId { get; set; }
-
-		public float Value { get; set; }
+		public String Username { get; set; }
+		public String Password { get; set; }
 
 		public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+
+		public bool IsEnabled { get; set; }
 	}
 }
