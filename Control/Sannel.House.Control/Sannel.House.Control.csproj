@@ -104,13 +104,6 @@
     </Compile>
     <Compile Include="Models\HourlyItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HttpHelpers\DBAuthenticated.cs" />
-    <Compile Include="Roughts\Authenticated\Devices.cs" />
-    <Compile Include="HttpHelpers\BasicAuthenticationRought.cs" />
-    <Compile Include="Roughts\CurrentConditions.cs" />
-    <Compile Include="Roughts\Javascript.cs" />
-    <Compile Include="Roughts\StaticContent.cs" />
-    <Compile Include="Roughts\StyleSheet.cs" />
     <Compile Include="ViewModels\HomeViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ServerViewModel.cs" />
@@ -260,10 +253,6 @@
     <ProjectReference Include="..\Sannel.House.Control.Data\Sannel.House.Control.Data.csproj">
       <Project>{dc34708a-da63-4576-9565-a3b501d6f053}</Project>
       <Name>Sannel.House.Control.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sannel.House.Control.Http\Sannel.House.Control.Http.csproj">
-      <Project>{07e1efd7-79d9-4741-86bf-cbb80530914c}</Project>
-      <Name>Sannel.House.Control.Http</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sannel.House.WUnderground\Sannel.House.WUnderground.csproj">
       <Project>{8b8e8ad8-58b2-4c90-b0da-b5f12ccea7f3}</Project>

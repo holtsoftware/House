@@ -34,8 +34,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
-using Sannel.House.Control.Http;
-using Sannel.House.Control.Roughts;
 using Windows.Security.ExchangeActiveSyncProvisioning;
 using System.Reflection;
 
@@ -81,7 +79,6 @@ namespace Sannel.House.Control
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
-			container.RegisterInstance(typeof(HttpServer), null, new HttpServer(8088));
 			container.Singleton<TimerViewModel>();
 			container.Singleton<MainViewModel>();
 			container.Singleton<HomeViewModel>();
@@ -90,24 +87,6 @@ namespace Sannel.House.Control
 			container.Singleton<SettingsDevicesViewModel>();
 			container.Singleton<SettingsWUndergroundViewModel>();
 			container.Singleton<TemperatureViewModel>();
-
-			var server = container.GetInstance<HttpServer>();
-			var list = from t in GetType().GetTypeInfo().Assembly.GetTypes()
-					   where t.Namespace.StartsWith("Sannel.House.Control.Roughts") & !t.GetTypeInfo().IsAbstract
-					   select t;
-
-			foreach(var t in list)
-			{
-				var c = t.GetConstructor(new Type[] { });
-				if(c != null)
-				{
-					var v = c.Invoke(new Type[] { }) as IRought;
-					if (v != null)
-					{
-						server.RegisterRought(v);
-					}
-				}
-			}
 
 		}
 

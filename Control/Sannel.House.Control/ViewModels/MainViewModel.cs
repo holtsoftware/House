@@ -15,7 +15,6 @@
 */
 using Caliburn.Micro;
 using Sannel.House.Control.Data;
-using Sannel.House.Control.Http;
 using System;
 using System.Runtime.CompilerServices;
 using Windows.Devices.Enumeration;
@@ -26,11 +25,9 @@ namespace Sannel.House.Control.ViewModels
 	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive
 	{
 		private WinRTContainer container;
-		private HttpServer server;
-		public MainViewModel(WinRTContainer container, TimerViewModel tvm, HttpServer server)
+		public MainViewModel(WinRTContainer container, TimerViewModel tvm)
 		{
 			this.container = container;
-			this.server = server;
 			tvm.Tick += Tick;
 			HomeViewModel = container.GetInstance<HomeViewModel>();
 			SettingsViewModel = container.GetInstance<SettingsViewModel>();
@@ -97,7 +94,6 @@ namespace Sannel.House.Control.ViewModels
 		{
 			base.OnActivate();
 			HomeAction();
-			server.StartAsync().Wait();
 		}
 
 		private void updateTime()

@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.WUnderground",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.WUnderground.Tests", "Sannel.House.WUnderground.Tests\Sannel.House.WUnderground.Tests.csproj", "{C2D45B4B-02E3-40C5-A427-BEEB3229FBE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Control.Http", "Sannel.House.Control.Http\Sannel.House.Control.Http.csproj", "{07E1EFD7-79D9-4741-86BF-CBB80530914C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Control.Business", "Sannel.House.Control.Business\Sannel.House.Control.Business.csproj", "{62D4E300-A93F-4F64-8BB6-45DF8CC376BF}"
 EndProject
 Global
@@ -117,22 +115,6 @@ Global
 		{C2D45B4B-02E3-40C5-A427-BEEB3229FBE5}.Release|x86.ActiveCfg = Release|x86
 		{C2D45B4B-02E3-40C5-A427-BEEB3229FBE5}.Release|x86.Build.0 = Release|x86
 		{C2D45B4B-02E3-40C5-A427-BEEB3229FBE5}.Release|x86.Deploy.0 = Release|x86
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|ARM.ActiveCfg = Debug|ARM
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|ARM.Build.0 = Debug|ARM
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|x64.ActiveCfg = Debug|x64
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|x64.Build.0 = Debug|x64
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|x86.ActiveCfg = Debug|x86
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Debug|x86.Build.0 = Debug|x86
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|ARM.ActiveCfg = Release|ARM
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|ARM.Build.0 = Release|ARM
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|x64.ActiveCfg = Release|x64
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|x64.Build.0 = Release|x64
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|x86.ActiveCfg = Release|x86
-		{07E1EFD7-79D9-4741-86BF-CBB80530914C}.Release|x86.Build.0 = Release|x86
 		{62D4E300-A93F-4F64-8BB6-45DF8CC376BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{62D4E300-A93F-4F64-8BB6-45DF8CC376BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62D4E300-A93F-4F64-8BB6-45DF8CC376BF}.Debug|ARM.ActiveCfg = Debug|ARM
