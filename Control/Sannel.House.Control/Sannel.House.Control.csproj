@@ -148,9 +148,6 @@
     <None Include="Sannel.House.Control_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\http\css\default.css" />
-    <Content Include="Assets\http\js\devices.js" />
-    <Content Include="Assets\http\js\jquery.js" />
     <Content Include="Assets\Icons\25\chanceflurries.gif" />
     <Content Include="Assets\Icons\25\chancerain.gif" />
     <Content Include="Assets\Icons\25\chancesleet.gif" />
