@@ -303,7 +303,7 @@ namespace Sannel.House.Control.Business
 
 			// Returns humidity in %RH as unsigned 32 bit integer in Q22. 10 format (22 integer and 10 fractional bits).
 			// Output value of “47445” represents 47445/1024 = 46. 333 %RH
-			int adc_H = (int)(((uint)readRegister(BME280_HUMIDITY_MSB_REG) << 8) | ((uint)readRegister(BME280_HUMIDITY_LSB_REG)));
+			int adc_H = ((int)readRegister(BME280_HUMIDITY_MSB_REG) << 8) | ((int)readRegister(BME280_HUMIDITY_LSB_REG));
 
 			int var1;
 			var1 = ((int)tFine - ((int)76800));
@@ -314,7 +314,17 @@ namespace Sannel.House.Control.Business
 			var1 = (var1 < 0 ? 0 : var1);
 			var1 = (var1 > 419430400 ? 419430400 : var1);
 
-			return (float)((var1 >> 12) >> 10);
+			double var2 = var1 >> 12;
+			unsafe
+			{
+				double* var3 = &var2;
+				int* var4 = (int*)var3;
+				*var4 >>= 10;
+				var2 = *var3;
+
+			}
+
+			return (float)var2;
 
 		}
 
