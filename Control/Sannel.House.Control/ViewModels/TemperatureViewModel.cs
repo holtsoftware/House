@@ -6,19 +6,23 @@ using System.Threading.Tasks;
 using Sannel.House.Control.Data;
 using Sannel.House.Control.Business;
 using Sannel.House.Control.Data.Models;
+using Caliburn.Micro;
+using Sannel.House.Control.Data.Messages;
+using Windows.UI.Xaml;
+using Windows.UI.Core;
 
 namespace Sannel.House.Control.ViewModels
 {
-	public class TemperatureViewModel : SubViewModel
+	public class TemperatureViewModel : SubViewModel, IHandle<TickMessage>, IHandle<HalfHourTickMessage>
 	{
 		private BME280 bme = new BME280();
 		private bool busFound = false;
-		private TimerViewModel timer;
+		private IEventAggregator aggregator;
 
-		public TemperatureViewModel(TimerViewModel timer)
+		public TemperatureViewModel(IEventAggregator agg)
 		{
-			this.timer = timer;
-			
+			//this.timer = timer;
+			aggregator = agg;
 		}
 
 		protected override async void OnViewLoaded(object view)
@@ -32,8 +36,9 @@ namespace Sannel.House.Control.ViewModels
 				}
 				if (busFound)
 				{
-					timer.Tick += Tick;
-					timer.HalfHourTick += HalfHourTick;
+					//timer.Tick += Tick;
+					//timer.HalfHourTick += HalfHourTick;
+					aggregator.Subscribe(this);
 				}
 			}
 			if (!busFound)
@@ -46,15 +51,7 @@ namespace Sannel.House.Control.ViewModels
 
 		public void Tick()
 		{
-			if (busFound)
-			{
-				var tempC = bme.ReadTemperatureCelsius();
-				Temperature = BME280.ConvertToFahrenheit(tempC);
-				var alt = bme.ReadPressure();
-				Altitude = BME280.PressureAsAltitudeFeet(alt);
-				var hum = bme.ReadHumidity();
-				Humidity = BME280.HumidityToRH(hum);
-			}
+
 		}
 
 		public async void HalfHourTick()
@@ -67,6 +64,29 @@ namespace Sannel.House.Control.ViewModels
 				context.Temperatures.Add(temp);
 				await context.SaveChangesAsync();
 			}
+		}
+
+		public async void Handle(TickMessage message)
+		{
+			if (busFound)
+			{
+				float tempC = 0, alt = 0, hum = 0;
+				await Task.Run(() =>
+				{
+					tempC = bme.ReadTemperatureCelsius();
+					alt = bme.ReadPressure();
+					hum = bme.ReadHumidity();
+				});
+
+				Altitude = BME280.PressureAsAltitudeFeet(alt);
+				Temperature = BME280.ConvertToFahrenheit(tempC);
+				Humidity = BME280.HumidityToRH(hum);
+			}
+		}
+
+		public void Handle(HalfHourTickMessage message)
+		{
+
 		}
 
 		private float temperature;

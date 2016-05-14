@@ -36,6 +36,7 @@ using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
 using Windows.Security.ExchangeActiveSyncProvisioning;
 using System.Reflection;
+using Sannel.House.Control.Business;
 
 namespace Sannel.House.Control
 {
@@ -79,7 +80,6 @@ namespace Sannel.House.Control
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
-			container.Singleton<TimerViewModel>();
 			container.Singleton<MainViewModel>();
 			container.Singleton<HomeViewModel>();
 			container.Singleton<SettingsViewModel>();
@@ -87,7 +87,8 @@ namespace Sannel.House.Control
 			container.Singleton<SettingsDevicesViewModel>();
 			container.Singleton<SettingsWUndergroundViewModel>();
 			container.Singleton<TemperatureViewModel>();
-
+			container.Singleton<TimerService>();
+			container.Singleton<SyncService>();
 		}
 
 		/// <summary>
@@ -119,6 +120,8 @@ namespace Sannel.House.Control
 			}
 
 			DisplayRootView<MainView>();
+
+			container.GetInstance<TimerService>();
 
 		}
 

@@ -114,7 +114,6 @@
     <Compile Include="ViewModels\SettingsWUndergroundViewModel.cs" />
     <Compile Include="ViewModels\SubViewModel.cs" />
     <Compile Include="ViewModels\TemperatureViewModel.cs" />
-    <Compile Include="ViewModels\TimerViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\WeatherViewModel.cs" />
     <Compile Include="Views\HomeView.xaml.cs">

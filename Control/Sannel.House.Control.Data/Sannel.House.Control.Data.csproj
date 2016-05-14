@@ -108,6 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="Messages\DayTickMessage.cs" />
+    <Compile Include="Messages\HalfHourTickMessage.cs" />
+    <Compile Include="Messages\HourTickMessage.cs" />
+    <Compile Include="Messages\TickMessage.cs" />
     <Compile Include="Migrations\20160416031952_First.cs" />
     <Compile Include="Migrations\20160416031952_First.designer.cs">
       <DependentUpon>20160416031952_First.cs</DependentUpon>

@@ -15,29 +15,25 @@
 */
 using Caliburn.Micro;
 using Sannel.House.Control.Data;
+using Sannel.House.Control.Data.Messages;
 using System;
 using System.Runtime.CompilerServices;
 using Windows.Devices.Enumeration;
 using Windows.Devices.I2c;
+using Windows.UI.Xaml;
 
 namespace Sannel.House.Control.ViewModels
 {
-	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive
+	public class MainViewModel : Conductor<ViewModelBase>.Collection.OneActive, IHandle<TickMessage>
 	{
 		private WinRTContainer container;
-		public MainViewModel(WinRTContainer container, TimerViewModel tvm)
+		public MainViewModel(WinRTContainer container, IEventAggregator agg)
 		{
 			this.container = container;
-			tvm.Tick += Tick;
 			HomeViewModel = container.GetInstance<HomeViewModel>();
 			SettingsViewModel = container.GetInstance<SettingsViewModel>();
 		}
-
-		private void Tick()
-		{
-			updateTime();
-		}
-
+		
 		private HomeViewModel homeViewModel;
 		public HomeViewModel HomeViewModel
 		{
@@ -120,6 +116,11 @@ namespace Sannel.House.Control.ViewModels
 				dest = source;
 				NotifyOfPropertyChange(propName);
 			}
+		}
+
+		public async void Handle(TickMessage message)
+		{
+			await Window.Current.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, updateTime);
 		}
 	}
 }

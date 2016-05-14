@@ -26,18 +26,17 @@ using Windows.Web.Http;
 using Sannel.House.WUnderground;
 using Sannel.House.WUnderground.Models;
 using System.Collections.ObjectModel;
+using Caliburn.Micro;
+using Sannel.House.Control.Data.Messages;
 
 namespace Sannel.House.Control.ViewModels
 {
-	public class WeatherViewModel : SubViewModel
+	public class WeatherViewModel : SubViewModel, IHandle<HalfHourTickMessage>, IHandle<DayTickMessage>
 	{
 		private ObservableCollection<HourlyItem> hourlyItems = new ObservableCollection<HourlyItem>();
-		public WeatherViewModel(TimerViewModel tvm)
+		public WeatherViewModel(IEventAggregator agg)
 		{
-			tvm.Tick += tick;
-			tvm.HalfHourTick += halfHourTick;
-			tvm.HourTick += hourTick;
-			tvm.DayTick += dayTick;
+			agg.Subscribe(this);
 			using (SqliteContext context = new SqliteContext())
 			{
 				updateCurrentConditions(context.WeatherConditions.OrderByDescending(i => i.CreatedDate).FirstOrDefault());
@@ -51,26 +50,7 @@ namespace Sannel.House.Control.ViewModels
 		{
 			base.OnInitialize();
 		}
-
-		private void tick()
-		{
-		}
-
-		private void halfHourTick()
-		{
-			pullHourlyForcast();
-			pullCurrentConditions();
-		}
-
-		private void hourTick()
-		{
-		}
-
-		private void dayTick()
-		{
-			pullAstronomy();
-		}
-
+		
 		private async void pullCurrentConditions()
 		{
 			if (AppSettings.Current.WUndergroundSetup())
@@ -210,6 +190,17 @@ namespace Sannel.House.Control.ViewModels
 				PercentIlluminated = $"{wa.PercentIlluminated:P0}";
 				AgeOfMoon = $"{wa.AgeOfMoon}";
 			}
+		}
+
+		public void Handle(HalfHourTickMessage message)
+		{
+			pullHourlyForcast();
+			pullCurrentConditions();
+		}
+
+		public void Handle(DayTickMessage message)
+		{
+			pullAstronomy();
 		}
 
 		private String iconUrl;
