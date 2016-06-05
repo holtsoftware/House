@@ -8,6 +8,6 @@ module solarPanel()
 difference()
 {
     cube([140,75,5]);
-    translate([17,12.25,0]) solarPanel();
-    translate([70,12.25,0]) solarPanel();
+    translate([18,12.25,0]) solarPanel();
+    translate([73,12.25,0]) solarPanel();
 }
