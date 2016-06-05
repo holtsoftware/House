@@ -6,6 +6,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.lock.json
 
 # Windows StoreAssociation
 Package.StoreAssociation.xml
