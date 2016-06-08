@@ -5,9 +5,14 @@ module solarPanel()
     translate([0,20.5,0]) color("orange") cube([49.5,8,5]);
 }
 
-difference()
+module roof()
+{
+rotate([45,0,0]) difference()
 {
     cube([140,75,5]);
     translate([18,12.25,0]) solarPanel();
     translate([73,12.25,0]) solarPanel();
+};
+
+translate([0,46,53]) rotate([-45,0,0]) cube([140,75,5]);
 }
