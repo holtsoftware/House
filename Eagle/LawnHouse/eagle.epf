@@ -346,6 +346,20 @@ UsedLibrary="C:/EAGLE/lbr/xilinx-xc9.lbr"
 UsedLibrary="C:/EAGLE/lbr/xilinx-xcv.lbr"
 UsedLibrary="C:/EAGLE/lbr/zetex.lbr"
 UsedLibrary="C:/EAGLE/lbr/zilog.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Aesthetics.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-AnalogIC.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Boards.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Capacitors.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Connectors.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-DigitalIC.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-DiscreteSemi.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-LED.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Passives.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-PowerIC.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-RF.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Resistors.lbr"
+UsedLibrary="C:/Source/github/SparkFun-Eagle-Libraries/SparkFun-Sensors.lbr"
+UsedLibrary="C:/Source/github/photon/libraries/Spark.lbr"
 
 [Win_1]
 Type="Control Panel"
@@ -354,5 +368,5 @@ State=1
 Number=0
 
 [Desktop]
-Screen="6400 1440"
+Screen="1920 1080"
 Window="Win_1"
