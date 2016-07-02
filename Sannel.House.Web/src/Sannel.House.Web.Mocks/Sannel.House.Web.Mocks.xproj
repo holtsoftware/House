@@ -7,8 +7,8 @@
 
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>7d8cc62a-2ba5-4a91-9bea-652ad5a43e9f</ProjectGuid>
-    <RootNamespace>Sannel.House.Web.Interfaces</RootNamespace>
+    <ProjectGuid>df99c5c1-5c69-44a0-9179-2e3e7909ca01</ProjectGuid>
+    <RootNamespace>Sannel.House.Web.Mocks</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>

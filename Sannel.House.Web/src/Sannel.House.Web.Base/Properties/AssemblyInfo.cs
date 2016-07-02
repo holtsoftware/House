@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sannel.House.Web.Interfaces")]
+[assembly: AssemblyProduct("Sannel.House.Web.Base")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,4 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("7d8cc62a-2ba5-4a91-9bea-652ad5a43e9f")]
+[assembly: Guid("bc45b5f5-6b05-4484-ad49-c2838cfc9a72")]
