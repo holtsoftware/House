@@ -201,3 +201,6 @@ FakesAssemblies/
 *.opt
 /Control/Sannel.House.Control/BundleArtifacts
 connectionStrings.config
+
+# Developer settings
+appsettings.development.json

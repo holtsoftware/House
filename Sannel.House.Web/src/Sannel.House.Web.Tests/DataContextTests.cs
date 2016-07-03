@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Sannel.House.Web.Tests
 {
 	[TestFixture]
-	public class DataContextTests
+	public class DataContextTests : TestBase
 	{
 		/// <summary>
 		/// Used to verify our mock database is setup correctly for testing.

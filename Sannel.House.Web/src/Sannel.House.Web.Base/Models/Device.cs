@@ -19,7 +19,8 @@ namespace Sannel.House.Web.Base.Models
 		/// The identifier.
 		/// </value>
 		[Key]
-		public uint Id { get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name.
@@ -28,6 +29,7 @@ namespace Sannel.House.Web.Base.Models
 		/// The name.
 		/// </value>
 		[MaxLength(256)]
+		[Required]
 		public String Name { get; set; }
 
 		/// <summary>
@@ -37,6 +39,7 @@ namespace Sannel.House.Web.Base.Models
 		/// The description.
 		/// </value>
 		[MaxLength(2000)]
+		[Required]
 		public String Description { get; set; }
 
 

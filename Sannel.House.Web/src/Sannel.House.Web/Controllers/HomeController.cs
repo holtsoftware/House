@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Sannel.House.Web.Controllers
 {
-	[Route("/")]
 	public class HomeController : Controller
 	{
 		// GET: /<controller>/
