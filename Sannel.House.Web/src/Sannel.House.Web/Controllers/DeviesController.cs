@@ -32,32 +32,64 @@ namespace Sannel.House.Web.Controllers
 
 		// GET api/values/5
 		[HttpGet("{id}")]
-		public string Get(int id)
+		public Device Get(int id)
 		{
-			return "value";
+			return context.Devices.FirstOrDefault(i => i.Id == id);
 		}
 
 		// POST api/values
 		[HttpPost]
-		public void Post([FromBody]Device value)
+		public async Task<int> Post([FromBody]Device value)
 		{
-			value.Id = default(int);
-			value.DateCreated = DateTime.Now;
-			value.DisplayOrder = context.Devices.Count() + 1;
-			context.Devices.Add(value);
-			context.SaveChanges();
+			if (ModelState.IsValid)
+			{
+				value.Id = default(int);
+				value.DateCreated = DateTime.Now;
+				value.DisplayOrder = context.Devices.Count() + 1;
+				context.Devices.Add(value);
+				await context.SaveChangesAsync();
+
+				return value.Id;
+			}
+			else
+			{
+				throw new Exception("Model is not valid");
+			}
 		}
 
 		// PUT api/values/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody]string value)
+		[HttpPut()]
+		public async Task Put([FromBody]Device updated)
 		{
+			if (ModelState.IsValid)
+			{
+				var device = context.Devices.FirstOrDefault(i => i.Id == updated.Id);
+				if(device == null)
+				{
+					throw new KeyNotFoundException($"The Id {updated.Id} was not found");
+				}
+				device.Name = updated.Name;
+				device.Description = updated.Description;
+				device.DisplayOrder = updated.DisplayOrder;
+				await context.SaveChangesAsync();
+			}
+			else
+			{
+				throw new Exception("Model is not valid");
+			}
 		}
 
 		// DELETE api/values/5
 		[HttpDelete("{id}")]
-		public void Delete(int id)
+		public async Task Delete(int id)
 		{
+			var d = context.Devices.FirstOrDefault(i => i.Id == id);
+			if(d == null)
+			{
+				throw new KeyNotFoundException($"The id {id} was not found");
+			}
+			context.Devices.Remove(context.Devices.FirstOrDefault(i => i.Id == id));
+			await context.SaveChangesAsync();
 		}
 	}
 }
