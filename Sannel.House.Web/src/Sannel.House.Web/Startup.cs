@@ -12,6 +12,10 @@ using Sannel.House.Web.Data;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Sannel.House.Web.Base.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Sannel.House.Web
 {
@@ -37,6 +41,17 @@ namespace Sannel.House.Web
 			services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration["ConnectionString"]));
 			services.AddMvc();
 			services.AddMvcCore();
+			services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+			{
+				options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
+				options.Cookies.ApplicationCookie.CookieName = "Authz";
+				options.Password.RequireDigit = false;
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireUppercase = false;
+				options.Password.RequiredLength = 4;
+			})
+			.AddEntityFrameworkStores<DataContext>()
+				.AddDefaultTokenProviders();
 			services.AddAntiforgery();
 			services.AddSingleton(Configuration);
 			services.AddScoped<IDataContext, DataContext>();
@@ -48,11 +63,37 @@ namespace Sannel.House.Web
 			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
 			loggerFactory.AddDebug();
 
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+
+				// For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
+				try
+				{
+					using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+						.CreateScope())
+					{
+						serviceScope.ServiceProvider.GetService<DataContext>()
+							 .Database.Migrate();
+					}
+				}
+				catch { }
+			}
+			app.UseStaticFiles();
+
+			app.UseIdentity();
+			// To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
+
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute(
-					"default",
-					"{controller=Home}/{action=Index}/{id?}");
+					name: "default",
+					template: "{controller=Home}/{action=Index}/{id?}");
 			});
 		}
 	}

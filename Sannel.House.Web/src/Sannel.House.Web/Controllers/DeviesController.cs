@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sannel.House.Web.Base.Models;
 using Sannel.House.Web.Base.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Sannel.House.Web.Controllers
 {
 	[Route("api/devices")]
+	[Authorize(Roles = "Admin,Controller")]
 	public class DevicesController : Controller
 	{
 		private IDataContext context;

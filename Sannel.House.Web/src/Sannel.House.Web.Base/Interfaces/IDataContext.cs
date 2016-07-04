@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Sannel.House.Web.Base.Models;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,10 @@ namespace Sannel.House.Web.Base.Interfaces
 		/// The devices.
 		/// </value>
 		DbSet<Device> Devices { get; set; }
+
+		DbSet<ApplicationUser> Users { get; set; }
+
+		DbSet<IdentityRole> Roles { get; set; }
 
 		int SaveChanges();
 
