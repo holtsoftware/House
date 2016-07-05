@@ -63,6 +63,12 @@ namespace Sannel.House.Web.Controllers
 			return View(model);
 		}
 
+        [HttpGet]
+        public IActionResult AccessDenied(String returnUrl = null)
+        {
+            return View(model: returnUrl);
+        }
+
 		//
 		// GET: /Account/Register
 		[HttpGet]
@@ -83,7 +89,7 @@ namespace Sannel.House.Web.Controllers
 			ViewData["ReturnUrl"] = returnUrl;
 			if (ModelState.IsValid)
 			{
-				var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+				var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
 				var result = await userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 				{

@@ -8,5 +8,6 @@ namespace Sannel.House.Web.Base.Models
 {
 	public class ApplicationUser : IdentityUser
 	{
-	}
+        public String Name { get; set; }
+    }
 }

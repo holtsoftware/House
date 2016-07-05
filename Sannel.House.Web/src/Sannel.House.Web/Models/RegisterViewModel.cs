@@ -8,6 +8,10 @@ namespace Sannel.House.Web.Models
 {
 	public class RegisterViewModel
 	{
+        [Required]
+        [Display(Name = "Name")]
+        public String Name { get; set; }
+
 		[Required]
 		[EmailAddress]
 		[Display(Name = "Email")]
