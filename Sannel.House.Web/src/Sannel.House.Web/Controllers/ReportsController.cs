@@ -8,13 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Sannel.House.Web.Controllers
 {
-	public class HomeController : Controller
-	{
-		// GET: /<controller>/
-		public IActionResult Index()
-		{
-			ViewBag.Section = "Home";
-			return View();
-		}
-	}
+    public class ReportsController : Controller
+    {
+        // GET: /<controller>/
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
 }

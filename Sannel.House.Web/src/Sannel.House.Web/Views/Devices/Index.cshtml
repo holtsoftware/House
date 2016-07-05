@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Device>
+<div class="row">
+	<div class="col-xs-12">
+		<h1>Devices</h1>
+	</div>
+	<div class="col-xs-12">
+		<ul>
+			@foreach (var item in Model)
+			{
+				<li>@Html.DisplayFor(i => item.Name)</li>
+			}
+		</ul>
+	</div>
+</div>
