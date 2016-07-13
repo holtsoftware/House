@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,7 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [JsonProperty("Id")]
 		public int Id { get; set; }
 
 		/// <summary>
@@ -30,7 +32,8 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[MaxLength(256)]
 		[Required]
-		public String Name { get; set; }
+        [JsonProperty("Name")]
+        public String Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the description.
@@ -40,7 +43,8 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[MaxLength(2000)]
 		[Required]
-		public String Description { get; set; }
+        [JsonProperty("Description")]
+        public String Description { get; set; }
 
 
 		/// <summary>
@@ -49,6 +53,7 @@ namespace Sannel.House.Web.Base.Models
 		/// <value>
 		/// The display order.
 		/// </value>
+        [JsonProperty("DisplayOrder")]
 		public int DisplayOrder { get; set; }
 
 		/// <summary>
@@ -57,6 +62,7 @@ namespace Sannel.House.Web.Base.Models
 		/// <value>
 		/// The date created.
 		/// </value>
+        [JsonProperty("DateCreated")]
 		public DateTime DateCreated { get; set; }
 	}
 }

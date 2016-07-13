@@ -15,7 +15,8 @@
 			"Sannel.House.Web": "1.0.0-*",
 			"Sannel.House.Web.Data": "0.1.0-*",
     "Sannel.House.Web.Base": "0.1.0-*",
-    "Sannel.House.Web.Mocks": "0.1.0-*"
+    "Sannel.House.Web.Mocks": "0.1.0-*",
+    "Newtonsoft.Json": "9.0.1"
   },
 
   "frameworks": {
