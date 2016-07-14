@@ -76,7 +76,7 @@ var DevicesViewModel = (function () {
     DevicesViewModel.prototype.AddNewDevice = function () {
         this.CurrentDevice(new Device());
     };
-    DevicesViewModel.prototype.SaveNewDevice = function () {
+    DevicesViewModel.prototype.validateDevice = function (dev) {
         var cd = this.CurrentDevice();
         var errorMessage = "";
         if (cd.Name().length <= 0) {
@@ -88,8 +88,13 @@ var DevicesViewModel = (function () {
         if (errorMessage.length > 0) {
             alert(errorMessage);
         }
-        else {
+        return errorMessage.length == 0;
+    };
+    DevicesViewModel.prototype.SaveNewDevice = function () {
+        var cd = this.CurrentDevice();
+        if (this.validateDevice(cd)) {
             var me = this;
+            me.CurrentDevice(undefined);
             $.ajax({
                 url: me._apiUrl,
                 type: 'post',
@@ -98,6 +103,27 @@ var DevicesViewModel = (function () {
                 dataType: "json",
                 success: function (id) {
                     me.loadDevice(id);
+                    me.CurrentDevice(undefined);
+                }
+            });
+        }
+    };
+    DevicesViewModel.prototype.EditDevice = function (dev) {
+        this.CurrentDevice(dev);
+    };
+    DevicesViewModel.prototype.UpdateDevice = function () {
+        var cd = this.CurrentDevice();
+        var me = this;
+        if (this.validateDevice(cd)) {
+            me.CurrentDevice(undefined);
+            $.ajax({
+                url: me._apiUrl,
+                type: "PUT",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(cd.AsServerDevice()),
+                dataType: "json",
+                success: function () {
+                    me.loadDevice(cd.Id());
                 }
             });
         }

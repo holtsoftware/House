@@ -85,23 +85,31 @@ class DevicesViewModel {
 
 	public AddNewDevice() {
 		this.CurrentDevice(new Device());
-	}
+    }
+
+    private validateDevice(dev: Device): boolean {
+        var cd = this.CurrentDevice();
+        var errorMessage: string = "";
+        if (cd.Name().length <= 0) {
+            errorMessage = "Name is required.\n";
+        }
+        if (cd.Description().length <= 0) {
+            errorMessage += "Description is required.\n";
+        }
+
+        if (errorMessage.length > 0) {
+            alert(errorMessage);
+        }
+
+        return errorMessage.length == 0;
+    }
 
 	public SaveNewDevice() {
 		var cd = this.CurrentDevice();
-		var errorMessage: string = "";
-		if (cd.Name().length <= 0) {
-			errorMessage = "Name is required.\n";
-		}
-		if (cd.Description().length <= 0) {
-			errorMessage += "Description is required.\n";
-		}
 
-		if (errorMessage.length > 0) {
-			alert(errorMessage);
-		}
-		else {
-			var me = this;
+        if (this.validateDevice(cd)) {
+            var me = this;
+            me.CurrentDevice(undefined);
 			$.ajax({
 				url: me._apiUrl,
 				type: 'post',
@@ -109,9 +117,32 @@ class DevicesViewModel {
 				data: JSON.stringify(cd.AsServerDevice()),
 				dataType: "json",
 				success: function (id) {
-					me.loadDevice(id);
+                    me.loadDevice(id);
+                    me.CurrentDevice(undefined);
 				}
 			});
 		}
-	}
+    }
+
+    public EditDevice(dev: Device) {
+        this.CurrentDevice(dev);
+    }
+
+    public UpdateDevice() {
+        var cd = this.CurrentDevice();
+        var me = this;
+        if (this.validateDevice(cd)) {
+            me.CurrentDevice(undefined);
+            $.ajax({
+                url: me._apiUrl,
+                type: "PUT",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(cd.AsServerDevice()),
+                dataType: "json",
+                success: function () {
+                    me.loadDevice(cd.Id());
+                }
+            });
+        }
+    }
 }

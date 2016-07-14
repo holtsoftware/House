@@ -7738,3 +7738,7 @@ button.close {
     display: none !important;
   }
 }
+
+.devices-edit-button {
+  cursor: pointer;
+}
