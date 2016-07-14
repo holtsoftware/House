@@ -64,5 +64,11 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
         [JsonProperty("DateCreated")]
 		public DateTime DateCreated { get; set; }
+
+        /// <summary>
+        /// Gets or sets if this device is readonly
+        /// </summary>
+        [JsonProperty("IsReadOnly")]
+        public bool IsReadOnly { get; set; }
 	}
 }

@@ -5,21 +5,24 @@ class ServerDevice {
 	Id: Number;
 	Name: string;
 	Description: string;
-	DisplayOrder: Number;
+    DisplayOrder: Number;
+    IsReadOnly: boolean;
 }
 
 class Device {
 	Id: KnockoutObservable<Number> = ko.observable(0);
 	Name: KnockoutObservable<string> = ko.observable("");
 	Description: KnockoutObservable<string> = ko.observable("");
-	DisplayOrder: KnockoutObservable<Number> = ko.observable(0);
+    DisplayOrder: KnockoutObservable<Number> = ko.observable(0);
+    IsReadOnly: KnockoutObservable<boolean> = ko.observable(false);
 
 	constructor(sdevice: ServerDevice = undefined) {
 		if (sdevice != undefined) {
 			this.Id(sdevice.Id);
 			this.Name(sdevice.Name);
 			this.Description(sdevice.Description);
-			this.DisplayOrder(sdevice.DisplayOrder);
+            this.DisplayOrder(sdevice.DisplayOrder);
+            this.IsReadOnly(sdevice.IsReadOnly);
 		}
 	}
 
@@ -28,7 +31,8 @@ class Device {
 		sd.Id = this.Id();
 		sd.Name = this.Name();
 		sd.Description = this.Description();
-		sd.DisplayOrder = this.DisplayOrder();
+        sd.DisplayOrder = this.DisplayOrder();
+        sd.IsReadOnly = this.IsReadOnly();
 		return sd;
 	}
 }

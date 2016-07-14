@@ -23,6 +23,7 @@ namespace Sannel.House.Web
 	{
 		public Startup(IHostingEnvironment env)
 		{
+            
 			var builder = new ConfigurationBuilder()
 				.SetBasePath(env.ContentRootPath)
 				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

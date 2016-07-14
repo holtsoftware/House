@@ -12,11 +12,13 @@ var Device = (function () {
         this.Name = ko.observable("");
         this.Description = ko.observable("");
         this.DisplayOrder = ko.observable(0);
+        this.IsReadOnly = ko.observable(false);
         if (sdevice != undefined) {
             this.Id(sdevice.Id);
             this.Name(sdevice.Name);
             this.Description(sdevice.Description);
             this.DisplayOrder(sdevice.DisplayOrder);
+            this.IsReadOnly(sdevice.IsReadOnly);
         }
     }
     Device.prototype.AsServerDevice = function () {
@@ -25,6 +27,7 @@ var Device = (function () {
         sd.Name = this.Name();
         sd.Description = this.Description();
         sd.DisplayOrder = this.DisplayOrder();
+        sd.IsReadOnly = this.IsReadOnly();
         return sd;
     };
     return Device;

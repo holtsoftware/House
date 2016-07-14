@@ -17,7 +17,7 @@
 					<td data-bind="text: Id"></td>
 					<td data-bind="text: Name"></td>
 					<td data-bind="text: Description"></td>
-                    <td><a data-bind="click: function(){ $root.EditDevice($data); }" class="devices-edit-button">Edit</a></td>
+                    <td><a data-bind="visible: !IsReadOnly(), click: function(){ $root.EditDevice($data); }" class="devices-edit-button">Edit</a></td>
 				</tr>
 			</tbody>
 		</table>
