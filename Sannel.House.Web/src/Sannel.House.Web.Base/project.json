@@ -9,9 +9,10 @@
     "Newtonsoft.Json": "9.0.1"
   },
 
-	"frameworks": {
-		"netstandard1.6": {
-			"imports": "dnxcore50"
-		}
-	}
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": "dnxcore50"
+        },
+        "uap10.0": {}
+    }
 }
