@@ -6,7 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+#if THERMOSTAT
+namespace Sannel.House.Thermostat.Base.Models
+#else
 namespace Sannel.House.Web.Base.Models
+#endif
 {
 	/// <summary>
 	/// Represents a device using the platform
