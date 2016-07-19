@@ -13,6 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 using Caliburn.Micro;
+using Microsoft.EntityFrameworkCore;
+using Sannel.House.Thermostat.Base.Interfaces;
+using Sannel.House.Thermostat.Data;
+using Sannel.House.Thermostat.ViewModels;
+using Sannel.House.Thermostat.Views;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,10 +58,11 @@ namespace Sannel.House.Thermostat
             this.InitializeComponent();
             this.Suspending += OnSuspending;
             this.UnhandledException += App_UnhandledException;
-            //using (SqliteContext context = new SqliteContext())
-            //{
-            //    context.Database.Migrate();
-            //}
+
+            using(LocalDataContext context = new LocalDataContext())
+            {
+                context.Database.Migrate();
+            }
         }
 
         private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -73,6 +79,8 @@ namespace Sannel.House.Thermostat
         {
             container = new WinRTContainer();
             container.RegisterWinRTServices();
+            container.Singleton<ShellViewModel>();
+            container.PerRequest<IDataContext, LocalDataContext>();
             //container.Singleton<MainViewModel>();
             //container.Singleton<HomeViewModel>();
             //container.Singleton<SettingsViewModel>();
@@ -112,7 +120,7 @@ namespace Sannel.House.Thermostat
             //    }
             //}
 
-            DisplayRootView<MainPage>();   
+            DisplayRootView<ShellView>();   
         }
 
         /// <summary>

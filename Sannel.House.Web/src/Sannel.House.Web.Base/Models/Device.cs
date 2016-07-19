@@ -17,14 +17,16 @@ namespace Sannel.House.Web.Base.Models
 	/// </summary>
 	public class Device
 	{
-		/// <summary>
-		/// Gets or sets the identifier.
-		/// </summary>
-		/// <value>
-		/// The identifier.
-		/// </value>
-		[Key]
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+#if !THERMOSTAT
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+#endif
+		[Key]
         [JsonProperty("Id")]
 		public int Id { get; set; }
 
@@ -68,6 +70,11 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
         [JsonProperty("DateCreated")]
 		public DateTime DateCreated { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date modified
+        /// </summary>
+        public DateTime DateModified { get; set; }
 
         /// <summary>
         /// Gets or sets if this device is readonly
