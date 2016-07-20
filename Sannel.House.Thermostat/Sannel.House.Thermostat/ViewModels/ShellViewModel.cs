@@ -19,25 +19,35 @@ using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Windows.UI.Xaml.Controls;
+using Sannel.House.Thermostat.Base.Interfaces;
 
 namespace Sannel.House.Thermostat.ViewModels
 {
-    public class ShellViewModel : BaseViewModel
-    {
-        private INavigationService navigationService;
+	public class ShellViewModel : BaseViewModel
+	{
+		private readonly IAppSettings settings;
+		private INavigationService navigationService;
 
-        public ShellViewModel(WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
-        {
-        }
+		public ShellViewModel(IAppSettings settings,WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
+		{
+			this.settings = settings;
+		}
 
-        public void SetupNavigationService(Frame frame)
-        {
-            if(container.HasHandler(typeof(INavigationService), null))
-            {
-                container.UnregisterHandler(typeof(INavigationService), null);
-            }
+		public void SetupNavigationService(Frame frame)
+		{
+			if(container.HasHandler(typeof(INavigationService), null))
+			{
+				container.UnregisterHandler(typeof(INavigationService), null);
+			}
 
-            navigationService = container.RegisterNavigationService(frame);
-        }
-    }
+			navigationService = container.RegisterNavigationService(frame);
+
+			if(String.IsNullOrWhiteSpace(settings.Username) ||
+				String.IsNullOrWhiteSpace(settings.Password) ||
+				String.IsNullOrWhiteSpace(settings.ServerUrl))
+			{
+				navigationService.For<ConfigureViewModel>().WithParam(i => i.IsFirstRun, true).Navigate();
+			}
+		}
+	}
 }

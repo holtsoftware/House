@@ -17,17 +17,17 @@ namespace Sannel.House.Web.Base.Models
 	/// </summary>
 	public class Device
 	{
-        /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
+		/// <summary>
+		/// Gets or sets the identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
 #if !THERMOSTAT
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 #endif
 		[Key]
-        [JsonProperty("Id")]
+		[JsonProperty("Id")]
 		public int Id { get; set; }
 
 		/// <summary>
@@ -38,8 +38,8 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[MaxLength(256)]
 		[Required]
-        [JsonProperty("Name")]
-        public String Name { get; set; }
+		[JsonProperty("Name")]
+		public String Name { get; set; }
 
 		/// <summary>
 		/// Gets or sets the description.
@@ -49,8 +49,8 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[MaxLength(2000)]
 		[Required]
-        [JsonProperty("Description")]
-        public String Description { get; set; }
+		[JsonProperty("Description")]
+		public String Description { get; set; }
 
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Sannel.House.Web.Base.Models
 		/// <value>
 		/// The display order.
 		/// </value>
-        [JsonProperty("DisplayOrder")]
+		[JsonProperty("DisplayOrder")]
 		public int DisplayOrder { get; set; }
 
 		/// <summary>
@@ -68,18 +68,13 @@ namespace Sannel.House.Web.Base.Models
 		/// <value>
 		/// The date created.
 		/// </value>
-        [JsonProperty("DateCreated")]
+		[JsonProperty("DateCreated")]
 		public DateTime DateCreated { get; set; }
 
-        /// <summary>
-        /// Gets or sets the date modified
-        /// </summary>
-        public DateTime DateModified { get; set; }
-
-        /// <summary>
-        /// Gets or sets if this device is readonly
-        /// </summary>
-        [JsonProperty("IsReadOnly")]
-        public bool IsReadOnly { get; set; }
+		/// <summary>
+		/// Gets or sets if this device is readonly
+		/// </summary>
+		[JsonProperty("IsReadOnly")]
+		public bool IsReadOnly { get; set; }
 	}
 }

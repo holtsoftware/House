@@ -38,133 +38,134 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Sannel.House.Thermostat
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
-    sealed partial class App : CaliburnApplication
-    {
-        private WinRTContainer container;
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
-        public App()
-        {
+	/// <summary>
+	/// Provides application-specific behavior to supplement the default Application class.
+	/// </summary>
+	sealed partial class App : CaliburnApplication
+	{
+		private WinRTContainer container;
+		/// <summary>
+		/// Initializes the singleton application object.  This is the first line of authored code
+		/// executed, and as such is the logical equivalent of main() or WinMain().
+		/// </summary>
+		public App()
+		{
 #if CODE_ANALYSIS
-            //Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
-            //	Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
-            //	Microsoft.ApplicationInsights.WindowsCollectors.Session);
+			//Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
+			//	Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
+			//	Microsoft.ApplicationInsights.WindowsCollectors.Session);
 #endif
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
-            this.UnhandledException += App_UnhandledException;
+			this.InitializeComponent();
+			this.Suspending += OnSuspending;
+			this.UnhandledException += App_UnhandledException;
 
-            using(LocalDataContext context = new LocalDataContext())
-            {
-                context.Database.Migrate();
-            }
-        }
+			using(LocalDataContext context = new LocalDataContext())
+			{
+				context.Database.Migrate();
+			}
+		}
 
-        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
+		private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
 #if DEBUG
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
+			if (Debugger.IsAttached)
+			{
+				Debugger.Break();
+			}
 #endif
-        }
+		}
 
-        protected override void Configure()
-        {
-            container = new WinRTContainer();
-            container.RegisterWinRTServices();
-            container.Singleton<ShellViewModel>();
-            container.PerRequest<IDataContext, LocalDataContext>();
-            //container.Singleton<MainViewModel>();
-            //container.Singleton<HomeViewModel>();
-            //container.Singleton<SettingsViewModel>();
-            //container.Singleton<WeatherViewModel>();
-            //container.Singleton<SettingsDevicesViewModel>();
-            //container.Singleton<SettingsWUndergroundViewModel>();
-            //container.Singleton<TemperatureViewModel>();
-            //container.Singleton<TimerService>();
-            //container.Singleton<SyncService>();
-        }
+		protected override void Configure()
+		{
+			container = new WinRTContainer();
+			container.RegisterWinRTServices();
+			container.Singleton<IAppSettings, ApplicationSettings>();
+			container.Singleton<ShellViewModel>();
+			container.PerRequest<IDataContext, LocalDataContext>();
+			//container.Singleton<MainViewModel>();
+			//container.Singleton<HomeViewModel>();
+			//container.Singleton<SettingsViewModel>();
+			//container.Singleton<WeatherViewModel>();
+			//container.Singleton<SettingsDevicesViewModel>();
+			//container.Singleton<SettingsWUndergroundViewModel>();
+			//container.Singleton<TemperatureViewModel>();
+			//container.Singleton<TimerService>();
+			//container.Singleton<SyncService>();
+		}
 
-        /// <summary>
-        /// Invoked when the application is launched normally by the end user.  Other entry points
-        /// will be used such as when the application is launched to open a specific file.
-        /// </summary>
-        /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
-        {
+		/// <summary>
+		/// Invoked when the application is launched normally by the end user.  Other entry points
+		/// will be used such as when the application is launched to open a specific file.
+		/// </summary>
+		/// <param name="e">Details about the launch request and process.</param>
+		protected override void OnLaunched(LaunchActivatedEventArgs e)
+		{
 #if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-            }
+			if (System.Diagnostics.Debugger.IsAttached)
+			{
+				this.DebugSettings.EnableFrameRateCounter = true;
+			}
 #endif
-            //using (var context = new SqliteContext())
-            //{
-            //    var device = context.StoredDevices.FirstOrDefault(i => i.Id == AppSettings.Current.DeviceId);
-            //    if (device == null)
-            //    {
-            //        device = new Data.Models.StoredDevice();
-            //        EasClientDeviceInformation di = new EasClientDeviceInformation();
-            //        device.Name = di.FriendlyName;
-            //        device.ShortId = 0;
-            //        device.Id = AppSettings.Current.DeviceId;
-            //        context.StoredDevices.Add(device);
-            //        context.SaveChanges();
-            //    }
-            //}
+			//using (var context = new SqliteContext())
+			//{
+			//    var device = context.StoredDevices.FirstOrDefault(i => i.Id == AppSettings.Current.DeviceId);
+			//    if (device == null)
+			//    {
+			//        device = new Data.Models.StoredDevice();
+			//        EasClientDeviceInformation di = new EasClientDeviceInformation();
+			//        device.Name = di.FriendlyName;
+			//        device.ShortId = 0;
+			//        device.Id = AppSettings.Current.DeviceId;
+			//        context.StoredDevices.Add(device);
+			//        context.SaveChanges();
+			//    }
+			//}
 
-            DisplayRootView<ShellView>();   
-        }
+			DisplayRootView<ShellView>();   
+		}
 
-        /// <summary>
-        /// Invoked when Navigation to a certain page fails
-        /// </summary>
-        /// <param name="sender">The Frame which failed navigation</param>
-        /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
-        {
-            throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
-        }
+		/// <summary>
+		/// Invoked when Navigation to a certain page fails
+		/// </summary>
+		/// <param name="sender">The Frame which failed navigation</param>
+		/// <param name="e">Details about the navigation failure</param>
+		void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+		{
+			throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+		}
 
-        /// <summary>
-        /// Invoked when application execution is being suspended.  Application state is saved
-        /// without knowing whether the application will be terminated or resumed with the contents
-        /// of memory still intact.
-        /// </summary>
-        /// <param name="sender">The source of the suspend request.</param>
-        /// <param name="e">Details about the suspend request.</param>
-        protected override void OnSuspending(object sender, SuspendingEventArgs e)
-        {
-            var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
-            deferral.Complete();
-        }
+		/// <summary>
+		/// Invoked when application execution is being suspended.  Application state is saved
+		/// without knowing whether the application will be terminated or resumed with the contents
+		/// of memory still intact.
+		/// </summary>
+		/// <param name="sender">The source of the suspend request.</param>
+		/// <param name="e">Details about the suspend request.</param>
+		protected override void OnSuspending(object sender, SuspendingEventArgs e)
+		{
+			var deferral = e.SuspendingOperation.GetDeferral();
+			//TODO: Save application state and stop any background activity
+			deferral.Complete();
+		}
 
-        protected override void PrepareViewFirst(Frame rootFrame)
-        {
-            container.RegisterNavigationService(rootFrame);
-        }
+		protected override void PrepareViewFirst(Frame rootFrame)
+		{
+			container.RegisterNavigationService(rootFrame);
+		}
 
-        protected override object GetInstance(Type service, string key)
-        {
-            return container.GetInstance(service, key);
-        }
+		protected override object GetInstance(Type service, string key)
+		{
+			return container.GetInstance(service, key);
+		}
 
-        protected override IEnumerable<object> GetAllInstances(Type service)
-        {
-            return container.GetAllInstances(service);
-        }
+		protected override IEnumerable<object> GetAllInstances(Type service)
+		{
+			return container.GetAllInstances(service);
+		}
 
-        protected override void BuildUp(object instance)
-        {
-            container.BuildUp(instance);
-        }
-    }
+		protected override void BuildUp(object instance)
+		{
+			container.BuildUp(instance);
+		}
+	}
 }
