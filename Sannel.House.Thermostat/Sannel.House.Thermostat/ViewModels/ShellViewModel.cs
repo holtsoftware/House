@@ -20,10 +20,11 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using Windows.UI.Xaml.Controls;
 using Sannel.House.Thermostat.Base.Interfaces;
+using Sannel.House.Thermostat.Base.Messages;
 
 namespace Sannel.House.Thermostat.ViewModels
 {
-	public class ShellViewModel : BaseViewModel
+	public class ShellViewModel : BaseViewModel, IHandle<Timer10SecondsMessage>
 	{
 		private readonly IAppSettings settings;
 		private INavigationService navigationService;
@@ -31,6 +32,7 @@ namespace Sannel.House.Thermostat.ViewModels
 		public ShellViewModel(IAppSettings settings,WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
 		{
 			this.settings = settings;
+            Handle((Timer10SecondsMessage)null);
 		}
 
 		public void SetupNavigationService(Frame frame)
@@ -49,5 +51,51 @@ namespace Sannel.House.Thermostat.ViewModels
 				navigationService.For<ConfigureViewModel>().WithParam(i => i.IsFirstRun, true).Navigate();
 			}
 		}
-	}
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();
+            eventAggregator.Subscribe(this);
+        }
+
+        protected override void OnDeactivate(bool close)
+        {
+            base.OnDeactivate(close);
+            eventAggregator.Unsubscribe(this);
+        }
+
+        public void Handle(Timer10SecondsMessage message)
+        {
+            var now = DateTime.Now;
+            Time = now.ToString("t");
+            Date = now.ToString("dd MMM yyyy");
+
+        }
+
+        private String time;
+        public String Time
+        {
+            get
+            {
+                return time;
+            }
+            set
+            {
+                Set(ref time, value);
+            }
+        }
+
+        private String date;
+        public String Date
+        {
+            get
+            {
+                return date;
+            }
+            set
+            {
+                Set(ref date, value);
+            }
+        }
+    }
 }

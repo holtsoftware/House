@@ -16,6 +16,7 @@ using Caliburn.Micro;
 using Microsoft.EntityFrameworkCore;
 using Sannel.House.Thermostat.Base.Interfaces;
 using Sannel.House.Thermostat.Data;
+using Sannel.House.Thermostat.Services;
 using Sannel.House.Thermostat.ViewModels;
 using Sannel.House.Thermostat.Views;
 using System;
@@ -82,6 +83,7 @@ namespace Sannel.House.Thermostat
 			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.Singleton<ShellViewModel>();
 			container.PerRequest<IDataContext, LocalDataContext>();
+            container.Singleton<TimerService>();
 			//container.Singleton<MainViewModel>();
 			//container.Singleton<HomeViewModel>();
 			//container.Singleton<SettingsViewModel>();
@@ -106,22 +108,9 @@ namespace Sannel.House.Thermostat
 				this.DebugSettings.EnableFrameRateCounter = true;
 			}
 #endif
-			//using (var context = new SqliteContext())
-			//{
-			//    var device = context.StoredDevices.FirstOrDefault(i => i.Id == AppSettings.Current.DeviceId);
-			//    if (device == null)
-			//    {
-			//        device = new Data.Models.StoredDevice();
-			//        EasClientDeviceInformation di = new EasClientDeviceInformation();
-			//        device.Name = di.FriendlyName;
-			//        device.ShortId = 0;
-			//        device.Id = AppSettings.Current.DeviceId;
-			//        context.StoredDevices.Add(device);
-			//        context.SaveChanges();
-			//    }
-			//}
+			DisplayRootView<ShellView>();
 
-			DisplayRootView<ShellView>();   
+            container.GetInstance<TimerService>();
 		}
 
 		/// <summary>

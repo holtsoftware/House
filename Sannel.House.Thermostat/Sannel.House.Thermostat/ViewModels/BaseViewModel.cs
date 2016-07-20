@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 using Caliburn.Micro;
+using System;
+using System.Runtime.CompilerServices;
 
 namespace Sannel.House.Thermostat.ViewModels
 {
@@ -25,6 +27,17 @@ namespace Sannel.House.Thermostat.ViewModels
         {
             this.container = container;
             this.eventAggregator = eventAggregator;
+        }
+
+
+        protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
+        {
+
+            if (!Object.Equals(dest, source))
+            {
+                dest = source;
+                NotifyOfPropertyChange(propName);
+            }
         }
     }
 }
