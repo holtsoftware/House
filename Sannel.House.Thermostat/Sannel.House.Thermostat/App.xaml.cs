@@ -83,7 +83,8 @@ namespace Sannel.House.Thermostat
 			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.Singleton<ShellViewModel>();
 			container.PerRequest<IDataContext, LocalDataContext>();
-            container.Singleton<TimerService>();
+			container.Singleton<TimerService>();
+			container.PerRequest<ConfigureViewModel>();
 			//container.Singleton<MainViewModel>();
 			//container.Singleton<HomeViewModel>();
 			//container.Singleton<SettingsViewModel>();
@@ -110,7 +111,7 @@ namespace Sannel.House.Thermostat
 #endif
 			DisplayRootView<ShellView>();
 
-            container.GetInstance<TimerService>();
+			container.GetInstance<TimerService>();
 		}
 
 		/// <summary>
