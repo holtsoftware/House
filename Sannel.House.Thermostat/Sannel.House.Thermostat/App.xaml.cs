@@ -85,6 +85,7 @@ namespace Sannel.House.Thermostat
 			container.PerRequest<IDataContext, LocalDataContext>();
 			container.Singleton<TimerService>();
 			container.PerRequest<ConfigureViewModel>();
+			container.Singleton<IServerSource, ServerDataContext>();
 			//container.Singleton<MainViewModel>();
 			//container.Singleton<HomeViewModel>();
 			//container.Singleton<SettingsViewModel>();

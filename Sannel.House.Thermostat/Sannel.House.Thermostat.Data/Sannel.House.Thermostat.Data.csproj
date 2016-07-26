@@ -114,6 +114,7 @@
     </Compile>
     <Compile Include="Migrations\LocalDataContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServerDataContext.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Data.rd.xml" />
   </ItemGroup>
   <ItemGroup>

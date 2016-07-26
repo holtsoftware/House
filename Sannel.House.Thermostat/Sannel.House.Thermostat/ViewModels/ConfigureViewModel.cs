@@ -5,20 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Sannel.House.Thermostat.Base.Interfaces;
-using System.Net;
-using System.Net.Http;
+using Windows.Web.Http.Filters;
+using System.Diagnostics;
 
 namespace Sannel.House.Thermostat.ViewModels
 {
 	public class ConfigureViewModel : BaseViewModel
 	{
 		private readonly IAppSettings settings;
-		public ConfigureViewModel(IAppSettings settings, WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
+		private readonly IServerSource server;
+		public ConfigureViewModel(IAppSettings settings, IServerSource source, WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
 		{
 			this.settings = settings;
 			serverUrl = settings.ServerUrl;
 			username = settings.Username;
 			password = settings.Password;
+			server = source;
 		}
 
 		/// <summary>
@@ -94,37 +96,12 @@ namespace Sannel.House.Thermostat.ViewModels
 		/// </summary>
 		public async void Verify()
 		{
-			UriBuilder builder = new UriBuilder(ServerUrl);
-			builder.Path = "/Account/Login";
-
-
-			var request = HttpWebRequest.Create(builder.Uri);
-			request.Method = "POST";
-			var response = await request.GetResponseAsync();
-			//response.
-
-			CookieContainer cookies = new CookieContainer();
-			HttpClientHandler handler = new HttpClientHandler();
-			handler.CookieContainer = cookies;
-
-			using (var client = new System.Net.Http.HttpClient(handler))
+			IsBusy = true;
+			if(await server.LoginAsync(settings.Username, settings.Password))
 			{
-				var content = new System.Net.Http.FormUrlEncodedContent(new KeyValuePair<String, String>[]
-				{
-					new KeyValuePair<string, string>("Email", username),
-					new KeyValuePair<string, string>("Password", password),
-					new KeyValuePair<string, string>("RememberMe", "true")
-				});
 
-				var result = await client.GetAsync(builder.Uri);
-				result.EnsureSuccessStatusCode();
-
-				result = await client.PostAsync(builder.Uri, content);
-				result.EnsureSuccessStatusCode();
-				var data = await result.Content.ReadAsStringAsync();
-				
-				var cc = cookies.GetCookies(builder.Uri);
 			}
+			IsBusy = false;
 		}
 	}
 }

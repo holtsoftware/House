@@ -12,7 +12,8 @@
                 <ResourceDictionary Source="ms-appx:///AppStyle.xaml" />
                 <ResourceDictionary>
                     <converters:BooleanNotVisibilityConverter x:Key="BooleanNotVisibilityConverter" />
-                </ResourceDictionary>
+					<converters:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+				</ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </cm:CaliburnApplication.Resources>

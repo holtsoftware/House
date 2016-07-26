@@ -114,6 +114,7 @@
       <Link>Models\Device.cs</Link>
     </Compile>
     <Compile Include="Interfaces\IAppSettings.cs" />
+    <Compile Include="Interfaces\IServerSource.cs" />
     <Compile Include="Messages\TimerMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Base.rd.xml" />

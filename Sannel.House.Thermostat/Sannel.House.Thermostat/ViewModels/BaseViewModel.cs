@@ -29,6 +29,25 @@ namespace Sannel.House.Thermostat.ViewModels
             this.eventAggregator = eventAggregator;
         }
 
+		private bool isBusy;
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is busy.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is busy; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsBusy
+		{
+			get
+			{
+				return isBusy;
+			}
+			set
+			{
+				Set(ref isBusy, value);
+			}
+		}
+
 
         protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
         {

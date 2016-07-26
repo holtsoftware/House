@@ -48,7 +48,7 @@ namespace Sannel.House.Web.Controllers
 			ViewData["ReturnUrl"] = returnUrl;
 			if (ModelState.IsValid)
 			{
-                var results = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+                var results = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 				if (results.Succeeded)
 				{
 					return RedirectToLocal(returnUrl);

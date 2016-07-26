@@ -18,5 +18,8 @@
 			<TextBox x:Name="Password" InputScope="Password" />
 			<Button x:Name="Verify" HorizontalAlignment="Center" Margin="0,12,0,0">Verify Settings</Button>
 		</StackPanel>
+		<Border Visibility="{Binding IsBusy, Converter={StaticResource BooleanVisibilityConverter}}">
+			<ProgressRing IsActive="{Binding IsBusy}"/>
+		</Border>
 	</Grid>
 </Page>

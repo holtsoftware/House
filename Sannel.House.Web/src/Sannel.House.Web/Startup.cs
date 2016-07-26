@@ -46,6 +46,7 @@ namespace Sannel.House.Web
 			{
 				options.Cookies.ApplicationCookie.AuthenticationScheme = "ApplicationCookie";
 				options.Cookies.ApplicationCookie.CookieName = "Authz";
+                options.Cookies.ApplicationCookie.CookiePath = "/";
 				options.Password.RequireDigit = false;
 				options.Password.RequireNonAlphanumeric = false;
 				options.Password.RequireUppercase = false;
