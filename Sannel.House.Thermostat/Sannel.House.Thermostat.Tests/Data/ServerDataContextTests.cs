@@ -31,6 +31,34 @@ namespace Sannel.House.Thermostat.Tests.Data
 
 			result = await server.LoginAsync("test@test.com", "testtest");
 			Assert.AreEqual(LoginStatus.Success, result);
+			Assert.IsTrue(server.IsAuthenticated);
+		}
+
+		[TestMethod]
+		public async Task GetDevicesAsyncTest()
+		{
+			var appSettings = new StubIAppSettings().ServerUrl_Get(() => "http://localhost:5000");
+			IServerSource server = new ServerDataContext(appSettings);
+			bool thrown = false;
+			try
+			{
+				await server.GetDevicesAsync();
+			}
+			catch (UnauthorizedAccessException)
+			{
+				thrown = true;
+			}
+			Assert.IsTrue(thrown);
+
+			await server.LoginAsync("test2@test.com", "testtest"); // login does not have access to devices
+
+			var results = await server.GetDevicesAsync();
+			Assert.IsNull(results); // we dont have access to devices this should be null
+
+			await server.LoginAsync("test@test.com", "testtest"); // login does have access to devices
+			results = await server.GetDevicesAsync();
+			Assert.IsNotNull(results);
+			Assert.IsTrue(results.Count > 0);
 		}
 	}
 }

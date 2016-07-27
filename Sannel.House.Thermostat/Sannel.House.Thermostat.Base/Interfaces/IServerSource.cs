@@ -1,4 +1,5 @@
 ﻿using Sannel.House.Thermostat.Base.Enums;
+using Sannel.House.Thermostat.Base.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,5 +32,11 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 		/// <param name="password">The password.</param>
 		/// <returns></returns>
 		Task<LoginStatus> LoginAsync(String username, String password);
+
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <returns></returns>
+		Task<IList<Device>> GetDevicesAsync();
 	}
 }

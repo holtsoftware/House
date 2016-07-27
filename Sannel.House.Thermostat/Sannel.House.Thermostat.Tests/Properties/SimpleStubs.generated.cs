@@ -216,5 +216,10 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             _stubs[nameof(LoginAsync_String_String_Delegate)] = del;
             return this;
         }
-    }
+
+		public Task<IList<Device>> GetDevicesAsync()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

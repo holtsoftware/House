@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
+using Sannel.House.Thermostat.Base.Models;
+using Newtonsoft.Json;
 
 namespace Sannel.House.Thermostat.Data
 {
@@ -99,6 +101,50 @@ namespace Sannel.House.Thermostat.Data
 			}
 
 			return LoginStatus.Unknown;
+		}
+
+		/// <summary>
+		/// Gets the devices.
+		/// </summary>
+		/// <returns></returns>
+		public async Task<IList<Device>> GetDevicesAsync()
+		{
+			if(authz == null)
+			{
+				throw new UnauthorizedAccessException("Please authenticate before getting devices");
+			}
+			UriBuilder builder;
+			try
+			{
+				builder = new UriBuilder(new Uri(settings.ServerUrl));
+				builder.Path = "/api/Devices";
+			}
+			catch (UriFormatException)
+			{
+				return null;
+			}
+
+			HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
+			httpFilter.CookieManager.SetCookie(authz);
+			using(var client = new HttpClient(httpFilter))
+			{
+				var result = await client.GetAsync(builder.Uri);
+				if(result.StatusCode == HttpStatusCode.Ok)
+				{
+					var data = await result.Content.ReadAsStringAsync();
+					try
+					{
+						return JsonConvert.DeserializeObject<List<Device>>(data);
+					}
+					catch
+					{
+						return null;
+					}
+				}
+				
+			}
+
+			return null;
 		}
 	}
 }
