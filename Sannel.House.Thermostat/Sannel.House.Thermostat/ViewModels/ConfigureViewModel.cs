@@ -91,15 +91,32 @@ namespace Sannel.House.Thermostat.ViewModels
 			}
 		}
 
+		private bool hasError;
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance has error.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has error; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasError
+		{
+			get { return hasError; }
+			set { Set(ref hasError, value); }
+		}
+
 		/// <summary>
 		/// Verifies this instance.
 		/// </summary>
 		public async void Verify()
 		{
 			IsBusy = true;
-			if(await server.LoginAsync(settings.Username, settings.Password))
+			if(!await server.LoginAsync(settings.Username, settings.Password))
 			{
-
+				HasError = true;
+			}
+			else
+			{
+				HasError = false;
 			}
 			IsBusy = false;
 		}

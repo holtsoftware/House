@@ -9,6 +9,7 @@
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<StackPanel>
+			<TextBlock Visibility="{Binding HasError, Converter={StaticResource BooleanVisibilityConverter}}">Unable to login with the information provided.</TextBlock>
 			<TextBlock Visibility="{Binding IsFirstRun, Converter={StaticResource BooleanNotVisibilityConverter}}">The system is not configured please configure it before we proced</TextBlock>
 			<TextBlock Style="{StaticResource Label}">Server Url</TextBlock>
 			<TextBox x:Name="ServerUrl" InputScope="Url" />
