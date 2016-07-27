@@ -1,7 +1,9 @@
-﻿using Sannel.House.Thermostat.Base.Interfaces;
+﻿using Sannel.House.Thermostat.Base.Enums;
+using Sannel.House.Thermostat.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
@@ -43,10 +45,18 @@ namespace Sannel.House.Thermostat.Data
 		/// <returns>
 		/// true if the app was able to login
 		/// </returns>
-		public async Task<bool> LoginAsync(string username, string password)
+		public async Task<LoginStatus> LoginAsync(string username, string password)
 		{
-			UriBuilder builder = new UriBuilder(settings.ServerUrl);
-			builder.Path = "/Account/Login";
+			UriBuilder builder;
+			try
+			{
+				builder = new UriBuilder(new Uri(settings.ServerUrl));
+				builder.Path = "/Account/Login";
+			}
+			catch(UriFormatException)
+			{
+				return LoginStatus.InvalidServerUrl;
+			}
 
 			HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
 			
@@ -58,7 +68,20 @@ namespace Sannel.House.Thermostat.Data
 					new KeyValuePair<string, string>("Password", password),
 					new KeyValuePair<string, string>("RememberMe", "true")
 				});
-				var result = await client.PostAsync(builder.Uri, content);
+				HttpResponseMessage result = null;
+				try
+				{
+					result = await client.PostAsync(builder.Uri, content);
+				}
+				catch (COMException ce)
+				{
+					if(ce.HResult == -2147012867)
+					{
+						return LoginStatus.UnableToConnectToServer;
+					}
+
+					return LoginStatus.Error;
+				}
 				if (result.StatusCode == HttpStatusCode.Ok)
 				{
 					var cookies = httpFilter.CookieManager.GetCookies(new Uri("http://localhost:5000"));
@@ -66,12 +89,16 @@ namespace Sannel.House.Thermostat.Data
 					if(authz != null)
 					{
 						this.authz = authz;
-						return true;
+						return LoginStatus.Success;
+					}
+					else
+					{
+						return LoginStatus.ErrorAuthenticating;
 					}
 				}
 			}
 
-			return false;
+			return LoginStatus.Unknown;
 		}
 	}
 }

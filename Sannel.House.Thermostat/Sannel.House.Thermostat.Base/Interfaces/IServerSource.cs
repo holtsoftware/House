@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sannel.House.Thermostat.Base.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,13 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 		{
 			get;
 		}
+
 		/// <summary>
-		/// Attemps to login to the server
+		/// Logins the asynchronous.
 		/// </summary>
-		/// <param name="username">The Username</param>
-		/// <param name="password">The Password</param>
-		/// <returns>true if the app was able to login</returns>
-		Task<bool> LoginAsync(String username, String password);
+		/// <param name="username">The username.</param>
+		/// <param name="password">The password.</param>
+		/// <returns></returns>
+		Task<LoginStatus> LoginAsync(String username, String password);
 	}
 }

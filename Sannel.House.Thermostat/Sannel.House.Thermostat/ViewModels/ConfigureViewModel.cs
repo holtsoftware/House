@@ -110,7 +110,7 @@ namespace Sannel.House.Thermostat.ViewModels
 		public async void Verify()
 		{
 			IsBusy = true;
-			if(!await server.LoginAsync(settings.Username, settings.Password))
+			if(await server.LoginAsync(settings.Username, settings.Password) != Base.Enums.LoginStatus.Success)
 			{
 				HasError = true;
 			}

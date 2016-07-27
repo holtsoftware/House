@@ -20,6 +20,7 @@ namespace Sannel.House.Thermostat.Tests
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
+	[Bindable]
     sealed partial class App : Application
     {
         /// <summary>

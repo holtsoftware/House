@@ -42,6 +42,7 @@ namespace Sannel.House.Thermostat
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
+	[Bindable]
 	sealed partial class App : CaliburnApplication
 	{
 		private WinRTContainer container;
