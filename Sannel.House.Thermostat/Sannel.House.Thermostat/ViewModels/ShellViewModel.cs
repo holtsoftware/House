@@ -27,9 +27,8 @@ namespace Sannel.House.Thermostat.ViewModels
 	public class ShellViewModel : BaseViewModel, IHandle<Timer10SecondsMessage>
 	{
 		private readonly IAppSettings settings;
-		private INavigationService navigationService;
 
-		public ShellViewModel(IAppSettings settings,WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
+		public ShellViewModel(IAppSettings settings,WinRTContainer container, INavigationService service, IEventAggregator eventAggregator) : base(container, service, eventAggregator)
 		{
 			this.settings = settings;
 			Handle((Timer10SecondsMessage)null);
@@ -70,6 +69,22 @@ namespace Sannel.House.Thermostat.ViewModels
 			Time = now.ToString("t");
 			Date = now.ToString("dd MMM yyyy");
 
+		}
+
+		public void HomeAction()
+		{
+			if (App.HasBooted)
+			{
+				navigationService.For<HomeViewModel>().Navigate();
+			}
+		}
+
+		public void SettingsAction()
+		{
+			if (App.HasBooted)
+			{
+				navigationService.For<ConfigureViewModel>().Navigate();
+			}
 		}
 
 		private String time;

@@ -10,7 +10,7 @@ using Sannel.House.Web.Base.Interfaces;
 
 namespace Sannel.House.Web.Controllers
 {
-	[Authorize(Roles = "Admin")]
+	[Authorize(Roles = "Admin,Controller")]
     public class DevicesController : Controller
     {
         // GET: /<controller>/

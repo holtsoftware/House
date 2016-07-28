@@ -22,11 +22,14 @@ namespace Sannel.House.Thermostat.ViewModels
     {
         protected readonly WinRTContainer container;
         protected readonly IEventAggregator eventAggregator;
+		protected INavigationService navigationService;
 
-        public BaseViewModel(WinRTContainer container, IEventAggregator eventAggregator)
+
+		public BaseViewModel(WinRTContainer container, INavigationService service, IEventAggregator eventAggregator)
         {
             this.container = container;
             this.eventAggregator = eventAggregator;
+			this.navigationService = service;
         }
 
 		private bool isBusy;

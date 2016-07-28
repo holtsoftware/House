@@ -14,7 +14,7 @@ namespace Sannel.House.Thermostat.ViewModels
 	{
 		private readonly IAppSettings settings;
 		private readonly IServerSource server;
-		public ConfigureViewModel(IAppSettings settings, IServerSource source, WinRTContainer container, IEventAggregator eventAggregator) : base(container, eventAggregator)
+		public ConfigureViewModel(IAppSettings settings, IServerSource source, WinRTContainer container, INavigationService service, IEventAggregator eventAggregator) : base(container, service, eventAggregator)
 		{
 			this.settings = settings;
 			serverUrl = settings.ServerUrl;
@@ -117,6 +117,7 @@ namespace Sannel.House.Thermostat.ViewModels
 			else
 			{
 				HasError = false;
+				navigationService.For<BootViewModel>().Navigate();
 			}
 			IsBusy = false;
 		}

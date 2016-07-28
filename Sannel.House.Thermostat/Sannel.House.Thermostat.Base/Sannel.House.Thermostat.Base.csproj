@@ -116,7 +116,9 @@
     <Compile Include="Enums\LoginStatus.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IServerSource.cs" />
+    <Compile Include="Interfaces\ISyncService.cs" />
     <Compile Include="Messages\TimerMessages.cs" />
+    <Compile Include="Models\LogEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Base.rd.xml" />
   </ItemGroup>

@@ -15,6 +15,7 @@ limitations under the License.*/
 using Caliburn.Micro;
 using Microsoft.EntityFrameworkCore;
 using Sannel.House.Thermostat.Base.Interfaces;
+using Sannel.House.Thermostat.Business;
 using Sannel.House.Thermostat.Data;
 using Sannel.House.Thermostat.Services;
 using Sannel.House.Thermostat.ViewModels;
@@ -45,6 +46,7 @@ namespace Sannel.House.Thermostat
 	[Bindable]
 	sealed partial class App : CaliburnApplication
 	{
+		public static bool HasBooted = false;
 		private WinRTContainer container;
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
@@ -82,11 +84,17 @@ namespace Sannel.House.Thermostat
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
 			container.Singleton<IAppSettings, ApplicationSettings>();
-			container.Singleton<ShellViewModel>();
 			container.PerRequest<IDataContext, LocalDataContext>();
 			container.Singleton<TimerService>();
-			container.PerRequest<ConfigureViewModel>();
 			container.Singleton<IServerSource, ServerDataContext>();
+			container.PerRequest<ISyncService, SyncService>();
+
+			// ViewModels
+			container.Singleton<ShellViewModel>();
+			container.PerRequest<ConfigureViewModel>();
+			container.PerRequest<BootViewModel>();
+			container.PerRequest<HomeViewModel>();
+
 			//container.Singleton<MainViewModel>();
 			//container.Singleton<HomeViewModel>();
 			//container.Singleton<SettingsViewModel>();
