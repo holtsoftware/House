@@ -43,12 +43,16 @@ namespace Sannel.House.Thermostat.ViewModels
 
 			navigationService = container.RegisterNavigationService(frame);
 
-			//if(String.IsNullOrWhiteSpace(settings.Username) ||
-			//	String.IsNullOrWhiteSpace(settings.Password) ||
-			//	String.IsNullOrWhiteSpace(settings.ServerUrl))
-			//{
+			if (String.IsNullOrWhiteSpace(settings.Username) ||
+				String.IsNullOrWhiteSpace(settings.Password) ||
+				String.IsNullOrWhiteSpace(settings.ServerUrl))
+			{
 				navigationService.For<ConfigureViewModel>().WithParam(i => i.IsFirstRun, true).Navigate();
-			//}
+			}
+			else
+			{
+				navigationService.For<BootViewModel>().Navigate();
+			}
 		}
 
 		protected override void OnActivate()

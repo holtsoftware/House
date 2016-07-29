@@ -22,7 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
-namespace Sannel.House.Thermostat.Services
+namespace Sannel.House.Thermostat.Business
 {
     public class TimerService
     {

@@ -8,6 +8,19 @@
     mc:Ignorable="d">
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<TextBlock>Home</TextBlock>
+		<TextBlock Visibility="{Binding SensorMissing, Converter={StaticResource BooleanVisibilityConverter}}">Could Not Connect to Temperature Sensor</TextBlock>
+		<Grid Visibility="{Binding SensorMissing, Converter={StaticResource BooleanNotVisibilityConverter}}">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<StackPanel Grid.Column="0">
+				<TextBlock>Upstars</TextBlock>
+				
+			</StackPanel>
+			<Grid Grid.Column="1">
+				<TextBlock>Forcast</TextBlock>
+			</Grid>
+		</Grid>
 	</Grid>
 </Page>

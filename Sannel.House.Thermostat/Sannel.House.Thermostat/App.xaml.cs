@@ -17,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using Sannel.House.Thermostat.Base.Interfaces;
 using Sannel.House.Thermostat.Business;
 using Sannel.House.Thermostat.Data;
-using Sannel.House.Thermostat.Services;
 using Sannel.House.Thermostat.ViewModels;
 using Sannel.House.Thermostat.Views;
 using System;
@@ -83,11 +82,19 @@ namespace Sannel.House.Thermostat
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
+
+			var bme280 = new BME280Sensor();
+			container.Instance<ITemperatureSensor>(bme280);
+			container.Instance<IHumiditySensor>(bme280);
+			container.Instance<IPressureSensor>(bme280);
+			container.Instance<ITempreatureHumidityPressureSensor>(bme280);
+
 			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.PerRequest<IDataContext, LocalDataContext>();
 			container.Singleton<TimerService>();
 			container.Singleton<IServerSource, ServerDataContext>();
 			container.PerRequest<ISyncService, SyncService>();
+
 
 			// ViewModels
 			container.Singleton<ShellViewModel>();
