@@ -201,7 +201,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        bool global::Sannel.House.Thermostat.Base.Interfaces.ISensor.IsInitalized
+        bool global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.IsInitalized
         {
             get
             {
@@ -217,7 +217,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISensor.InitializeAsync()
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
             return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
         }
@@ -265,7 +265,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        bool global::Sannel.House.Thermostat.Base.Interfaces.ISensor.IsInitalized
+        bool global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.IsInitalized
         {
             get
             {
@@ -281,7 +281,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISensor.InitializeAsync()
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
             return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
         }
@@ -312,11 +312,11 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 namespace Sannel.House.Thermostat.Base.Interfaces
 {
     [CompilerGenerated]
-    public class StubISensor : ISensor
+    public class StubISensor : ISmallDevice
     {
         private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
 
-        bool global::Sannel.House.Thermostat.Base.Interfaces.ISensor.IsInitalized
+        bool global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.IsInitalized
         {
             get
             {
@@ -332,7 +332,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISensor.InitializeAsync()
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
             return ((InitializeAsync_Delegate)_stubs[nameof(InitializeAsync_Delegate)]).Invoke();
         }
@@ -492,7 +492,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        bool global::Sannel.House.Thermostat.Base.Interfaces.ISensor.IsInitalized
+        bool global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.IsInitalized
         {
             get
             {
@@ -508,7 +508,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISensor.InitializeAsync()
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
             return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
         }
@@ -595,7 +595,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        bool global::Sannel.House.Thermostat.Base.Interfaces.ISensor.IsInitalized
+        bool global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.IsInitalized
         {
             get
             {
@@ -611,7 +611,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
             return this;
         }
 
-        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISensor.InitializeAsync()
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
             return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
         }

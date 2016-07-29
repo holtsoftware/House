@@ -110,8 +110,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BME280Sensor.cs" />
+    <Compile Include="BeefcakeRelay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncService.cs" />
+    <Compile Include="ThermostatService.cs" />
     <Compile Include="TimerService.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Business.rd.xml" />
   </ItemGroup>

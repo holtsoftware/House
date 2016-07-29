@@ -118,11 +118,13 @@
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IHumiditySensor.cs" />
     <Compile Include="Interfaces\IPressureSensor.cs" />
-    <Compile Include="Interfaces\ISensor.cs" />
+    <Compile Include="Interfaces\IRelay.cs" />
+    <Compile Include="Interfaces\ISmallDevice.cs" />
     <Compile Include="Interfaces\IServerSource.cs" />
     <Compile Include="Interfaces\ISyncService.cs" />
     <Compile Include="Interfaces\ITemperatureSensor.cs" />
     <Compile Include="Interfaces\ITempreatureHumidityPressureSensor.cs" />
+    <Compile Include="Interfaces\IThermostatService.cs" />
     <Compile Include="Messages\TimerMessages.cs" />
     <Compile Include="Models\LogEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

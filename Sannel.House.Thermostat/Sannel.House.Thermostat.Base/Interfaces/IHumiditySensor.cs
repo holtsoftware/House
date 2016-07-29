@@ -9,8 +9,8 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 	/// <summary>
 	/// Represents a Sensor that returns the Humidity
 	/// </summary>
-	/// <seealso cref="Sannel.House.Thermostat.Base.Interfaces.ISensor" />
-	public interface IHumiditySensor : ISensor
+	/// <seealso cref="Sannel.House.Thermostat.Base.Interfaces.ISmallDevice" />
+	public interface IHumiditySensor : ISmallDevice
 	{
 		/// <summary>
 		/// Gets the humidity asynchronous.

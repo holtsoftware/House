@@ -9,8 +9,8 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 	/// <summary>
 	/// Represents a sensor who returns the current environmental pressure.
 	/// </summary>
-	/// <seealso cref="Sannel.House.Thermostat.Base.Interfaces.ISensor" />
-	public interface IPressureSensor : ISensor
+	/// <seealso cref="Sannel.House.Thermostat.Base.Interfaces.ISmallDevice" />
+	public interface IPressureSensor : ISmallDevice
 	{
 		/// <summary>
 		/// Gets the pressure asynchronous.

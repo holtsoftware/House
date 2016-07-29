@@ -9,8 +9,8 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 	/// <summary>
 	/// This interface describes a sensor that can return the temperature
 	/// </summary>
-	/// <seealso cref="Sannel.House.Thermostat.Base.Interfaces.ISensor" />
-	public interface ITemperatureSensor : ISensor
+	/// <seealso cref="Sannel.House.Thermostat.Base.Interfaces.ISmallDevice" />
+	public interface ITemperatureSensor : ISmallDevice
 	{
 		/// <summary>
 		/// Gets the temperature in celsius asynchronous.

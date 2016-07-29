@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Thermostat.Base.Interfaces
 {
-	public interface ISensor : IDisposable
+	public interface ISmallDevice : IDisposable
 	{
 		/// <summary>
 		/// Gets a value indicating whether this instance is initalized.
