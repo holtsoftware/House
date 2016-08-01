@@ -26,6 +26,14 @@ namespace Sannel.House.Web.Base.Interfaces
 		/// </value>
 		DbSet<Device> Devices { get; set; }
 
+		/// <summary>
+		/// Gets or sets the temperature defaults.
+		/// </summary>
+		/// <value>
+		/// The temperature defaults.
+		/// </value>
+		DbSet<TemperatureDefault> TemperatureDefaults { get; set; }
+
 #if !THERMOSTAT
         DbSet<ApplicationUser> Users { get; set; }
 
