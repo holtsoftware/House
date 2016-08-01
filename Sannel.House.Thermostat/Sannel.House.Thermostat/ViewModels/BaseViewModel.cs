@@ -18,19 +18,19 @@ using System.Runtime.CompilerServices;
 
 namespace Sannel.House.Thermostat.ViewModels
 {
-    public abstract class BaseViewModel : Screen
-    {
-        protected readonly WinRTContainer container;
-        protected readonly IEventAggregator eventAggregator;
+	public abstract class BaseViewModel : Screen
+	{
+		protected readonly WinRTContainer container;
+		protected readonly IEventAggregator eventAggregator;
 		protected INavigationService navigationService;
 
 
 		public BaseViewModel(WinRTContainer container, INavigationService service, IEventAggregator eventAggregator)
-        {
-            this.container = container;
-            this.eventAggregator = eventAggregator;
+		{
+			this.container = container;
+			this.eventAggregator = eventAggregator;
 			this.navigationService = service;
-        }
+		}
 
 		private bool isBusy;
 		/// <summary>
@@ -52,14 +52,14 @@ namespace Sannel.House.Thermostat.ViewModels
 		}
 
 
-        protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
-        {
+		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
+		{
 
-            if (!Object.Equals(dest, source))
-            {
-                dest = source;
-                NotifyOfPropertyChange(propName);
-            }
-        }
-    }
+			if (!Object.Equals(dest, source))
+			{
+				dest = source;
+				NotifyOfPropertyChange(propName);
+			}
+		}
+	}
 }

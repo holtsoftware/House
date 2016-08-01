@@ -26,5 +26,10 @@ namespace Sannel.House.Thermostat.Views
 		{
 			this.InitializeComponent();
 		}
+		protected override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			base.OnNavigatedTo(e);
+			VisualStateManager.GoToState(this, "DisplayAnimation", true);
+		}
 	}
 }

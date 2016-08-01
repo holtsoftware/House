@@ -14,9 +14,20 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 		/// <param name="sensor">The sensor.</param>
 		/// <param name="celsius">The celsius.</param>
 		/// <returns></returns>
-		public static double ConvertToFahrenheit(this ITemperatureSensor sensor, double celsius)
+		public static double CelsiusToFahrenheit(this ITemperatureSensor sensor, double celsius)
 		{
 			return (celsius * 9) / 5 + 32;
+		}
+
+		/// <summary>
+		/// Converts Fahrenheits to celsius.
+		/// </summary>
+		/// <param name="sensor">The sensor.</param>
+		/// <param name="fehrenheit">The fehrenheit.</param>
+		/// <returns></returns>
+		public static double FahrenheitToCelsius(this ITemperatureSensor sensor, double fehrenheit)
+		{
+			return (fehrenheit - 32) * (5 / 9);
 		}
 
 		/// <summary>

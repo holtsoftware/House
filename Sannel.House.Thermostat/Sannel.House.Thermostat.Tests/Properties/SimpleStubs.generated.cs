@@ -205,28 +205,28 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         {
             get
             {
-                return ((ISensor_IsInitalized_Get_Delegate)_stubs[nameof(ISensor_IsInitalized_Get_Delegate)]).Invoke();
+                return ((ISmallDevice_IsInitalized_Get_Delegate)_stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)]).Invoke();
             }
         }
 
-        public delegate bool ISensor_IsInitalized_Get_Delegate();
+        public delegate bool ISmallDevice_IsInitalized_Get_Delegate();
 
-        public StubIHumiditySensor IsInitalized_Get(ISensor_IsInitalized_Get_Delegate del)
+        public StubIHumiditySensor IsInitalized_Get(ISmallDevice_IsInitalized_Get_Delegate del)
         {
-            _stubs[nameof(ISensor_IsInitalized_Get_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)] = del;
             return this;
         }
 
         global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
-            return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
+            return ((ISmallDevice_InitializeAsync_Delegate)_stubs[nameof(ISmallDevice_InitializeAsync_Delegate)]).Invoke();
         }
 
-        public delegate global::System.Threading.Tasks.Task<bool> ISensor_InitializeAsync_Delegate();
+        public delegate global::System.Threading.Tasks.Task<bool> ISmallDevice_InitializeAsync_Delegate();
 
-        public StubIHumiditySensor InitializeAsync(ISensor_InitializeAsync_Delegate del)
+        public StubIHumiditySensor InitializeAsync(ISmallDevice_InitializeAsync_Delegate del)
         {
-            _stubs[nameof(ISensor_InitializeAsync_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_InitializeAsync_Delegate)] = del;
             return this;
         }
 
@@ -269,28 +269,28 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         {
             get
             {
-                return ((ISensor_IsInitalized_Get_Delegate)_stubs[nameof(ISensor_IsInitalized_Get_Delegate)]).Invoke();
+                return ((ISmallDevice_IsInitalized_Get_Delegate)_stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)]).Invoke();
             }
         }
 
-        public delegate bool ISensor_IsInitalized_Get_Delegate();
+        public delegate bool ISmallDevice_IsInitalized_Get_Delegate();
 
-        public StubIPressureSensor IsInitalized_Get(ISensor_IsInitalized_Get_Delegate del)
+        public StubIPressureSensor IsInitalized_Get(ISmallDevice_IsInitalized_Get_Delegate del)
         {
-            _stubs[nameof(ISensor_IsInitalized_Get_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)] = del;
             return this;
         }
 
         global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
-            return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
+            return ((ISmallDevice_InitializeAsync_Delegate)_stubs[nameof(ISmallDevice_InitializeAsync_Delegate)]).Invoke();
         }
 
-        public delegate global::System.Threading.Tasks.Task<bool> ISensor_InitializeAsync_Delegate();
+        public delegate global::System.Threading.Tasks.Task<bool> ISmallDevice_InitializeAsync_Delegate();
 
-        public StubIPressureSensor InitializeAsync(ISensor_InitializeAsync_Delegate del)
+        public StubIPressureSensor InitializeAsync(ISmallDevice_InitializeAsync_Delegate del)
         {
-            _stubs[nameof(ISensor_InitializeAsync_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_InitializeAsync_Delegate)] = del;
             return this;
         }
 
@@ -312,7 +312,100 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 namespace Sannel.House.Thermostat.Base.Interfaces
 {
     [CompilerGenerated]
-    public class StubISensor : ISmallDevice
+    public class StubIRelay : IRelay
+    {
+        private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
+
+        bool global::Sannel.House.Thermostat.Base.Interfaces.IRelay.IsOn
+        {
+            get
+            {
+                return ((IsOn_Get_Delegate)_stubs[nameof(IsOn_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate bool IsOn_Get_Delegate();
+
+        public StubIRelay IsOn_Get(IsOn_Get_Delegate del)
+        {
+            _stubs[nameof(IsOn_Get_Delegate)] = del;
+            return this;
+        }
+
+        void global::Sannel.House.Thermostat.Base.Interfaces.IRelay.TurnOn()
+        {
+            ((TurnOn_Delegate)_stubs[nameof(TurnOn_Delegate)]).Invoke();
+        }
+
+        public delegate void TurnOn_Delegate();
+
+        public StubIRelay TurnOn(TurnOn_Delegate del)
+        {
+            _stubs[nameof(TurnOn_Delegate)] = del;
+            return this;
+        }
+
+        void global::Sannel.House.Thermostat.Base.Interfaces.IRelay.TurnOff()
+        {
+            ((TurnOff_Delegate)_stubs[nameof(TurnOff_Delegate)]).Invoke();
+        }
+
+        public delegate void TurnOff_Delegate();
+
+        public StubIRelay TurnOff(TurnOff_Delegate del)
+        {
+            _stubs[nameof(TurnOff_Delegate)] = del;
+            return this;
+        }
+
+        bool global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.IsInitalized
+        {
+            get
+            {
+                return ((ISmallDevice_IsInitalized_Get_Delegate)_stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate bool ISmallDevice_IsInitalized_Get_Delegate();
+
+        public StubIRelay IsInitalized_Get(ISmallDevice_IsInitalized_Get_Delegate del)
+        {
+            _stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)] = del;
+            return this;
+        }
+
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
+        {
+            return ((ISmallDevice_InitializeAsync_Delegate)_stubs[nameof(ISmallDevice_InitializeAsync_Delegate)]).Invoke();
+        }
+
+        public delegate global::System.Threading.Tasks.Task<bool> ISmallDevice_InitializeAsync_Delegate();
+
+        public StubIRelay InitializeAsync(ISmallDevice_InitializeAsync_Delegate del)
+        {
+            _stubs[nameof(ISmallDevice_InitializeAsync_Delegate)] = del;
+            return this;
+        }
+
+        void global::System.IDisposable.Dispose()
+        {
+            ((IDisposable_Dispose_Delegate)_stubs[nameof(IDisposable_Dispose_Delegate)]).Invoke();
+        }
+
+        public delegate void IDisposable_Dispose_Delegate();
+
+        public StubIRelay Dispose(IDisposable_Dispose_Delegate del)
+        {
+            _stubs[nameof(IDisposable_Dispose_Delegate)] = del;
+            return this;
+        }
+    }
+}
+
+namespace Sannel.House.Thermostat.Base.Interfaces
+{
+    [CompilerGenerated]
+    public class StubISmallDevice : ISmallDevice
     {
         private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
 
@@ -326,7 +419,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 
         public delegate bool IsInitalized_Get_Delegate();
 
-        public StubISensor IsInitalized_Get(IsInitalized_Get_Delegate del)
+        public StubISmallDevice IsInitalized_Get(IsInitalized_Get_Delegate del)
         {
             _stubs[nameof(IsInitalized_Get_Delegate)] = del;
             return this;
@@ -339,7 +432,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 
         public delegate global::System.Threading.Tasks.Task<bool> InitializeAsync_Delegate();
 
-        public StubISensor InitializeAsync(InitializeAsync_Delegate del)
+        public StubISmallDevice InitializeAsync(InitializeAsync_Delegate del)
         {
             _stubs[nameof(InitializeAsync_Delegate)] = del;
             return this;
@@ -352,7 +445,7 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 
         public delegate void IDisposable_Dispose_Delegate();
 
-        public StubISensor Dispose(IDisposable_Dispose_Delegate del)
+        public StubISmallDevice Dispose(IDisposable_Dispose_Delegate del)
         {
             _stubs[nameof(IDisposable_Dispose_Delegate)] = del;
             return this;
@@ -496,28 +589,28 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         {
             get
             {
-                return ((ISensor_IsInitalized_Get_Delegate)_stubs[nameof(ISensor_IsInitalized_Get_Delegate)]).Invoke();
+                return ((ISmallDevice_IsInitalized_Get_Delegate)_stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)]).Invoke();
             }
         }
 
-        public delegate bool ISensor_IsInitalized_Get_Delegate();
+        public delegate bool ISmallDevice_IsInitalized_Get_Delegate();
 
-        public StubITemperatureSensor IsInitalized_Get(ISensor_IsInitalized_Get_Delegate del)
+        public StubITemperatureSensor IsInitalized_Get(ISmallDevice_IsInitalized_Get_Delegate del)
         {
-            _stubs[nameof(ISensor_IsInitalized_Get_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)] = del;
             return this;
         }
 
         global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
-            return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
+            return ((ISmallDevice_InitializeAsync_Delegate)_stubs[nameof(ISmallDevice_InitializeAsync_Delegate)]).Invoke();
         }
 
-        public delegate global::System.Threading.Tasks.Task<bool> ISensor_InitializeAsync_Delegate();
+        public delegate global::System.Threading.Tasks.Task<bool> ISmallDevice_InitializeAsync_Delegate();
 
-        public StubITemperatureSensor InitializeAsync(ISensor_InitializeAsync_Delegate del)
+        public StubITemperatureSensor InitializeAsync(ISmallDevice_InitializeAsync_Delegate del)
         {
-            _stubs[nameof(ISensor_InitializeAsync_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_InitializeAsync_Delegate)] = del;
             return this;
         }
 
@@ -599,28 +692,28 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         {
             get
             {
-                return ((ISensor_IsInitalized_Get_Delegate)_stubs[nameof(ISensor_IsInitalized_Get_Delegate)]).Invoke();
+                return ((ISmallDevice_IsInitalized_Get_Delegate)_stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)]).Invoke();
             }
         }
 
-        public delegate bool ISensor_IsInitalized_Get_Delegate();
+        public delegate bool ISmallDevice_IsInitalized_Get_Delegate();
 
-        public StubITempreatureHumidityPressureSensor IsInitalized_Get(ISensor_IsInitalized_Get_Delegate del)
+        public StubITempreatureHumidityPressureSensor IsInitalized_Get(ISmallDevice_IsInitalized_Get_Delegate del)
         {
-            _stubs[nameof(ISensor_IsInitalized_Get_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_IsInitalized_Get_Delegate)] = del;
             return this;
         }
 
         global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.ISmallDevice.InitializeAsync()
         {
-            return ((ISensor_InitializeAsync_Delegate)_stubs[nameof(ISensor_InitializeAsync_Delegate)]).Invoke();
+            return ((ISmallDevice_InitializeAsync_Delegate)_stubs[nameof(ISmallDevice_InitializeAsync_Delegate)]).Invoke();
         }
 
-        public delegate global::System.Threading.Tasks.Task<bool> ISensor_InitializeAsync_Delegate();
+        public delegate global::System.Threading.Tasks.Task<bool> ISmallDevice_InitializeAsync_Delegate();
 
-        public StubITempreatureHumidityPressureSensor InitializeAsync(ISensor_InitializeAsync_Delegate del)
+        public StubITempreatureHumidityPressureSensor InitializeAsync(ISmallDevice_InitializeAsync_Delegate del)
         {
-            _stubs[nameof(ISensor_InitializeAsync_Delegate)] = del;
+            _stubs[nameof(ISmallDevice_InitializeAsync_Delegate)] = del;
             return this;
         }
 
@@ -634,6 +727,121 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         public StubITempreatureHumidityPressureSensor Dispose(IDisposable_Dispose_Delegate del)
         {
             _stubs[nameof(IDisposable_Dispose_Delegate)] = del;
+            return this;
+        }
+    }
+}
+
+namespace Sannel.House.Thermostat.Base.Interfaces
+{
+    [CompilerGenerated]
+    public class StubIThermostatService : IThermostatService
+    {
+        private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
+
+        bool global::Sannel.House.Thermostat.Base.Interfaces.IThermostatService.HasDevices
+        {
+            get
+            {
+                return ((HasDevices_Get_Delegate)_stubs[nameof(HasDevices_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate bool HasDevices_Get_Delegate();
+
+        public StubIThermostatService HasDevices_Get(HasDevices_Get_Delegate del)
+        {
+            _stubs[nameof(HasDevices_Get_Delegate)] = del;
+            return this;
+        }
+
+        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Thermostat.Base.Interfaces.IThermostatService.InitializeAsync()
+        {
+            return ((InitializeAsync_Delegate)_stubs[nameof(InitializeAsync_Delegate)]).Invoke();
+        }
+
+        public delegate global::System.Threading.Tasks.Task<bool> InitializeAsync_Delegate();
+
+        public StubIThermostatService InitializeAsync(InitializeAsync_Delegate del)
+        {
+            _stubs[nameof(InitializeAsync_Delegate)] = del;
+            return this;
+        }
+
+        double global::Sannel.House.Thermostat.Base.Interfaces.IThermostatService.TemperatureC
+        {
+            get
+            {
+                return ((TemperatureC_Get_Delegate)_stubs[nameof(TemperatureC_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate double TemperatureC_Get_Delegate();
+
+        public StubIThermostatService TemperatureC_Get(TemperatureC_Get_Delegate del)
+        {
+            _stubs[nameof(TemperatureC_Get_Delegate)] = del;
+            return this;
+        }
+
+        double global::Sannel.House.Thermostat.Base.Interfaces.IThermostatService.CoolOnTemperatureC
+        {
+            get
+            {
+                return ((ActiveCoolTemperatureC_Get_Delegate)_stubs[nameof(ActiveCoolTemperatureC_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate double ActiveCoolTemperatureC_Get_Delegate();
+
+        public StubIThermostatService ActiveCoolTemperatureC_Get(ActiveCoolTemperatureC_Get_Delegate del)
+        {
+            _stubs[nameof(ActiveCoolTemperatureC_Get_Delegate)] = del;
+            return this;
+        }
+
+        double global::Sannel.House.Thermostat.Base.Interfaces.IThermostatService.HeatOnTemperatureC
+        {
+            get
+            {
+                return ((ActiveHeatTemperatureC_Get_Delegate)_stubs[nameof(ActiveHeatTemperatureC_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate double ActiveHeatTemperatureC_Get_Delegate();
+
+        public StubIThermostatService ActiveHeatTemperatureC_Get(ActiveHeatTemperatureC_Get_Delegate del)
+        {
+            _stubs[nameof(ActiveHeatTemperatureC_Get_Delegate)] = del;
+            return this;
+        }
+
+        bool global::Sannel.House.Thermostat.Base.Interfaces.IThermostatService.FanOn
+        {
+            get
+            {
+                return ((FanOn_Get_Delegate)_stubs[nameof(FanOn_Get_Delegate)]).Invoke();
+            }
+
+            set
+            {
+                ((FanOn_Set_Delegate)_stubs[nameof(FanOn_Set_Delegate)]).Invoke(value);
+            }
+        }
+
+        public delegate bool FanOn_Get_Delegate();
+
+        public StubIThermostatService FanOn_Get(FanOn_Get_Delegate del)
+        {
+            _stubs[nameof(FanOn_Get_Delegate)] = del;
+            return this;
+        }
+
+        public delegate void FanOn_Set_Delegate(bool value);
+
+        public StubIThermostatService FanOn_Set(FanOn_Set_Delegate del)
+        {
+            _stubs[nameof(FanOn_Set_Delegate)] = del;
             return this;
         }
     }

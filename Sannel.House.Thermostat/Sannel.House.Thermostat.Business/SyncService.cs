@@ -98,6 +98,8 @@ namespace Sannel.House.Thermostat.Business
 						}
 					}
 
+					await Task.Delay(2000);
+
 					return true;
 				}
 				else

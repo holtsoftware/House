@@ -48,7 +48,7 @@ namespace Sannel.House.Web.Controllers
 			ViewData["ReturnUrl"] = returnUrl;
 			if (ModelState.IsValid)
 			{
-                var results = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+				var results = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 				if (results.Succeeded)
 				{
 					return RedirectToLocal(returnUrl);
@@ -63,11 +63,11 @@ namespace Sannel.House.Web.Controllers
 			return View(model);
 		}
 
-        [HttpGet]
-        public IActionResult AccessDenied(String returnUrl = null)
-        {
-            return View(model: returnUrl);
-        }
+		[HttpGet]
+		public IActionResult AccessDenied(String returnUrl = null)
+		{
+			return View(model: returnUrl);
+		}
 
 		//
 		// GET: /Account/Register

@@ -82,16 +82,12 @@ namespace Sannel.House.Thermostat
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
-
-			var bme280 = new BME280Sensor();
-			container.Instance<ITemperatureSensor>(bme280);
-			container.Instance<IHumiditySensor>(bme280);
-			container.Instance<IPressureSensor>(bme280);
-			container.Instance<ITempreatureHumidityPressureSensor>(bme280);
+			
 
 			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.PerRequest<IDataContext, LocalDataContext>();
 			container.Singleton<TimerService>();
+			container.Singleton<IThermostatService, ThermostatService>();
 			container.Singleton<IServerSource, ServerDataContext>();
 			container.PerRequest<ISyncService, SyncService>();
 
@@ -118,7 +114,7 @@ namespace Sannel.House.Thermostat
 		/// will be used such as when the application is launched to open a specific file.
 		/// </summary>
 		/// <param name="e">Details about the launch request and process.</param>
-		protected override void OnLaunched(LaunchActivatedEventArgs e)
+		protected override async void OnLaunched(LaunchActivatedEventArgs e)
 		{
 #if DEBUG
 			if (System.Diagnostics.Debugger.IsAttached)
@@ -129,6 +125,7 @@ namespace Sannel.House.Thermostat
 			DisplayRootView<ShellView>();
 
 			container.GetInstance<TimerService>();
+			await container.GetInstance<IThermostatService>().InitializeAsync();
 		}
 
 		/// <summary>

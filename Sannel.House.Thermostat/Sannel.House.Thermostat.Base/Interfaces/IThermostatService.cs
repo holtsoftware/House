@@ -24,5 +24,52 @@ namespace Sannel.House.Thermostat.Base.Interfaces
 		/// </summary>
 		/// <returns></returns>
 		Task<bool> InitializeAsync();
+
+		/// <summary>
+		/// Gets the temperature c.
+		/// </summary>
+		/// <value>
+		/// The temperature c.
+		/// </value>
+		double TemperatureC
+		{
+			get;
+		}
+
+
+		/// <summary>
+		/// Gets the cool on temperature c.
+		/// </summary>
+		/// <value>
+		/// The cool on temperature c.
+		/// </value>
+		double CoolOnTemperatureC
+		{
+			get;
+		}
+
+
+		/// <summary>
+		/// Gets the heat on temperature c.
+		/// </summary>
+		/// <value>
+		/// The heat on temperature c.
+		/// </value>
+		double HeatOnTemperatureC
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the fan should be on.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [fan on]; otherwise, <c>false</c>.
+		/// </value>
+		bool FanOn
+		{
+			get;
+			set;
+		}
 	}
 }

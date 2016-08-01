@@ -86,7 +86,7 @@ namespace Sannel.House.Thermostat.Data
 				}
 				if (result.StatusCode == HttpStatusCode.Ok)
 				{
-					var cookies = httpFilter.CookieManager.GetCookies(new Uri("http://localhost:5000"));
+					var cookies = httpFilter.CookieManager.GetCookies(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"));
 					var authz = cookies.FirstOrDefault(i => String.Compare(i.Name, "Authz") == 0);
 					if(authz != null)
 					{

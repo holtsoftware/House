@@ -1,22 +1,97 @@
 ﻿<Page
-    x:Class="Sannel.House.Thermostat.Views.HomeView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Sannel.House.Thermostat.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+	x:Class="Sannel.House.Thermostat.Views.HomeView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Sannel.House.Thermostat.Views"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d">
 
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<Grid x:Name="MainGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="VisualStateGroup">
+				<VisualStateGroup.Transitions>
+					<VisualTransition GeneratedDuration="0" To="DisplayAnimation">
+						<Storyboard AutoReverse="False" RepeatBehavior="Forever">
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="canvas">
+								<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:2" Value="360"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</VisualTransition>
+				</VisualStateGroup.Transitions>
+				<VisualState x:Name="DisplayAnimation"/>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+
 		<TextBlock Visibility="{Binding SensorMissing, Converter={StaticResource BooleanVisibilityConverter}}">Could Not Connect to Temperature Sensor</TextBlock>
 		<Grid Visibility="{Binding SensorMissing, Converter={StaticResource BooleanNotVisibilityConverter}}">
+			
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
 				<ColumnDefinition />
 			</Grid.ColumnDefinitions>
 			<StackPanel Grid.Column="0">
 				<TextBlock>Upstars</TextBlock>
-				
+				<Button>
+					<Grid>
+						<StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Name="CurrentTemperatureF" FontSize="75">75</TextBlock>
+								<TextBlock>°F</TextBlock>
+							</StackPanel>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Name="CurrentTemperatureC"></TextBlock>
+								<TextBlock>°C</TextBlock>
+							</StackPanel>
+						</StackPanel>
+					</Grid>
+					<Button.Flyout>
+						<Flyout Placement="Right">
+							<Grid>
+								<StackPanel>
+									<ToggleButton IsChecked="{Binding FanOn, Mode=TwoWay}">Fan</ToggleButton>
+								</StackPanel>
+							</Grid>
+						</Flyout>
+					</Button.Flyout>
+				</Button>
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition Width="auto" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition />
+						<RowDefinition />
+					</Grid.RowDefinitions>
+
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,6">
+						<Canvas Height="21" HorizontalAlignment="Left" Width="17" Margin="0,0,6,0">
+							<Path x:Name="path1305" Data="M101.443,0 C91.4619,92.3845 108.22,123.177 124.344,143.709 L125.688,145.393 L126.298,143.398 C136.942,109.196 151.53,72.8962 168.884,60.4273 C145.293,104.788 176.314,173.024 183.366,198.035 C187.485,217.042 188.637,239.525 176.09,253.947 C157.727,275.053 134.698,287.62 121.087,291.15 L120.172,291.373 L120.14,291.59 L119.873,291.446 L119.8,291.464 C117.935,292.772 116.606,291.973 115.64,289.799 L115.38,289.13 L114.902,288.896 C87.8743,276.31 48.9932,276.314 30.14,256.957 C-39.7006,185.253 36.3968,180.259 17.0276,81.7827 C34.9986,118.046 50.5722,147.261 60.5197,174.023 L61.2571,176.045 L61.2831,175.86 C68.0329,128.755 86.2072,42.454 101.443,0 z" Fill="#FFE78C00" Height="20.251" StrokeStartLineCap="Flat" Stretch="Fill" StrokeEndLineCap="Flat" StrokeThickness="1.25" StrokeLineJoin="Miter" UseLayoutRounding="False" Width="15.798"/>
+							<Path x:Name="path2047" Data="M71.5558,0 C64.3774,31.1991 87.1344,75.7933 99.4254,97.3444 L99.5443,97.5522 L100.063,95.5784 C106.843,70.0532 116.356,40.3531 130.126,35.3959 C108.777,57.5789 145.85,116.891 145.807,132.814 C145.045,144.707 130.577,160.78 122.363,169.429 C116.352,176.686 104.458,183.66 96.5981,188.548 C93.2078,186.487 91.1266,184.649 89.4713,182.626 L89.2992,182.408 L88.8088,182.105 C86.6818,180.816 84.2636,179.517 81.6322,178.203 L81.029,177.907 L80.6161,177.746 C79.3626,177.23 78.1885,176.662 77.1488,176.104 L77.1503,176.043 L75.3849,175.222 C57.2148,166.866 33.0033,157.845 21.7961,147.206 C-19.9823,107.546 11.2177,84.2608 10.8445,34.7259 C19.6869,67.9178 43.1728,81.9589 53.4856,98.4052 L53.9016,99.0889 L53.9023,99.066 C54.9008,65.7899 58.523,15.9479 71.5558,0 z" Fill="#FFE7E100" Height="13.072" Canvas.Left="1.891" StrokeStartLineCap="Flat" Stretch="Fill" StrokeEndLineCap="Flat" StrokeThickness="1.2499997625" StrokeLineJoin="Miter" Canvas.Top="7.31" UseLayoutRounding="False" Width="12.371"/>
+							<Path x:Name="path2049" Data="M0,0 C29.7664,37.6437 44.7961,47.8483 55.1509,55.9273 L55.6525,56.3214 L55.7282,54.2318 C56.3166,42.0433 59.0822,29.3035 62.0237,16.0468 C64.8823,35.236 76.7903,58.5225 83.5219,66.1588 C84.2478,67.0959 84.9163,68.0633 85.5251,69.057 L85.799,69.5155 L85.8021,69.5025 C90.2674,50.1504 86.2358,33.8323 107.932,17.5617 C100.108,35.7764 118.002,64.5372 116.055,74.5101 C112.883,90.7576 91.5639,102.98 85.0381,104.903 L84.9005,104.942 L84.749,105.348 C84.58,105.212 84.4133,105.081 84.2487,104.953 L84.2099,104.923 L81.7731,103.835 C79.112,102.644 76.5422,101.483 74.0607,100.35 L73.5855,100.133 L73.0926,100.024 C71.7861,99.7213 70.5588,99.2929 69.1758,98.2082 L68.8985,97.9771 L66.8782,97.0389 C-26.2088,53.6433 19.3212,54.8169 0,0 z" Fill="#FFFFFF9E" Height="7.304" Canvas.Left="2.989" StrokeStartLineCap="Flat" Stretch="Fill" StrokeEndLineCap="Flat" StrokeThickness="1.250001425" StrokeLineJoin="Miter" Canvas.Top="12.574" UseLayoutRounding="False" Width="9.859"/>
+						</Canvas>
+						<TextBlock x:Name="HeatOnTemp">60</TextBlock>
+						<TextBlock>°F</TextBlock>
+					</StackPanel>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="1" Margin="0,6">
+						<Canvas Width="17" Height="17" Margin="0,0,6,0">
+							<Path Fill="#FF5BFFFF" Data="M 0 3.4 0 13.6 8.5 17 8.5 6.8 z" />
+							<Path Fill="#FF5BFFFF" Data="M 8.5 6.8 8.5 17 17 13.6 17 3.4 z" />
+							<Path Fill="#FF5BFFFF" Data="M 8.5 0 0 3.4 8.5 6.8 17 3.4 z" />
+						</Canvas>
+						<TextBlock x:Name="CoolOnTemp">85</TextBlock>
+						<TextBlock>°F</TextBlock>
+					</StackPanel>
+					<Canvas x:Name="canvas" Width="40" Height="40" Visibility="{Binding FanOn, Converter={StaticResource BooleanVisibilityConverter}}" Margin="12,0,0,0" HorizontalAlignment="Left" Grid.RowSpan="2" Grid.Column="1" RenderTransformOrigin="0.5,0.5">
+						<Canvas.RenderTransform>
+							<CompositeTransform/>
+						</Canvas.RenderTransform>
+						<Path x:Name="path2809" Data="M68.2206,0 C77.2706,0 84.6106,7.34003 84.6106,16.39 C84.6106,25.37 77.3806,32.82 68.4206,32.93 L68.2206,32.93 C59.1805,32.93 51.8405,40.26 51.8405,49.31 C51.8405,57.0069 57.1667,63.4645 64.3337,65.214 L64.9249,65.3441 L65.3548,65.3863 L65.4347,64.5714 C67.4162,48.3759 81.1997,35.8097 97.93,35.8097 C115.19,35.8097 129.32,49.1997 130.58,66.1497 C130.7,66.9497 130.78,67.7597 130.78,68.5897 C130.78,77.6297 123.43,84.9697 114.39,84.9697 C105.41,84.9697 97.96,77.7397 97.85,68.7897 L97.85,68.5897 C97.85,59.5397 90.51,52.1997 81.47,52.1997 C73.7638,52.1997 67.3144,57.5259 65.566,64.6928 L65.4359,65.2838 L65.4252,65.3932 L65.8489,65.4347 C82.0444,67.4162 94.6106,81.1997 94.6106,97.93 C94.6106,115.19 81.2206,129.32 64.2706,130.58 C63.4706,130.7 62.6606,130.78 61.8306,130.78 C52.7906,130.78 45.4506,123.43 45.4506,114.39 C45.4506,105.41 52.6806,97.96 61.6306,97.85 L61.8306,97.85 C70.8806,97.85 78.2206,90.51 78.2206,81.47 C78.2206,73.7638 72.8944,67.3144 65.7275,65.566 L65.415,65.4972 L65.3454,66.208 C63.3632,82.4035 49.5707,94.9697 32.85,94.9697 C15.58,94.9697 1.45001,81.5797 0.200012,64.6297 C0.079987,63.8397 0,63.0297 0,62.1997 C0,53.1497 7.34003,45.8097 16.39,45.8097 C25.37,45.8097 32.82,53.0397 32.93,61.9997 L32.93,62.1997 C32.93,71.2397 40.26,78.5797 49.31,78.5797 C57.0069,78.5797 63.4645,73.2535 65.214,66.0866 L65.3441,65.4953 L65.3454,65.4819 L65.1365,65.4359 L64.2122,65.3454 C48.0168,63.3632 35.4506,49.5707 35.4506,32.85 C35.4506,15.58 48.8406,1.45001 65.7906,0.200012 C66.5806,0.079987 67.3906,0 68.2206,0 z" Fill="#FFffffff" Height="40" Stretch="Fill" UseLayoutRounding="False" Width="40"/>
+					</Canvas>
+				</Grid>
 			</StackPanel>
 			<Grid Grid.Column="1">
 				<TextBlock>Forcast</TextBlock>

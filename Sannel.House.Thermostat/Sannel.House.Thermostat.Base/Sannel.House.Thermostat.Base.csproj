@@ -114,6 +114,7 @@
       <Link>Models\Device.cs</Link>
     </Compile>
     <Compile Include="Enums\LoginStatus.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
     <Compile Include="Extensions\SensorExtensions.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IHumiditySensor.cs" />
