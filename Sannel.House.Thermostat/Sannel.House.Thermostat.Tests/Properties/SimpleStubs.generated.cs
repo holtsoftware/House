@@ -788,15 +788,15 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         {
             get
             {
-                return ((ActiveCoolTemperatureC_Get_Delegate)_stubs[nameof(ActiveCoolTemperatureC_Get_Delegate)]).Invoke();
+                return ((CoolOnTemperatureC_Get_Delegate)_stubs[nameof(CoolOnTemperatureC_Get_Delegate)]).Invoke();
             }
         }
 
-        public delegate double ActiveCoolTemperatureC_Get_Delegate();
+        public delegate double CoolOnTemperatureC_Get_Delegate();
 
-        public StubIThermostatService ActiveCoolTemperatureC_Get(ActiveCoolTemperatureC_Get_Delegate del)
+        public StubIThermostatService CoolOnTemperatureC_Get(CoolOnTemperatureC_Get_Delegate del)
         {
-            _stubs[nameof(ActiveCoolTemperatureC_Get_Delegate)] = del;
+            _stubs[nameof(CoolOnTemperatureC_Get_Delegate)] = del;
             return this;
         }
 
@@ -804,15 +804,15 @@ namespace Sannel.House.Thermostat.Base.Interfaces
         {
             get
             {
-                return ((ActiveHeatTemperatureC_Get_Delegate)_stubs[nameof(ActiveHeatTemperatureC_Get_Delegate)]).Invoke();
+                return ((HeatOnTemperatureC_Get_Delegate)_stubs[nameof(HeatOnTemperatureC_Get_Delegate)]).Invoke();
             }
         }
 
-        public delegate double ActiveHeatTemperatureC_Get_Delegate();
+        public delegate double HeatOnTemperatureC_Get_Delegate();
 
-        public StubIThermostatService ActiveHeatTemperatureC_Get(ActiveHeatTemperatureC_Get_Delegate del)
+        public StubIThermostatService HeatOnTemperatureC_Get(HeatOnTemperatureC_Get_Delegate del)
         {
-            _stubs[nameof(ActiveHeatTemperatureC_Get_Delegate)] = del;
+            _stubs[nameof(HeatOnTemperatureC_Get_Delegate)] = del;
             return this;
         }
 
