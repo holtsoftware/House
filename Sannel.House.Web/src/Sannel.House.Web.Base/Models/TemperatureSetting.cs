@@ -11,8 +11,8 @@ namespace Sannel.House.Web.Base.Models
 	/// <summary>
 	/// Represents the configuration f
 	/// </summary>
-	public class TemperatureDefault
-    {
+	public class TemperatureSetting
+	{
 		/// <summary>
 		/// Gets or sets the identifier.
 		/// </summary>
@@ -23,7 +23,7 @@ namespace Sannel.House.Web.Base.Models
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 #endif
 		[Key]
-		[JsonProperty("Id")]
+		[JsonProperty(nameof(Id))]
 		public long Id { get; set; }
 
 		/// <summary>
@@ -32,26 +32,34 @@ namespace Sannel.House.Web.Base.Models
 		/// <value>
 		/// The day of week.
 		/// </value>
-		[JsonProperty("DayOfWeek")]
-		public DayOfWeek DayOfWeek
+		[JsonProperty(nameof(DayOfWeek))]
+		public DayOfWeek? DayOfWeek
 		{
 			get;
 			set;
 		}
 
 		/// <summary>
-		/// Gets or sets the heat temperature c.
+		/// Gets or sets the month.
 		/// </summary>
 		/// <value>
-		/// The heat temperature c.
+		/// The month.
 		/// </value>
-		[JsonProperty(nameof(StartTime))]
-		public DateTime StartTime
+		[JsonProperty(nameof(Month))]
+		public int? Month
 		{
 			get;
 			set;
 		}
 
+		[JsonProperty(nameof(StartDate))]
+		[Column(TypeName = "bigint")]
+		public Date? StartDate { get; set; }
+
+		[JsonProperty(nameof(EndDate))]
+		[Column(TypeName = "bigint")]
+		public Date? EndDate { get; set; }
+		
 		[JsonProperty(nameof(HeatTemperatureC))]
 		public double HeatTemperatureC { get; set; }
 

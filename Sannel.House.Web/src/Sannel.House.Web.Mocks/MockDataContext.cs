@@ -22,6 +22,18 @@ namespace Sannel.House.Web.Mocks
 			get; set;
 		}
 
+		/// <summary>
+		/// Gets or sets the temperature settings.
+		/// </summary>
+		/// <value>
+		/// The temperature settings.
+		/// </value>
+		public DbSet<TemperatureSetting> TemperatureSettings
+		{
+			get;
+			set;
+		}
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
 			base.OnConfiguring(optionsBuilder);

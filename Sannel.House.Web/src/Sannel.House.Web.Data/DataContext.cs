@@ -25,12 +25,12 @@ namespace Sannel.House.Web.Data
 		}
 
 		/// <summary>
-		/// Gets or sets the temperature defaults.
+		/// Gets or sets the temperature settings.
 		/// </summary>
 		/// <value>
-		/// The temperature defaults.
+		/// The temperature settings.
 		/// </value>
-		public DbSet<TemperatureDefault> TemperatureDefaults
+		public DbSet<TemperatureSetting> TemperatureSettings
 		{
 			get;
 			set;
@@ -38,7 +38,7 @@ namespace Sannel.House.Web.Data
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
-			
+
 		}
 	}
 }
