@@ -156,5 +156,11 @@ namespace Sannel.House.Web.Base.Models
 
 		[JsonProperty(nameof(CoolTemperatureC))]
 		public double CoolTemperatureC { get; set; }
+
+		[JsonProperty(nameof(DateCreated))]
+		public DateTime DateCreated { get; set; } = DateTime.Now;
+
+		[JsonProperty(nameof(DateModified))]
+		public DateTime DateModified { get; set; } = DateTime.Now;
 	}
 }

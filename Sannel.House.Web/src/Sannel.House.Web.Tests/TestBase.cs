@@ -20,6 +20,11 @@ namespace Sannel.House.Web.Tests
 					context.Devices.Remove(d);
 				}
 
+				foreach(var s in context.TemperatureSettings)
+				{
+					context.TemperatureSettings.Remove(s);
+				}
+
 				context.SaveChanges();
 			}
 		}

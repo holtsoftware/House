@@ -14,32 +14,84 @@ namespace Sannel.House.Web.Controllers.api
 	public class TemperatureSettingsController : Controller
 	{
 		private IDataContext context;
-		//public DevicesController()
-		//{
-		//}
+
 		public TemperatureSettingsController(IDataContext context)
 		{
 			this.context = context;
 		}
-		// GET: api/values
+
 		[HttpGet]
 		public IEnumerable<TemperatureSetting> Get()
 		{
-			var resultDefaults = from f in context.TemperatureSettings
-						  where f.DayOfWeek == null
-							  && f.LongStartDate == null
-							  && f.LongEndDate == null
-						  select f;
+			return Get(DateTime.Now);
+		}
 
-			var now = DateTime.Now;
+		/// <summary>
+		/// Gets the default temperature setting i.e. nothing else is set use this
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public TemperatureSetting GetDefault()
+		{
+			var first = (from f in context.TemperatureSettings
+					where f.DayOfWeek == null
+						&& f.LongStartDate == null
+						&& f.LongEndDate == null
+					orderby f.DateModified descending
+					select f).FirstOrDefault();
+			if(first == null)
+			{
+				first = new TemperatureSetting();
+				first.HeatTemperatureC = 15.6;
+				first.CoolTemperatureC = 29.5;
+				context.TemperatureSettings.Add(first);
+				context.SaveChanges();
+			}
+
+			return first;
+		}
+
+		// GET: api/values
+		/// <summary>
+		/// Gets the TemperatureSettings that would be applyed from today -1, today, today +1, today +2
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet]
+		public IEnumerable<TemperatureSetting> Get(DateTime now)
+		{
+			var resultDefaults = (from f in context.TemperatureSettings
+								  where f.DayOfWeek == null
+									  && f.LongStartDate == null
+									  && f.LongEndDate == null
+								  orderby f.DateModified descending
+								  select f).Take(1);
+			if(resultDefaults.Count() == 0)
+			{
+				var first = new TemperatureSetting();
+				first.HeatTemperatureC = 15.6;
+				first.CoolTemperatureC = 29.5;
+				context.TemperatureSettings.Add(first);
+				context.SaveChanges();
+
+				resultDefaults = (from f in context.TemperatureSettings
+								  where f.DayOfWeek == null
+									  && f.LongStartDate == null
+									  && f.LongEndDate == null
+								  orderby f.DateModified descending
+								  select f).Take(1);
+			}
+
 			var yesterday = now.AddDays(-1);
 			var tomorrow = now.AddDays(1);
+			var twoDays = now.AddDays(2);
 			var resultsDay = from f in context.TemperatureSettings
 							 where (f.DayOfWeek == yesterday.DayOfWeek ||
 								f.DayOfWeek == now.DayOfWeek ||
-								f.DayOfWeek == tomorrow.DayOfWeek) &&
+								f.DayOfWeek == tomorrow.DayOfWeek ||
+								f.DayOfWeek == twoDays.DayOfWeek) &&
 								f.LongStartDate == null &&
 								f.LongEndDate == null
+							 orderby f.DayOfWeek, f.ShortTimeStart
 							 select f;
 
 			return resultDefaults.Union(resultsDay);
