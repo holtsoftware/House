@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Web.Base.Models
 {
-	public struct Date
+	public struct Date 
 	{
 		private DateTime date;
 

@@ -8,8 +8,8 @@ using Sannel.House.Web.Data;
 namespace Sannel.House.Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20160802035220_Updated TempratureSettings")]
-    partial class UpdatedTempratureSettings
+    [Migration("20160803034105_AddedStartAndEndDate")]
+    partial class AddedStartAndEndDate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -210,9 +210,9 @@ namespace Sannel.House.Web.Data.Migrations
 
                     b.Property<double>("HeatTemperatureC");
 
-                    b.Property<int>("Hour");
+                    b.Property<long?>("LongEndDate");
 
-                    b.Property<int>("Minute");
+                    b.Property<long?>("LongStartDate");
 
                     b.Property<int?>("Month");
 

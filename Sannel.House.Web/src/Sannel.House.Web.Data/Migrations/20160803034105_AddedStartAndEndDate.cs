@@ -5,13 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Sannel.House.Web.Data.Migrations
 {
-    public partial class UpdatedTempratureSettings : Migration
+    public partial class AddedStartAndEndDate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "TemperatureDefaults");
-
             migrationBuilder.CreateTable(
                 name: "TemperatureSettings",
                 columns: table => new
@@ -21,8 +18,8 @@ namespace Sannel.House.Web.Data.Migrations
                     CoolTemperatureC = table.Column<double>(nullable: false),
                     DayOfWeek = table.Column<int>(nullable: true),
                     HeatTemperatureC = table.Column<double>(nullable: false),
-                    Hour = table.Column<int>(nullable: false),
-                    Minute = table.Column<int>(nullable: false),
+                    LongEndDate = table.Column<long>(nullable: true),
+                    LongStartDate = table.Column<long>(nullable: true),
                     Month = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -35,22 +32,6 @@ namespace Sannel.House.Web.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "TemperatureSettings");
-
-            migrationBuilder.CreateTable(
-                name: "TemperatureDefaults",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CoolTemperatureC = table.Column<double>(nullable: false),
-                    DayOfWeek = table.Column<int>(nullable: false),
-                    HeatTemperatureC = table.Column<double>(nullable: false),
-                    StartTime = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TemperatureDefaults", x => x.Id);
-                });
         }
     }
 }

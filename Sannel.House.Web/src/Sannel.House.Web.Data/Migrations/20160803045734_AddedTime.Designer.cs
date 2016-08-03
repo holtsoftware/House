@@ -8,8 +8,8 @@ using Sannel.House.Web.Data;
 namespace Sannel.House.Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20160801192126_Added-TemperatureDefaults")]
-    partial class AddedTemperatureDefaults
+    [Migration("20160803045734_AddedTime")]
+    partial class AddedTime
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -199,22 +199,28 @@ namespace Sannel.House.Web.Data.Migrations
                     b.ToTable("Devices");
                 });
 
-            modelBuilder.Entity("Sannel.House.Web.Base.Models.TemperatureDefault", b =>
+            modelBuilder.Entity("Sannel.House.Web.Base.Models.TemperatureSetting", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<double>("CoolTemperatureC");
 
-                    b.Property<int>("DayOfWeek");
+                    b.Property<int?>("DayOfWeek");
 
                     b.Property<double>("HeatTemperatureC");
 
-                    b.Property<DateTime>("StartTime");
+                    b.Property<long?>("LongEndDate");
+
+                    b.Property<long?>("LongStartDate");
+
+                    b.Property<int?>("ShortEndTime");
+
+                    b.Property<int?>("ShortTimeStart");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TemperatureDefaults");
+                    b.ToTable("TemperatureSettings");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

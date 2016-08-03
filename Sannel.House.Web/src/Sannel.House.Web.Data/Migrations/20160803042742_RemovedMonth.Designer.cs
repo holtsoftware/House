@@ -8,9 +8,10 @@ using Sannel.House.Web.Data;
 namespace Sannel.House.Web.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20160803042742_RemovedMonth")]
+    partial class RemovedMonth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")
@@ -212,10 +213,6 @@ namespace Sannel.House.Web.Data.Migrations
                     b.Property<long?>("LongEndDate");
 
                     b.Property<long?>("LongStartDate");
-
-                    b.Property<int?>("ShortEndTime");
-
-                    b.Property<int?>("ShortTimeStart");
 
                     b.HasKey("Id");
 

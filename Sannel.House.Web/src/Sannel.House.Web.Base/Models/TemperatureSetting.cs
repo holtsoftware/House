@@ -19,9 +19,7 @@ namespace Sannel.House.Web.Base.Models
 		/// <value>
 		/// The identifier.
 		/// </value>
-#if !THERMOSTAT
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-#endif
 		[Key]
 		[JsonProperty(nameof(Id))]
 		public long Id { get; set; }
@@ -40,26 +38,119 @@ namespace Sannel.House.Web.Base.Models
 		}
 
 		/// <summary>
-		/// Gets or sets the month.
+		/// Gets or sets the long start date.
 		/// </summary>
 		/// <value>
-		/// The month.
+		/// The long start date.
 		/// </value>
-		[JsonProperty(nameof(Month))]
-		public int? Month
+		[JsonIgnore]
+		public long? LongStartDate { get; set; }
+
+		/// <summary>
+		/// Gets or sets the start date.
+		/// </summary>
+		/// <value>
+		/// The start date.
+		/// </value>
+		[JsonProperty(nameof(StartDate))]
+		[NotMapped]
+		public Date? StartDate
 		{
-			get;
-			set;
+			get
+			{
+				return LongStartDate;
+			}
+			set
+			{
+				LongStartDate = value;
+			}
 		}
 
-		[JsonProperty(nameof(StartDate))]
-		[Column(TypeName = "bigint")]
-		public Date? StartDate { get; set; }
+		/// <summary>
+		/// Gets or sets the long end date.
+		/// </summary>
+		/// <value>
+		/// The long end date.
+		/// </value>
+		[JsonIgnore]
+		public long? LongEndDate { get; set; }
 
+		/// <summary>
+		/// Gets or sets the end date.
+		/// </summary>
+		/// <value>
+		/// The end date.
+		/// </value>
 		[JsonProperty(nameof(EndDate))]
-		[Column(TypeName = "bigint")]
-		public Date? EndDate { get; set; }
-		
+		[NotMapped]
+		public Date? EndDate
+		{
+			get
+			{
+				return LongEndDate;
+			}
+			set
+			{
+				LongEndDate = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the time start.
+		/// </summary>
+		/// <value>
+		/// The time start.
+		/// </value>
+		[JsonIgnore]
+		public int? ShortTimeStart { get; set; }
+
+		/// <summary>
+		/// Gets or sets the start time.
+		/// </summary>
+		/// <value>
+		/// The start time.
+		/// </value>
+		[NotMapped]
+		public Time? StartTime
+		{
+			get
+			{
+				return ShortTimeStart;
+			}
+			set
+			{
+				ShortTimeStart = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the short end time.
+		/// </summary>
+		/// <value>
+		/// The short end time.
+		/// </value>
+		[JsonIgnore]
+		public int? ShortEndTime { get; set; }
+
+		/// <summary>
+		/// Gets or sets the end time.
+		/// </summary>
+		/// <value>
+		/// The end time.
+		/// </value>
+		[NotMapped]
+		public Time? EndTime
+		{
+			get
+			{
+				return ShortEndTime;
+			}
+			set
+			{
+				ShortEndTime = value;
+			}
+		}
+
 		[JsonProperty(nameof(HeatTemperatureC))]
 		public double HeatTemperatureC { get; set; }
 
