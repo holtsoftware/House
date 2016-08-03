@@ -27,6 +27,7 @@ namespace Sannel.House.Web.Base.Interfaces
 		DbSet<Device> Devices { get; set; }
 
 
+#if !THERMOSTAT
 		/// <summary>
 		/// Gets or sets the temperature settings.
 		/// </summary>
@@ -35,7 +36,6 @@ namespace Sannel.House.Web.Base.Interfaces
 		/// </value>
 		DbSet<TemperatureSetting> TemperatureSettings { get; set; }
 
-#if !THERMOSTAT
 		DbSet<ApplicationUser> Users { get; set; }
 
 		DbSet<IdentityRole> Roles { get; set; }
