@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Sannel.House.Client.UWP
 		{
 			this.InitializeComponent();
 
-			LoadApplication(new Sannel.House.Client.App());
+			LoadApplication(new Client.App(App.container));
 		}
 	}
 }

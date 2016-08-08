@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -20,16 +22,40 @@ namespace Sannel.House.Client.UWP
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
-	sealed partial class App : Application
+	sealed partial class App : CaliburnApplication
 	{
+		internal static WinRTContainer container;
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
 		/// </summary>
 		public App()
 		{
+#if CODE_ANALYSIS
+			//Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
+			//	Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
+			//	Microsoft.ApplicationInsights.WindowsCollectors.Session);
+#endif
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
+			this.UnhandledException += App_UnhandledException;
+		}
+
+		private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+#if DEBUG
+			if (Debugger.IsAttached)
+			{
+				Debugger.Break();
+			}
+#endif
+
+		}
+
+		protected override void Configure()
+		{
+			container = new WinRTContainer();
+			container.RegisterWinRTServices();
 		}
 
 		/// <summary>
@@ -39,45 +65,14 @@ namespace Sannel.House.Client.UWP
 		/// <param name="e">Details about the launch request and process.</param>
 		protected override void OnLaunched(LaunchActivatedEventArgs e)
 		{
-
 #if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-            }
+			if (System.Diagnostics.Debugger.IsAttached)
+			{
+				this.DebugSettings.EnableFrameRateCounter = true;
+			}
 #endif
-
-			Frame rootFrame = Window.Current.Content as Frame;
-
-			// Do not repeat app initialization when the Window already has content,
-			// just ensure that the window is active
-			if (rootFrame == null)
-			{
-				// Create a Frame to act as the navigation context and navigate to the first page
-				rootFrame = new Frame();
-
-				rootFrame.NavigationFailed += OnNavigationFailed;
-
-				Xamarin.Forms.Forms.Init(e);
-
-				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-				{
-					//TODO: Load state from previously suspended application
-				}
-
-				// Place the frame in the current Window
-				Window.Current.Content = rootFrame;
-			}
-
-			if (rootFrame.Content == null)
-			{
-				// When the navigation stack isn't restored navigate to the first page,
-				// configuring the new page by passing required information as a navigation
-				// parameter
-				rootFrame.Navigate(typeof(MainPage), e.Arguments);
-			}
-			// Ensure the current window is active
-			Window.Current.Activate();
+			Xamarin.Forms.Forms.Init(e);
+			DisplayRootView<MainPage>();
 		}
 
 		/// <summary>
@@ -97,11 +92,31 @@ namespace Sannel.House.Client.UWP
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private void OnSuspending(object sender, SuspendingEventArgs e)
+		protected override void OnSuspending(object sender, SuspendingEventArgs e)
 		{
 			var deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity
 			deferral.Complete();
+		}
+
+		protected override void PrepareViewFirst(Frame rootFrame)
+		{
+			container.RegisterNavigationService(rootFrame);
+		}
+
+		protected override object GetInstance(Type service, string key)
+		{
+			return container.GetInstance(service, key);
+		}
+
+		protected override IEnumerable<object> GetAllInstances(Type service)
+		{
+			return container.GetAllInstances(service);
+		}
+
+		protected override void BuildUp(object instance)
+		{
+			container.BuildUp(instance);
 		}
 	}
 }
