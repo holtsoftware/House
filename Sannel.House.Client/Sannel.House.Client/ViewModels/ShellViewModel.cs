@@ -7,16 +7,32 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.ViewModels
 {
-	public class ShellViewModel : IShellViewModel
+	public class ShellViewModel : BaseViewModel, IShellViewModel
 	{
 		public ShellViewModel()
 		{
 
 		}
 
-		public string Test
+
+		private bool isPaneOpen;
+		/// <summary>
+		/// Gets or sets the IsPaneOpen
+		/// </summary>
+		/// <value>
+		/// The IsPaneOpen
+		/// </value>
+		public bool IsPaneOpen
 		{
-			get; set;
-		} = "Test";
+			get
+			{
+				return isPaneOpen;
+			}
+			set
+			{
+				Set(ref isPaneOpen, value);
+			}
+		}
+
 	}
 }
