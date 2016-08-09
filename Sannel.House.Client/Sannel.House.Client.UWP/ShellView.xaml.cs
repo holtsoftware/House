@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sannel.House.Client.UWP.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,11 @@ namespace Sannel.House.Client.UWP
 		public ShellView()
 		{
 			this.InitializeComponent();
+			NavigationService service = ViewModelLocator.NavigationService as NavigationService;
+			if(service != null)
+			{
+				service.Frame = MainFrame;
+			}
 		}
 	}
 }

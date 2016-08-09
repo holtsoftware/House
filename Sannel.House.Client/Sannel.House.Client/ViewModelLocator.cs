@@ -27,6 +27,19 @@ namespace Sannel.House.Client
 			}
 		}
 
+		public static void SetNavigationService(INavigationService service)
+		{
+			Container.Register<INavigationService>(() => service, true);
+		}
+
+		public static INavigationService NavigationService
+		{
+			get
+			{
+				return Container.GetInstance<INavigationService>();
+			}
+		}
+
 		public static ISimpleIoc Container
 		{
 			get

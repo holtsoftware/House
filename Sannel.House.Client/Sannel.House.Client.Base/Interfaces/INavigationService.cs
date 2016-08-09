@@ -6,15 +6,9 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.Interfaces
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface IShellViewModel
+	public interface INavigationService
 	{
-		bool IsPaneOpen
-		{
-			get;
-			set;
-		}
+		void Navigate<T>(Object parameter)
+			where T : class;
 	}
 }
