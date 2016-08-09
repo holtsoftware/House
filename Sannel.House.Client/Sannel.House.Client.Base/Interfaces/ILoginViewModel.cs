@@ -11,7 +11,7 @@ namespace Sannel.House.Client.Interfaces
 	/// <summary>
 	/// What the login form needs
 	/// </summary>
-	public interface ILoginViewModel
+	public interface ILoginViewModel : IBaseViewModel
 	{
 		/// <summary>
 		/// Gets or sets the username.

@@ -1,4 +1,6 @@
-﻿using Sannel.House.Client.UWP.Services;
+﻿using Sannel.House.Client.Interfaces;
+using Sannel.House.Client.UWP.Services;
+using Sannel.House.Client.UWP.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,7 +68,7 @@ namespace Sannel.House.Client.UWP
 				Window.Current.Content = rootFrame;
 			}
 
-			ViewModelLocator.SetNavigationService(new NavigationService());
+			configure();
 
 			if (e.PrelaunchActivated == false)
 			{
@@ -80,6 +82,15 @@ namespace Sannel.House.Client.UWP
 				// Ensure the current window is active
 				Window.Current.Activate();
 			}
+		}
+
+		private void configure()
+		{
+			var navService = new NavigationService();
+			ViewModelLocator.SetNavigationService(navService);
+			ViewModelLocator.Container.Register<ISettings>(() => AppSettings.Current, true);
+			navService.RegisterMapping<ILoginViewModel, LoginView>();
+			navService.RegisterMapping<ISettingsViewModel, SettingsView>();
 		}
 
 		/// <summary>

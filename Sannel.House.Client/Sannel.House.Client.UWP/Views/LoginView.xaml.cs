@@ -1,6 +1,4 @@
-﻿using Sannel.House.Client.UWP.Services;
-using Sannel.House.Client.UWP.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,21 +15,16 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Sannel.House.Client.UWP
+namespace Sannel.House.Client.UWP.Views
 {
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class ShellView : BaseView
+	public sealed partial class LoginView : BaseView
 	{
-		public ShellView()
+		public LoginView()
 		{
 			this.InitializeComponent();
-			NavigationService service = ViewModelLocator.NavigationService as NavigationService;
-			if(service != null)
-			{
-				service.Frame = MainFrame;
-			}
 		}
 	}
 }

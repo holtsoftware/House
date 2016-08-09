@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.Interfaces
 {
-	public interface INavigationService
+	public interface ISettingsViewModel : IBaseViewModel
 	{
-		void Navigate<T>(Object parameter)
-			where T : IBaseViewModel;
-
-		void Navigate<T>()
-			where T : IBaseViewModel;
+		String ServerUrl
+		{
+			get;
+			set;
+		}
 	}
 }

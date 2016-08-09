@@ -24,6 +24,7 @@ namespace Sannel.House.Client
 			else
 			{
 				ioc.Register<IShellViewModel, ShellViewModel>();
+				ioc.Register<ILoginViewModel, LoginViewModel>();
 			}
 		}
 
@@ -48,12 +49,34 @@ namespace Sannel.House.Client
 			}
 		}
 
+		/// <summary>
+		/// Gets the login view model.
+		/// </summary>
+		/// <value>
+		/// The login view model.
+		/// </value>
+		public static ILoginViewModel LoginViewModel
+		{
+			get
+			{
+				return Container.GetInstance<ILoginViewModel>();
+			}
+		}
+
 
 		public static IShellViewModel ShellViewModel
 		{
 			get
 			{
 				return SimpleIoc.Default.GetInstance<IShellViewModel>();
+			}
+		}
+
+		public static ISettingsViewModel SettingsViewModel
+		{
+			get
+			{
+				return Container.GetInstance<ISettingsViewModel>();
 			}
 		}
 	}
