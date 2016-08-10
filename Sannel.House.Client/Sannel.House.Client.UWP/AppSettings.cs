@@ -63,5 +63,23 @@ namespace Sannel.House.Client.UWP
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the authz cookie value.
+		/// </summary>
+		/// <value>
+		/// The authz cookie value.
+		/// </value>
+		public String AuthzCookieValue
+		{
+			get
+			{
+				return get<String>();
+			}
+			set
+			{
+				set<String>(value);
+			}
+		}
+
 	}
 }

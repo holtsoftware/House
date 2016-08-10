@@ -22,5 +22,11 @@ namespace Sannel.House.Client.Interfaces
 			get;
 			set;
 		}
+
+		String AuthzCookieValue
+		{
+			get;
+			set;
+		}
 	}
 }

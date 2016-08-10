@@ -63,6 +63,28 @@ namespace Sannel.House.Web.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Logins from device.
+		/// System.NET.HttpClient seams to be able to access the cookie set from this method easyer not sure why. Probably the lack of redirect?
+		/// </summary>
+		/// <param name="model">The model.</param>
+		/// <returns></returns>
+		[HttpPost]
+		[AllowAnonymous]
+		public async Task<JsonResult> LoginFromDevice(LoginViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var results = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+				if (results.Succeeded)
+				{
+					return Json(true);	
+				}
+			}
+
+			return Json(false);
+		}
+
 		[HttpGet]
 		public IActionResult AccessDenied(String returnUrl = null)
 		{
@@ -117,6 +139,16 @@ namespace Sannel.House.Web.Controllers
 		{
 			await signInManager.SignOutAsync();
 			return RedirectToAction(nameof(HomeController.Index), "Home");
+		}
+
+		[HttpGet]
+		public async Task<JsonResult> GetRoles()
+		{
+			var user = await userManager.GetUserAsync(User);
+
+			var roles = await userManager.GetRolesAsync(user);
+
+			return Json(roles);
 		}
 
 		private IActionResult RedirectToLocal(string returnUrl)

@@ -1,10 +1,12 @@
-﻿using Sannel.House.Client.Interfaces;
+﻿using Newtonsoft.Json;
+using Sannel.House.Client.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Sannel.House.Client.Exceptions;
 
 namespace Sannel.House.Client.Data
 {
@@ -20,8 +22,18 @@ namespace Sannel.House.Client.Data
 		{
 			this.settings = settings;
 		}
+
 		public void Dispose()
 		{
+		}
+
+		public Task<IList<string>> GetRolesAsync()
+		{
+			if(settings.AuthzCookieValue == null)
+			{
+				throw new NotLoggedInException("Please login.");
+			}
+			return null;
 		}
 
 		/// <summary>
@@ -32,20 +44,43 @@ namespace Sannel.House.Client.Data
 		/// <returns></returns>
 		public async Task<bool> LoginAsync(string username, string password)
 		{
+			if (username == null)
+			{
+				throw new ArgumentNullException(nameof(username));
+			}
+			if(password == null)
+			{
+				throw new ArgumentNullException(nameof(password));
+			}
 			var clientHandler = new HttpClientHandler();
 			clientHandler.UseCookies = true;
 
 			using(HttpClient client = new HttpClient(clientHandler))
 			{
 				var uri = new UriBuilder(settings.ServerUrl);
-				uri.Path = "/Account/Login";
+				uri.Path = "/Account/LoginFromDevice";
 				var values = new Dictionary<String, String>();
 				values["Email"] = username;
 				values["Password"] = password;
 				values["RememberMe"] = "true";
-				var content = new FormUrlEncodedContent(values);
-				var result = await client.PostAsync(uri.Uri, content);
-				var s = await result.Content.ReadAsStringAsync();
+				var sentContent = new FormUrlEncodedContent(values);
+	
+				var response = await client.PostAsync(uri.Uri, sentContent);
+				response.EnsureSuccessStatusCode();
+				var content = await response.Content.ReadAsStringAsync();
+				var result = JsonConvert.DeserializeObject<bool>(content);
+
+				if (result)
+				{
+					var cookies = clientHandler.CookieContainer.GetCookies(settings.ServerUrl);
+
+					var c = cookies[Constants.AuthzCookieName];
+					if(c != null)
+					{
+						settings.AuthzCookieValue = c.Value;
+						return true;
+					}
+				}
 
 				return false;
 			}

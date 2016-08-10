@@ -38,7 +38,7 @@ namespace Sannel.House.Client.ViewModels
 		{
 			ErrorKeys.Clear();
 
-			if (!RegExes.EmailAddress.IsMatch(Username ?? ""))
+			if (!Constants.EmailAddress.IsMatch(Username ?? ""))
 			{
 				ErrorKeys.Add("UsernameMustBeEmail");
 			}

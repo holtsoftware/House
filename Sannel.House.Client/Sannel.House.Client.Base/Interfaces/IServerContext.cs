@@ -9,5 +9,7 @@ namespace Sannel.House.Client.Interfaces
 	public interface IServerContext
 	{
 		Task<bool> LoginAsync(String username, String password);
+
+		Task<IList<String>> GetRolesAsync();
 	}
 }
