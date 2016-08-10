@@ -41,7 +41,7 @@ namespace Sannel.House.Client.UWP.Services
 
 		public void Navigate<T>() where T : IBaseViewModel
 		{
-			Navigate<T>();
+			Navigate<T>(null);
 		}
 	}
 }

@@ -17,9 +17,11 @@ namespace Sannel.House.Client.ViewModels
 	public class LoginViewModel : ErrorViewModel, ILoginViewModel
 	{
 		private ISettings settings;
-		public LoginViewModel(ISettings settings)
+		private IServerContext context;
+		public LoginViewModel(ISettings settings, IServerContext context)
 		{
 			this.settings = settings;
+			this.context = context;
 		}
 
 		public override void NavigatedTo(object arg)
@@ -32,10 +34,34 @@ namespace Sannel.House.Client.ViewModels
 			return null;
 		}
 
-		private RelayCommand command = new RelayCommand(() =>
+		private bool validateMe()
 		{
+			ErrorKeys.Clear();
 
-		});
+			if (!RegExes.EmailAddress.IsMatch(Username ?? ""))
+			{
+				ErrorKeys.Add("UsernameMustBeEmail");
+			}
+
+			if(String.IsNullOrWhiteSpace(Password))
+			{
+				ErrorKeys.Add("PasswordIsRequired");
+			}
+
+			return ErrorKeys.Count == 0;
+		}
+
+		private async void loginCommand()
+		{
+			IsBusy = true;
+			if (validateMe())
+			{
+				var results = await context.LoginAsync(Username, Password);
+			}
+			IsBusy = false;
+		}
+
+		private RelayCommand command;
 
 		/// <summary>
 		/// Gets the login command that preforms the login
@@ -43,11 +69,11 @@ namespace Sannel.House.Client.ViewModels
 		/// <value>
 		/// The login.
 		/// </value>
-		public ICommand Login
+		public ICommand LoginCommand
 		{
 			get
 			{
-				return command;
+				return command ?? (command = new RelayCommand(loginCommand));
 			}
 		}
 

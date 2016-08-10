@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Hello">Hello World, Click Me!</string>
-    <string name="ApplicationName">Sannel.House.Client.Droid</string>
+	<string name="Hello">Hello World, Click Me!</string>
+	<string name="ApplicationName">Sannel.House.Client.Droid</string>
+	<string name="ServerUrlError">Server Url is invalid</string>
+	<string name="UsernameMustBeEmail">Username must be a valid email address.</string>
+	<string name="PasswordIsRequired">Password is Required</string>
 </resources>

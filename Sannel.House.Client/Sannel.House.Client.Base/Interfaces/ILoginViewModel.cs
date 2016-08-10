@@ -55,29 +55,7 @@ namespace Sannel.House.Client.Interfaces
 		/// <value>
 		/// The login.
 		/// </value>
-		ICommand Login
-		{
-			get;
-		}
-
-		/// <summary>
-		/// Gets the error keys for the current errors.
-		/// </summary>
-		/// <value>
-		/// The error keys.
-		/// </value>
-		ObservableCollection<String> ErrorKeys
-		{
-			get;
-		}
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has errors.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
-		/// </value>
-		bool HasErrors
+		ICommand LoginCommand
 		{
 			get;
 		}

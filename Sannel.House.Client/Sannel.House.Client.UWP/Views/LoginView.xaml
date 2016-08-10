@@ -1,27 +1,25 @@
 ﻿<views:BaseView
-    x:Class="Sannel.House.Client.UWP.Views.LoginView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Sannel.House.Client.UWP.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	x:Class="Sannel.House.Client.UWP.Views.LoginView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Sannel.House.Client.UWP.Views"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:views="using:Sannel.House.Client.UWP.Views"
-    mc:Ignorable="d"
+	mc:Ignorable="d"
+	xmlns:controls="using:Sannel.House.Client.UWP.Controls"
 	DataContext="{Binding LoginViewModel, Source={StaticResource Locator}}">
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<StackPanel>
-			<ListView ItemsSource="{Binding ErrorKeys}">
-			</ListView>
+			<controls:ErrorControl />
 			<TextBlock>1. Username</TextBlock>
 			<TextBox InputScope="EmailSmtpAddress" Text="{Binding Username, Mode=TwoWay}" />
 			<TextBlock>2. Password</TextBlock>
 			<PasswordBox Password="{Binding Password, Mode=TwoWay}" />
 			<CheckBox IsChecked="{Binding StayLoggedIn, Mode=TwoWay}">3. Stay logged in</CheckBox>
-			<Button Command="{Binding Login}">4. Login</Button>
+			<Button Command="{Binding LoginCommand}">4. Login</Button>
 		</StackPanel>
-		<Border Background="#AA000000" Visibility="{Binding IsBusy}">
-			<ProgressRing IsActive="{Binding IsBusy}" />
-		</Border>
+		<controls:BusyControl />
 	</Grid>
 </views:BaseView>

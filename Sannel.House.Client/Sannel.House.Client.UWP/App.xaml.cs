@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Practices.Unity;
 
 namespace Sannel.House.Client.UWP
 {
@@ -88,7 +89,7 @@ namespace Sannel.House.Client.UWP
 		{
 			var navService = new NavigationService();
 			ViewModelLocator.SetNavigationService(navService);
-			ViewModelLocator.Container.Register<ISettings>(() => AppSettings.Current, true);
+			ViewModelLocator.Container.RegisterInstance<ISettings>(AppSettings.Current);
 			navService.RegisterMapping<ILoginViewModel, LoginView>();
 			navService.RegisterMapping<ISettingsViewModel, SettingsView>();
 		}

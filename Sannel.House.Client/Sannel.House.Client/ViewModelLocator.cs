@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.Unity;
+using Sannel.House.Client.Data;
 using Sannel.House.Client.Interfaces;
 using Sannel.House.Client.ViewModels;
 using System;
@@ -15,39 +17,37 @@ namespace Sannel.House.Client
 	{
 		static ViewModelLocator()
 		{
-			ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-			var ioc = Container;
+			Container = new Microsoft.Practices.Unity.UnityContainer();
 			if (ViewModelBase.IsInDesignModeStatic)
 			{
 
 			}
 			else
 			{
-				ioc.Register<IShellViewModel, ShellViewModel>();
-				ioc.Register<ILoginViewModel, LoginViewModel>();
-				ioc.Register<ISettingsViewModel, SettingsViewModel>();
+				Container.RegisterType<IShellViewModel, ShellViewModel>(new ContainerControlledLifetimeManager());
+				Container.RegisterType<ILoginViewModel, LoginViewModel>();
+				Container.RegisterType<ISettingsViewModel, SettingsViewModel>(new ContainerControlledLifetimeManager());
+				Container.RegisterType<IServerContext, ServerContext>();
 			}
 		}
 
 		public static void SetNavigationService(INavigationService service)
 		{
-			Container.Register<INavigationService>(() => service, true);
+			Container.RegisterInstance<INavigationService>(service);
 		}
 
 		public static INavigationService NavigationService
 		{
 			get
 			{
-				return Container.GetInstance<INavigationService>();
+				return Container.Resolve<INavigationService>();
 			}
 		}
 
-		public static ISimpleIoc Container
+		public static IUnityContainer Container
 		{
-			get
-			{
-				return SimpleIoc.Default;
-			}
+			get;
+			private set;
 		}
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Sannel.House.Client
 		{
 			get
 			{
-				return Container.GetInstance<ILoginViewModel>();
+				return Container.Resolve<ILoginViewModel>();
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace Sannel.House.Client
 		{
 			get
 			{
-				return SimpleIoc.Default.GetInstance<IShellViewModel>();
+				return Container.Resolve<IShellViewModel>();
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace Sannel.House.Client
 		{
 			get
 			{
-				return Container.GetInstance<ISettingsViewModel>();
+				return Container.Resolve<ISettingsViewModel>();
 			}
 		}
 	}

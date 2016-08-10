@@ -1,15 +1,17 @@
 ﻿<Application
-    x:Class="Sannel.House.Client.UWP.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Sannel.House.Client.UWP"
+	x:Class="Sannel.House.Client.UWP.App"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Sannel.House.Client.UWP"
 	xmlns:vm="using:Sannel.House.Client"
-    RequestedTheme="Light">
+	xmlns:converters="using:Sannel.House.Client.UWP.Converters"
+	RequestedTheme="Light">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary>
 					<vm:ViewModelLocator x:Key="Locator" />
+					<converters:ErrorKeyConverter x:Key="ErrorKeyConverter" />
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
