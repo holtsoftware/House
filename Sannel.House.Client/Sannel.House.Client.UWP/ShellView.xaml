@@ -32,7 +32,7 @@
 			<SplitView.Pane>
 				<TextBlock>Pane</TextBlock>
 			</SplitView.Pane>
-			<Frame x:Name="MainFrame">
+			<Frame x:Name="MainFrame" Padding="12">
 				
 			</Frame>
 		</SplitView>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.Interfaces
 {
-	public interface ISettingsViewModel : IBaseViewModel
+	public interface ISettingsViewModel : IErrorViewModel
 	{
 		String ServerUrl
 		{

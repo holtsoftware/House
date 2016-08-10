@@ -25,6 +25,7 @@ namespace Sannel.House.Client
 			{
 				ioc.Register<IShellViewModel, ShellViewModel>();
 				ioc.Register<ILoginViewModel, LoginViewModel>();
+				ioc.Register<ISettingsViewModel, SettingsViewModel>();
 			}
 		}
 

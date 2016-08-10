@@ -14,49 +14,22 @@ namespace Sannel.House.Client.ViewModels
 	/// Represents the login view model
 	/// </summary>
 	/// <seealso cref="Sannel.House.Client.Interfaces.ILoginViewModel" />
-	public class LoginViewModel : BaseViewModel, ILoginViewModel
+	public class LoginViewModel : ErrorViewModel, ILoginViewModel
 	{
 		private ISettings settings;
 		public LoginViewModel(ISettings settings)
 		{
 			this.settings = settings;
-			if(settings.ServerUrl == null)
-			{
-				ErrorKeys.Add("ServerUrlNotConfigured");
-				HasErrors = false;
-			}
 		}
 
-		/// <summary>
-		/// Gets the error keys for the current errors.
-		/// </summary>
-		/// <value>
-		/// The error keys.
-		/// </value>
-		public ObservableCollection<string> ErrorKeys
+		public override void NavigatedTo(object arg)
 		{
-			get;
-			private set;
-		} = new ObservableCollection<String>();
+			base.NavigatedTo(arg);
+		}
 
-
-		private bool hasErrors;
-		/// <summary>
-		/// Gets or sets the HasErrors.
-		/// </summary>
-		/// <value>
-		/// The HasErrors
-		/// </value>
-		public bool HasErrors
+		private Task getPermissionsAsync()
 		{
-			get
-			{
-				return hasErrors;
-			}
-			set
-			{
-				Set(ref hasErrors, value);
-			}
+			return null;
 		}
 
 		private RelayCommand command = new RelayCommand(() =>

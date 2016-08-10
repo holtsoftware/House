@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IBaseViewModel.cs" />
+    <Compile Include="Interfaces\IErrorViewModel.cs" />
     <Compile Include="Interfaces\INavigationService.cs" />
     <Compile Include="Interfaces\ILoginViewModel.cs" />
     <Compile Include="Interfaces\ISettings.cs" />

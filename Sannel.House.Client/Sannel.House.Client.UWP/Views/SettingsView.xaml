@@ -6,13 +6,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:views="using:Sannel.House.Client.UWP.Views"
+	xmlns:controls="using:Sannel.House.Client.UWP.Controls"
     mc:Ignorable="d"
-	DataContext="{Binding SettingsViewModel, Converter={StaticResource Locator}}"
+	DataContext="{Binding SettingsViewModel, Source={StaticResource Locator}}"
 	>
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<StackPanel>
-			<TextBlock>Settings</TextBlock>
+			<controls:ErrorControl />
+			<TextBlock>Server Url</TextBlock>
+			<TextBox InputScope="Url" Text="{Binding ServerUrl, Mode=TwoWay}"></TextBox>
 		</StackPanel>
 	</Grid>
 </views:BaseView>

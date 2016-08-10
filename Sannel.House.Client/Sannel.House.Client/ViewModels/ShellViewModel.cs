@@ -39,10 +39,15 @@ namespace Sannel.House.Client.ViewModels
 
 		public override void NavigatedTo(object arg)
 		{
+			// navigationService on the Shell is pointed to the content frame in the split panel so were not navigating away from this page
 			base.NavigatedTo(arg);
 			if(settings.ServerUrl == null)
 			{
-				navService.Navigate<ISettingsViewModel>(null);
+				navService.Navigate<ISettingsViewModel>();
+			}
+			else
+			{
+				navService.Navigate<ILoginViewModel>();
 			}
 		}
 

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.ViewModels
 {
-	public class SettingsViewModel : BaseViewModel, ISettingsViewModel
+	public class SettingsViewModel : ErrorViewModel, ISettingsViewModel
 	{
+		public const String SERVERURLERROR = "ServerUrlError";
 		private ISettings settings;
 
 		public SettingsViewModel(ISettings settings)
@@ -34,8 +35,16 @@ namespace Sannel.House.Client.ViewModels
 				Uri i;
 				if(Uri.TryCreate(value, UriKind.Absolute, out i))
 				{
+					ErrorKeys.Remove(SERVERURLERROR);
 					settings.ServerUrl = i;
 					NotifyPropertyChanged();
+				}
+				else
+				{
+					if (!ErrorKeys.Contains(SERVERURLERROR))
+					{
+						ErrorKeys.Add(SERVERURLERROR);
+					}
 				}
 			}
 		}
