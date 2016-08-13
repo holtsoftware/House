@@ -395,12 +395,12 @@ namespace Sannel.House.Client.Interfaces
     {
         private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
 
-        global::System.Threading.Tasks.Task<bool> global::Sannel.House.Client.Interfaces.IServerContext.LoginAsync(string username, string password)
+        global::System.Threading.Tasks.Task<global::System.Tuple<bool, string>> global::Sannel.House.Client.Interfaces.IServerContext.LoginAsync(string username, string password)
         {
             return ((LoginAsync_String_String_Delegate)_stubs[nameof(LoginAsync_String_String_Delegate)]).Invoke(username, password);
         }
 
-        public delegate global::System.Threading.Tasks.Task<bool> LoginAsync_String_String_Delegate(string username, string password);
+        public delegate global::System.Threading.Tasks.Task<global::System.Tuple<bool, string>> LoginAsync_String_String_Delegate(string username, string password);
 
         public StubIServerContext LoginAsync(LoginAsync_String_String_Delegate del)
         {

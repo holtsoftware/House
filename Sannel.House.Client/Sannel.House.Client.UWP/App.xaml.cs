@@ -92,6 +92,7 @@ namespace Sannel.House.Client.UWP
 			ViewModelLocator.Container.RegisterInstance<ISettings>(AppSettings.Current);
 			navService.RegisterMapping<ILoginViewModel, LoginView>();
 			navService.RegisterMapping<ISettingsViewModel, SettingsView>();
+			navService.RegisterMapping<IHomeViewModel, HomeView>();
 		}
 
 		/// <summary>

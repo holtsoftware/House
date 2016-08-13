@@ -4,6 +4,7 @@ using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using Sannel.House.Client.Data;
 using Sannel.House.Client.Interfaces;
+using Sannel.House.Client.Models;
 using Sannel.House.Client.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,14 @@ namespace Sannel.House.Client
 				Container.RegisterType<ILoginViewModel, LoginViewModel>();
 				Container.RegisterType<ISettingsViewModel, SettingsViewModel>(new ContainerControlledLifetimeManager());
 				Container.RegisterType<IServerContext, ServerContext>();
+				Container.RegisterType<IHomeViewModel, HomeViewModel>();
 			}
 		}
+
+		public static User User
+		{
+			get;
+		} = new User();
 
 		public static void SetNavigationService(INavigationService service)
 		{
@@ -78,6 +85,14 @@ namespace Sannel.House.Client
 			get
 			{
 				return Container.Resolve<ISettingsViewModel>();
+			}
+		}
+
+		public static IHomeViewModel HomeViewModel
+		{
+			get
+			{
+				return Container.Resolve<IHomeViewModel>();
 			}
 		}
 	}

@@ -27,22 +27,51 @@ namespace Sannel.House.Client.Data
 		{
 		}
 
-		public Task<IList<string>> GetRolesAsync()
+		public async Task<IList<string>> GetRolesAsync()
 		{
 			if(settings.AuthzCookieValue == null)
 			{
 				throw new NotLoggedInException("Please login.");
 			}
-			return null;
+
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+			using(HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = "/Account/GetRoles";
+				var response = await client.GetAsync(builder.Uri);
+				if (!response.IsSuccessStatusCode)
+				{
+					throw new ServerException("Error from server", (int)response.StatusCode);
+				}
+				if(response.RequestMessage.RequestUri != builder.Uri)
+				{
+					throw new NotLoggedInException("Please login again.");
+				}
+				var data = await response.Content.ReadAsStringAsync();
+				var list = JsonConvert.DeserializeObject<IList<String>>(data);
+				return list;
+			}
 		}
 
 		/// <summary>
-		/// Logins the asynchronous.
+		/// Logins asynchronously.
+		/// Returns true and the name of the user if successfull
+		/// Returns false and null if the user is not logged in
 		/// </summary>
 		/// <param name="username">The username.</param>
 		/// <param name="password">The password.</param>
 		/// <returns></returns>
-		public async Task<bool> LoginAsync(string username, string password)
+		/// <exception cref="ArgumentNullException">
+		/// Username or Password is null
+		/// </exception>
+		/// <exception cref="ServerException">
+		/// Error logging in
+		/// or
+		/// Server Unavailable;503
+		/// </exception>
+		public async Task<Tuple<bool, String>> LoginAsync(string username, string password)
 		{
 			if (username == null)
 			{
@@ -64,25 +93,35 @@ namespace Sannel.House.Client.Data
 				values["Password"] = password;
 				values["RememberMe"] = "true";
 				var sentContent = new FormUrlEncodedContent(values);
-	
-				var response = await client.PostAsync(uri.Uri, sentContent);
-				response.EnsureSuccessStatusCode();
-				var content = await response.Content.ReadAsStringAsync();
-				var result = JsonConvert.DeserializeObject<bool>(content);
 
-				if (result)
+				try
 				{
-					var cookies = clientHandler.CookieContainer.GetCookies(settings.ServerUrl);
-
-					var c = cookies[Constants.AuthzCookieName];
-					if(c != null)
+					var response = await client.PostAsync(uri.Uri, sentContent);
+					if (!response.IsSuccessStatusCode)
 					{
-						settings.AuthzCookieValue = c.Value;
-						return true;
+						throw new ServerException("Error logging in", (int)response.StatusCode);
 					}
-				}
+					var content = await response.Content.ReadAsStringAsync();
+					var result = JsonConvert.DeserializeObject<LoginResults>(content);
 
-				return false;
+					if (result.Success)
+					{
+						var cookies = clientHandler.CookieContainer.GetCookies(settings.ServerUrl);
+
+						var c = cookies[Constants.AuthzCookieName];
+						if (c != null)
+						{
+							settings.AuthzCookieValue = c.Value;
+							return new Tuple<bool, string>(result.Success, result.Name);
+						}
+					}
+
+					return new Tuple<bool, string>(false, null);
+				}
+				catch(HttpRequestException re)
+				{
+					throw new ServerException("Server Unavailable", 503, re);
+				}
 			}
 		}
 	}

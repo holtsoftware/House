@@ -28,6 +28,9 @@
 					</ToggleButton>
 				</Border>
 			</StackPanel>
+			<StackPanel Orientation="Horizontal" Grid.Column="1">
+				<TextBlock Text="{Binding User.Name, Source={StaticResource Locator}}" />
+			</StackPanel>
 		</Grid>
 		<SplitView x:Name="Splitter" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" Grid.Row="1">
 			<SplitView.Pane>

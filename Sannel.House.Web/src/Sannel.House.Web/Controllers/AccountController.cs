@@ -9,6 +9,7 @@ using Sannel.House.Web.Base.Models;
 using Sannel.House.Web.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Sannel.House.Web.Extensions;
 
 namespace Sannel.House.Web.Controllers
 {
@@ -35,7 +36,7 @@ namespace Sannel.House.Web.Controllers
 		public IActionResult Login(string returnUrl = null)
 		{
 			ViewData["ReturnUrl"] = returnUrl;
-			
+
 			return View();
 		}
 
@@ -78,11 +79,20 @@ namespace Sannel.House.Web.Controllers
 				var results = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
 				if (results.Succeeded)
 				{
-					return Json(true);	
+					var user = await userManager.FindByNameAsync(model.Email);
+					return Json(new
+					{
+						Success = true,
+						Name = user.Name
+					});
 				}
 			}
 
-			return Json(false);
+			return Json(new
+			{
+				Success = false,
+				Name = (String)null
+			});
 		}
 
 		[HttpGet]

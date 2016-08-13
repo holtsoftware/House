@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/ApplicationName"
+        android:key="pref_key_storage_settings">
+        <EditTextPreference
+            android:title="1. Server Url"
+            android:key="sannel_house_client_server_url" />
+    </PreferenceCategory>
+</PreferenceScreen>

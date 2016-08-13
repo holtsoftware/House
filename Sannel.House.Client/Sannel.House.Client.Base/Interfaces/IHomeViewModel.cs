@@ -6,15 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.Interfaces
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface IShellViewModel : IBaseViewModel
+	public interface IHomeViewModel : IBaseViewModel
 	{
-		bool IsPaneOpen
-		{
-			get;
-			set;
-		}
 	}
 }

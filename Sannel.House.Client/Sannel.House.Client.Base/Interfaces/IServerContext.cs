@@ -8,8 +8,20 @@ namespace Sannel.House.Client.Interfaces
 {
 	public interface IServerContext
 	{
-		Task<bool> LoginAsync(String username, String password);
+		/// <summary>
+		/// Logins asynchronously.
+		/// Returns true and the name of the user if successfull
+		/// Returns false and null if the user is not logged in
+		/// </summary>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The password.</param>
+		/// <returns></returns>
+		Task<Tuple<bool, String>> LoginAsync(String username, String password);
 
+		/// <summary>
+		/// Gets the roles asynchronous.
+		/// </summary>
+		/// <returns></returns>
 		Task<IList<String>> GetRolesAsync();
 	}
 }

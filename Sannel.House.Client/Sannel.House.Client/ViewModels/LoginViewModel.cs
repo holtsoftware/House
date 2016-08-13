@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using Sannel.House.Client.Exceptions;
 
 namespace Sannel.House.Client.ViewModels
 {
@@ -18,8 +19,10 @@ namespace Sannel.House.Client.ViewModels
 	{
 		private ISettings settings;
 		private IServerContext context;
-		public LoginViewModel(ISettings settings, IServerContext context)
+		private INavigationService navService;
+		public LoginViewModel(INavigationService navService, ISettings settings, IServerContext context)
 		{
+			this.navService = navService;
 			this.settings = settings;
 			this.context = context;
 		}
@@ -29,9 +32,22 @@ namespace Sannel.House.Client.ViewModels
 			base.NavigatedTo(arg);
 		}
 
-		private Task getPermissionsAsync()
+		private async Task getPermissionsAndRedirectAsync()
 		{
-			return null;
+			try
+			{
+				var results = await context.GetRolesAsync();
+				ViewModelLocator.User.Roles = results;
+				navService.Navigate<IHomeViewModel>();
+			}
+			catch (NotLoggedInException)
+			{
+				// Were on the login screen so just catch this so we can reauthenticate
+			}
+			catch (ServerException)
+			{
+				ErrorKeys.Add("ErrorConnectingToTheServer");
+			}
 		}
 
 		private bool validateMe()
@@ -43,7 +59,7 @@ namespace Sannel.House.Client.ViewModels
 				ErrorKeys.Add("UsernameMustBeEmail");
 			}
 
-			if(String.IsNullOrWhiteSpace(Password))
+			if (String.IsNullOrWhiteSpace(Password))
 			{
 				ErrorKeys.Add("PasswordIsRequired");
 			}
@@ -56,7 +72,24 @@ namespace Sannel.House.Client.ViewModels
 			IsBusy = true;
 			if (validateMe())
 			{
-				var results = await context.LoginAsync(Username, Password);
+				try
+				{
+					var results = await context.LoginAsync(Username, Password);
+					if (!results.Item1)
+					{
+						ErrorKeys.Add("InvalidUsernameOrPassword");
+						IsBusy = false;
+						return;
+					}
+					ViewModelLocator.User.Name = results.Item2;
+				}
+				catch (ServerException)
+				{
+					ErrorKeys.Add("ErrorConnectingToTheServer");
+					IsBusy = false;
+					return;
+				}
+				await getPermissionsAndRedirectAsync();
 			}
 			IsBusy = false;
 		}

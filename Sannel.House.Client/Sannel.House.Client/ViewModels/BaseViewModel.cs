@@ -1,4 +1,5 @@
 ﻿using Sannel.House.Client.Interfaces;
+using Sannel.House.Client.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,25 +10,8 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.ViewModels
 {
-	public abstract class BaseViewModel : System.ComponentModel.INotifyPropertyChanged, IBaseViewModel
+	public abstract class BaseViewModel : BasePropertyChange, IBaseViewModel
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
-		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
-		{
-
-			if (!Object.Equals(dest, source))
-			{
-				dest = source;
-				NotifyPropertyChanged(propName);
-			}
-		}
-
-		protected void NotifyPropertyChanged([CallerMemberName]String propName = null)
-		{
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-		}
-
-
 		private bool isBusy;
 		/// <summary>
 		/// Gets or sets the IsBusy.
