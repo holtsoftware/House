@@ -10,11 +10,9 @@ namespace Sannel.House.Client.ViewModels
 	public class ShellViewModel : BaseViewModel, IShellViewModel
 	{
 		private ISettings settings;
-		private INavigationService navService;
-		public ShellViewModel(ISettings settings, INavigationService navigationService)
+		public ShellViewModel(ISettings settings, INavigationService navigationService) : base(navigationService)
 		{
 			this.settings = settings;
-			this.navService = navigationService;
 		}
 
 
@@ -43,11 +41,11 @@ namespace Sannel.House.Client.ViewModels
 			base.NavigatedTo(arg);
 			if(settings.ServerUrl == null)
 			{
-				navService.Navigate<ISettingsViewModel>();
+				NavigationService.Navigate<ISettingsViewModel>();
 			}
 			else
 			{
-				navService.Navigate<ILoginViewModel>();
+				NavigationService.Navigate<ILoginViewModel>();
 			}
 		}
 

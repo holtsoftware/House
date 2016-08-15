@@ -16,26 +16,28 @@ using Sannel.House.Client.Interfaces;
 
 namespace Sannel.House.Client.Droid.Fragments
 {
-	public class SettingsFragment : PreferenceFragment, INavigationFragment
+
+	public class SettingsFragment : ErrorFragment<ISettingsViewModel>
 	{
-		public override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
+		private TextView serverUrl;
+		private Button continueAction;
 
-			// Create your fragment here
-			AddPreferencesFromResource(Resource.Layout.SettingsView);
+		protected override int FragmentId
+		{
+			get
+			{
+				return Resource.Layout.SettingsView;
+			}
 		}
 
-		public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+		public override void OnStart()
 		{
-			// Use this to return your custom view for this Fragment
-			// return inflater.Inflate(Resource.Layout.YourFragment, container, false);
-
-			return base.OnCreateView(inflater, container, savedInstanceState);
-		}
-
-		public void SetViewModel(IBaseViewModel vm)
-		{
+			base.OnStart();
+			serverUrl = View.FindViewById<TextView>(Resource.Id.serverUrl);
+			continueAction = View.FindViewById<Button>(Resource.Id.continueAction);
+			ViewModelHelper
+				.BindText(i => i.ServerUrl, serverUrl)
+				.ConnectCommand(i => i.ContinueCommand, continueAction);
 		}
 	}
 }

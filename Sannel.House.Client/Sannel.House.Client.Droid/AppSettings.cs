@@ -15,18 +15,54 @@ namespace Sannel.House.Client.Droid
 {
 	public class AppSettings : ISettings
 	{
+		public const String ServerUrlKey = "sannel_house_client_server_url";
+		public const String AuthzCookieKey = "sannel_house_client_authz_cookie";
+
+		private ISharedPreferences preferences;
+		public AppSettings(ISharedPreferences preferences)
+		{
+			this.preferences = preferences;
+		}
+
 		public string AuthzCookieValue
 		{
-			get;
+			get
+			{
+				return preferences.GetString(AuthzCookieKey, null);
+			}
 
-			set;
+			set
+			{
+				using (var edit = preferences.Edit())
+				{
+					edit.PutString(AuthzCookieKey, value);
+					edit.Apply();
+				}
+			}
 		}
 
 		public Uri ServerUrl
 		{
-			get;
+			get
+			{
+				var result = preferences.GetString(ServerUrlKey, null);
+				Uri i;
+				if(Uri.TryCreate(result, UriKind.Absolute, out i))
+				{
+					return i;
+				}
 
-			set;
-		} = new Uri("http://192.168.1.11:5000");
+				return null;
+			}
+
+			set
+			{
+				using (var edit = preferences.Edit())
+				{
+					edit.PutString(ServerUrlKey, value?.ToString());
+					edit.Apply();
+				}
+			}
+		}
 	}
 }

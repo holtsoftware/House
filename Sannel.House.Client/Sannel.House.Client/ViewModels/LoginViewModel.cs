@@ -19,10 +19,8 @@ namespace Sannel.House.Client.ViewModels
 	{
 		private ISettings settings;
 		private IServerContext context;
-		private INavigationService navService;
-		public LoginViewModel(INavigationService navService, ISettings settings, IServerContext context)
+		public LoginViewModel(INavigationService navService, ISettings settings, IServerContext context) : base(navService)
 		{
-			this.navService = navService;
 			this.settings = settings;
 			this.context = context;
 		}
@@ -38,7 +36,7 @@ namespace Sannel.House.Client.ViewModels
 			{
 				var results = await context.GetRolesAsync();
 				ViewModelLocator.User.Roles = results;
-				navService.Navigate<IHomeViewModel>();
+				NavigationService.Navigate<IHomeViewModel>();
 			}
 			catch (NotLoggedInException)
 			{

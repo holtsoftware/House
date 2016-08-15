@@ -18,7 +18,7 @@
     },
     "Sannel.House.Web": {
       "commandName": "Project",
-      "commandLineArgs": "--server.urls=http://192.168.1.11,localhost:5000",
+      "commandLineArgs": "--server.urls=http://0.0.0.0:5000",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000/",
       "environmentVariables": {

@@ -10,7 +10,7 @@ namespace Sannel.House.Client.ViewModels
 {
 	public abstract class ErrorViewModel : BaseViewModel, IErrorViewModel
 	{
-		public ErrorViewModel()
+		public ErrorViewModel(INavigationService navigationService) : base(navigationService)
 		{
 			ErrorKeys.CollectionChanged += errorKeysChanged;
 		}

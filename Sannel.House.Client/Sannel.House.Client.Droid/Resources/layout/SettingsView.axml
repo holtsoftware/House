@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/ApplicationName"
-        android:key="pref_key_storage_settings">
-        <EditTextPreference
-            android:title="1. Server Url"
-            android:key="sannel_house_client_server_url" />
-    </PreferenceCategory>
-</PreferenceScreen>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_x="0px"
+	android:layout_y="0px"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<ListView
+		android:id="@+id/errorView"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="1. Server Url" />
+	<EditText
+		android:id="@+id/serverUrl"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+	<Button
+		android:id="@+id/continueAction"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="2. Continue" />
+</LinearLayout>

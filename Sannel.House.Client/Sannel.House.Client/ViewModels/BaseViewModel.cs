@@ -12,6 +12,12 @@ namespace Sannel.House.Client.ViewModels
 {
 	public abstract class BaseViewModel : BasePropertyChange, IBaseViewModel
 	{
+		protected readonly INavigationService NavigationService;
+		public BaseViewModel(INavigationService navigationService)
+		{
+			this.NavigationService = navigationService;
+		}
+
 		private bool isBusy;
 		/// <summary>
 		/// Gets or sets the IsBusy.

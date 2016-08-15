@@ -11,6 +11,7 @@ using Sannel.House.Client.Droid.Services;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Sannel.House.Client.Droid.Fragments;
+using Android.Preferences;
 
 namespace Sannel.House.Client.Droid
 {
@@ -29,10 +30,16 @@ namespace Sannel.House.Client.Droid
 
 			ns.RegisterFragment<ISettingsViewModel, SettingsFragment>();
 			ns.RegisterFragment<ILoginViewModel, LoginFragment>();
+			ns.RegisterFragment<IHomeViewModel, HomeFragment>();
 
 			ViewModelLocator.Container.RegisterInstance<INavigationService>(navService);
 			var container = ViewModelLocator.Container;
-			container.RegisterInstance<ISettings>(new AppSettings());
+
+			ISharedPreferences prefs =  PreferenceManager.GetDefaultSharedPreferences(this);
+			var settings = new AppSettings(prefs);
+			settings.ServerUrl = null;
+
+			container.RegisterInstance<ISettings>(settings);
 
 			vm = container.Resolve<IShellViewModel>();
 		}

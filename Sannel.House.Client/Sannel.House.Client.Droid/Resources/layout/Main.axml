@@ -5,10 +5,30 @@
     android:layout_height="match_parent">
 <!-- As the main content view, the view below consumes the entire
 		 space available using match_parent in both dimensions. -->
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <AbsoluteLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:minWidth="25px"
+        android:minHeight="25px">
+        <FrameLayout
+            android:layout_x="0px"
+            android:layout_y="0px"
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:id="@+id/busyOverlay"
+            android:layout_x="0px"
+            android:layout_y="0px"
+			android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#AA000000">
+            <ProgressBar
+                android:layout_height="match_parent"
+                android:layout_width="match_parent" />
+        </LinearLayout>
+    </AbsoluteLayout>
 <!-- android:layout_gravity="start" tells DrawerLayout to treat
 		 this as a sliding drawer on the left side for left-to-right
 		 languages and on the right side for right-to-left languages.

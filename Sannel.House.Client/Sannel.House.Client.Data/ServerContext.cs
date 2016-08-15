@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Sannel.House.Client.Exceptions;
+using System.Net;
 
 namespace Sannel.House.Client.Data
 {
@@ -117,6 +118,10 @@ namespace Sannel.House.Client.Data
 					}
 
 					return new Tuple<bool, string>(false, null);
+				}
+				catch(WebException we)
+				{
+					throw new ServerException(we.Message, 500,we);
 				}
 				catch(HttpRequestException re)
 				{

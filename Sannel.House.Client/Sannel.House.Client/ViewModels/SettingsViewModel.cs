@@ -1,9 +1,11 @@
-﻿using Sannel.House.Client.Interfaces;
+﻿using GalaSoft.MvvmLight.Command;
+using Sannel.House.Client.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Sannel.House.Client.ViewModels
 {
@@ -12,7 +14,7 @@ namespace Sannel.House.Client.ViewModels
 		public const String SERVERURLERROR = "ServerUrlError";
 		private ISettings settings;
 
-		public SettingsViewModel(ISettings settings)
+		public SettingsViewModel(ISettings settings,INavigationService service) : base(service)
 		{
 			this.settings = settings;
 		}
@@ -35,17 +37,46 @@ namespace Sannel.House.Client.ViewModels
 				Uri i;
 				if(Uri.TryCreate(value, UriKind.Absolute, out i))
 				{
-					ErrorKeys.Remove(SERVERURLERROR);
 					settings.ServerUrl = i;
 					NotifyPropertyChanged();
 				}
-				else
-				{
-					if (!ErrorKeys.Contains(SERVERURLERROR))
-					{
-						ErrorKeys.Add(SERVERURLERROR);
-					}
-				}
+			}
+		}
+
+		private bool verifyMe()
+		{
+			ErrorKeys.Clear();
+			if(settings.ServerUrl == null)
+			{
+				ErrorKeys.Add(SERVERURLERROR);
+			}
+
+			return ErrorKeys.Count == 0;
+		}
+
+		private void command()
+		{
+			IsBusy = true;
+			if(verifyMe())
+			{
+				NavigationService.Navigate<ILoginViewModel>();
+			}
+			IsBusy = false;
+		}
+
+		private RelayCommand continueCommand;
+
+		/// <summary>
+		/// Gets the continue command used to go to the next step.
+		/// </summary>
+		/// <value>
+		/// The continue command.
+		/// </value>
+		public ICommand ContinueCommand
+		{
+			get
+			{
+				return continueCommand ?? (continueCommand = new RelayCommand(command));
 			}
 		}
 	}

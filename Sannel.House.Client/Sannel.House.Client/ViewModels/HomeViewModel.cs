@@ -9,5 +9,8 @@ namespace Sannel.House.Client.ViewModels
 {
 	public class HomeViewModel : BaseViewModel, IHomeViewModel
 	{
+		public HomeViewModel(INavigationService navigationService) : base(navigationService)
+		{
+		}
 	}
 }
