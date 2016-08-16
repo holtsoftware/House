@@ -118,6 +118,7 @@ namespace Sannel.House.Client.Droid.Helpers
 				a.Value.Item1.Click -= button_click;
 			}
 			actionConnections.Clear();
+			visibilityConnections.Clear();
 		}
 
 		private void button_click(object sender, EventArgs e)

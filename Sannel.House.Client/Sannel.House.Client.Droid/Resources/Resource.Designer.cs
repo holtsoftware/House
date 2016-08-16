@@ -79,7 +79,13 @@ namespace Sannel.House.Client.Droid
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int Icon = 2130837504;
+			public const int drawer_shadow = 2130837504;
+			
+			// aapt resource value: 0x7f020001
+			public const int ic_drawer = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int Icon = 2130837506;
 			
 			static Drawable()
 			{
@@ -97,14 +103,17 @@ namespace Sannel.House.Client.Droid
 			// aapt resource value: 0x7f050004
 			public const int LoginAction = 2131034116;
 			
+			// aapt resource value: 0x7f05000d
+			public const int action_websearch = 2131034125;
+			
 			// aapt resource value: 0x7f050007
 			public const int busyOverlay = 2131034119;
 			
 			// aapt resource value: 0x7f050006
 			public const int content_frame = 2131034118;
 			
-			// aapt resource value: 0x7f05000a
-			public const int continueAction = 2131034122;
+			// aapt resource value: 0x7f05000c
+			public const int continueAction = 2131034124;
 			
 			// aapt resource value: 0x7f050005
 			public const int drawer_layout = 2131034117;
@@ -118,11 +127,17 @@ namespace Sannel.House.Client.Droid
 			// aapt resource value: 0x7f050008
 			public const int left_drawer = 2131034120;
 			
+			// aapt resource value: 0x7f050009
+			public const int menuLayout = 2131034121;
+			
+			// aapt resource value: 0x7f05000a
+			public const int menuText = 2131034122;
+			
 			// aapt resource value: 0x7f050003
 			public const int password = 2131034115;
 			
-			// aapt resource value: 0x7f050009
-			public const int serverUrl = 2131034121;
+			// aapt resource value: 0x7f05000b
+			public const int serverUrl = 2131034123;
 			
 			// aapt resource value: 0x7f050002
 			public const int username = 2131034114;
@@ -153,7 +168,10 @@ namespace Sannel.House.Client.Droid
 			public const int Main = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int SettingsView = 2130903044;
+			public const int MenuItemLayout = 2130903044;
+			
+			// aapt resource value: 0x7f030005
+			public const int SettingsView = 2130903045;
 			
 			static Layout()
 			{
@@ -161,6 +179,22 @@ namespace Sannel.House.Client.Droid
 			}
 			
 			private Layout()
+			{
+			}
+		}
+		
+		public partial class Menu
+		{
+			
+			// aapt resource value: 0x7f070000
+			public const int navigation_drawer = 2131165184;
+			
+			static Menu()
+			{
+				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
+			}
+			
+			private Menu()
 			{
 			}
 		}
@@ -188,6 +222,12 @@ namespace Sannel.House.Client.Droid
 			
 			// aapt resource value: 0x7f060003
 			public const int UsernameMustBeEmail = 2131099651;
+			
+			// aapt resource value: 0x7f060008
+			public const int drawer_close = 2131099656;
+			
+			// aapt resource value: 0x7f060007
+			public const int drawer_open = 2131099655;
 			
 			static String()
 			{

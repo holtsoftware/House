@@ -8,6 +8,7 @@ using Sannel.House.Client.Models;
 using Sannel.House.Client.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,12 @@ namespace Sannel.House.Client
 {
 	public class ViewModelLocator
 	{
+		public static ObservableCollection<Tuple<String, Type>> Menu
+		{
+			get;
+			private set;
+		} = new ObservableCollection<Tuple<String, Type>>();
+
 		static ViewModelLocator()
 		{
 			Container = new Microsoft.Practices.Unity.UnityContainer();

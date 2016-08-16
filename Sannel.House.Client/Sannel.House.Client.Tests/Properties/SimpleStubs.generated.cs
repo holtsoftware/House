@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,19 @@ namespace Sannel.House.Client.Interfaces
         {
             _stubs[nameof(NavigatedFrom_Delegate)] = del;
             return this;
+        }
+
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void On_PropertyChanged(object sender)
+        {
+            global::System.ComponentModel.PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) { handler(sender, null); }
+        }
+
+        public void PropertyChanged_Raise(object sender)
+        {
+            On_PropertyChanged(sender);
         }
     }
 }
@@ -150,6 +164,83 @@ namespace Sannel.House.Client.Interfaces
         {
             _stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)] = del;
             return this;
+        }
+
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void On_PropertyChanged(object sender)
+        {
+            global::System.ComponentModel.PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) { handler(sender, null); }
+        }
+
+        public void PropertyChanged_Raise(object sender)
+        {
+            On_PropertyChanged(sender);
+        }
+    }
+}
+
+namespace Sannel.House.Client.Interfaces
+{
+    [CompilerGenerated]
+    public class StubIHomeViewModel : IHomeViewModel
+    {
+        private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
+
+        bool global::Sannel.House.Client.Interfaces.IBaseViewModel.IsBusy
+        {
+            get
+            {
+                return ((IBaseViewModel_IsBusy_Get_Delegate)_stubs[nameof(IBaseViewModel_IsBusy_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate bool IBaseViewModel_IsBusy_Get_Delegate();
+
+        public StubIHomeViewModel IsBusy_Get(IBaseViewModel_IsBusy_Get_Delegate del)
+        {
+            _stubs[nameof(IBaseViewModel_IsBusy_Get_Delegate)] = del;
+            return this;
+        }
+
+        void global::Sannel.House.Client.Interfaces.IBaseViewModel.NavigatedTo(object arg)
+        {
+            ((IBaseViewModel_NavigatedTo_Object_Delegate)_stubs[nameof(IBaseViewModel_NavigatedTo_Object_Delegate)]).Invoke(arg);
+        }
+
+        public delegate void IBaseViewModel_NavigatedTo_Object_Delegate(object arg);
+
+        public StubIHomeViewModel NavigatedTo(IBaseViewModel_NavigatedTo_Object_Delegate del)
+        {
+            _stubs[nameof(IBaseViewModel_NavigatedTo_Object_Delegate)] = del;
+            return this;
+        }
+
+        void global::Sannel.House.Client.Interfaces.IBaseViewModel.NavigatedFrom()
+        {
+            ((IBaseViewModel_NavigatedFrom_Delegate)_stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)]).Invoke();
+        }
+
+        public delegate void IBaseViewModel_NavigatedFrom_Delegate();
+
+        public StubIHomeViewModel NavigatedFrom(IBaseViewModel_NavigatedFrom_Delegate del)
+        {
+            _stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)] = del;
+            return this;
+        }
+
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void On_PropertyChanged(object sender)
+        {
+            global::System.ComponentModel.PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) { handler(sender, null); }
+        }
+
+        public void PropertyChanged_Raise(object sender)
+        {
+            On_PropertyChanged(sender);
         }
     }
 }
@@ -385,6 +476,19 @@ namespace Sannel.House.Client.Interfaces
             _stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)] = del;
             return this;
         }
+
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void On_PropertyChanged(object sender)
+        {
+            global::System.ComponentModel.PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) { handler(sender, null); }
+        }
+
+        public void PropertyChanged_Raise(object sender)
+        {
+            On_PropertyChanged(sender);
+        }
     }
 }
 
@@ -526,6 +630,22 @@ namespace Sannel.House.Client.Interfaces
             return this;
         }
 
+        global::System.Windows.Input.ICommand global::Sannel.House.Client.Interfaces.ISettingsViewModel.ContinueCommand
+        {
+            get
+            {
+                return ((ContinueCommand_Get_Delegate)_stubs[nameof(ContinueCommand_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate global::System.Windows.Input.ICommand ContinueCommand_Get_Delegate();
+
+        public StubISettingsViewModel ContinueCommand_Get(ContinueCommand_Get_Delegate del)
+        {
+            _stubs[nameof(ContinueCommand_Get_Delegate)] = del;
+            return this;
+        }
+
         global::System.Collections.ObjectModel.ObservableCollection<string> global::Sannel.House.Client.Interfaces.IErrorViewModel.ErrorKeys
         {
             get
@@ -612,6 +732,19 @@ namespace Sannel.House.Client.Interfaces
             _stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)] = del;
             return this;
         }
+
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void On_PropertyChanged(object sender)
+        {
+            global::System.ComponentModel.PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) { handler(sender, null); }
+        }
+
+        public void PropertyChanged_Raise(object sender)
+        {
+            On_PropertyChanged(sender);
+        }
     }
 }
 
@@ -649,6 +782,61 @@ namespace Sannel.House.Client.Interfaces
         {
             _stubs[nameof(IsPaneOpen_Set_Delegate)] = del;
             return this;
+        }
+
+        bool global::Sannel.House.Client.Interfaces.IBaseViewModel.IsBusy
+        {
+            get
+            {
+                return ((IBaseViewModel_IsBusy_Get_Delegate)_stubs[nameof(IBaseViewModel_IsBusy_Get_Delegate)]).Invoke();
+            }
+        }
+
+        public delegate bool IBaseViewModel_IsBusy_Get_Delegate();
+
+        public StubIShellViewModel IsBusy_Get(IBaseViewModel_IsBusy_Get_Delegate del)
+        {
+            _stubs[nameof(IBaseViewModel_IsBusy_Get_Delegate)] = del;
+            return this;
+        }
+
+        void global::Sannel.House.Client.Interfaces.IBaseViewModel.NavigatedTo(object arg)
+        {
+            ((IBaseViewModel_NavigatedTo_Object_Delegate)_stubs[nameof(IBaseViewModel_NavigatedTo_Object_Delegate)]).Invoke(arg);
+        }
+
+        public delegate void IBaseViewModel_NavigatedTo_Object_Delegate(object arg);
+
+        public StubIShellViewModel NavigatedTo(IBaseViewModel_NavigatedTo_Object_Delegate del)
+        {
+            _stubs[nameof(IBaseViewModel_NavigatedTo_Object_Delegate)] = del;
+            return this;
+        }
+
+        void global::Sannel.House.Client.Interfaces.IBaseViewModel.NavigatedFrom()
+        {
+            ((IBaseViewModel_NavigatedFrom_Delegate)_stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)]).Invoke();
+        }
+
+        public delegate void IBaseViewModel_NavigatedFrom_Delegate();
+
+        public StubIShellViewModel NavigatedFrom(IBaseViewModel_NavigatedFrom_Delegate del)
+        {
+            _stubs[nameof(IBaseViewModel_NavigatedFrom_Delegate)] = del;
+            return this;
+        }
+
+        public event global::System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void On_PropertyChanged(object sender)
+        {
+            global::System.ComponentModel.PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) { handler(sender, null); }
+        }
+
+        public void PropertyChanged_Raise(object sender)
+        {
+            On_PropertyChanged(sender);
         }
     }
 }

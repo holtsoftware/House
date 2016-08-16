@@ -7,4 +7,6 @@
 	<string name="PasswordIsRequired">Password is Required</string>
 	<string name="ErrorConnectingToTheServer">Error connecting to the server</string>
 	<string name="InvalidUsernameOrPassword">Invalid Username or Password</string>
+	<string name="drawer_open">Open navigation drawer</string>
+	<string name="drawer_close">Close navigation drawer</string>
 </resources>
