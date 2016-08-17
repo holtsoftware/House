@@ -44,6 +44,11 @@ namespace Sannel.House.Client.Droid.Services
 		public void Navigate<T>(object parameter) where T : IBaseViewModel
 		{
 			var type = typeof(T);
+			Navigate(type, parameter);
+		}
+
+		public void Navigate(Type type, object parameter)
+		{
 			if (mappings.ContainsKey(type))
 			{
 				var toCreate = mappings[type];
@@ -58,6 +63,11 @@ namespace Sannel.House.Client.Droid.Services
 			{
 				throw new Exception($"The type {type} is not mapped and cannot be navigated to.");
 			}
+		}
+
+		public void Navigate(Type t)
+		{
+			Navigate(t, null);
 		}
 	}
 }

@@ -34,7 +34,22 @@
 		</Grid>
 		<SplitView x:Name="Splitter" IsPaneOpen="{Binding IsPaneOpen, Mode=TwoWay}" Grid.Row="1">
 			<SplitView.Pane>
-				<TextBlock>Pane</TextBlock>
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition />
+					</Grid.RowDefinitions>
+					<TextBlock Visibility="{Binding User.IsLoggedIn}" Text="{Binding User.Name}" />
+					<ListView Grid.Row="1" ItemsSource="{Binding Menu}"  SelectionChanged="ListView_SelectionChanged">
+						<ListView.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding TextKey}" />
+								</StackPanel>
+							</DataTemplate>
+						</ListView.ItemTemplate>
+					</ListView>
+				</Grid>
 			</SplitView.Pane>
 			<Frame x:Name="MainFrame" Padding="12">
 

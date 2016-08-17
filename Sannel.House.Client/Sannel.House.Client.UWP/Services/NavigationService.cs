@@ -29,19 +29,29 @@ namespace Sannel.House.Client.UWP.Services
 		public void Navigate<T>(Object obj) where T : IBaseViewModel
 		{
 			var type = typeof(T);
-			if (mappings.ContainsKey(type))
-			{
-				Frame?.Navigate(mappings[type], obj);
-			}
-			else
-			{
-				throw new Exception($"The type {type} is not mapped and cannot be navigated to.");
-			}
+			Navigate(type, obj);
 		}
 
 		public void Navigate<T>() where T : IBaseViewModel
 		{
 			Navigate<T>(null);
+		}
+
+		public void Navigate(Type t, object parameter)
+		{
+			if (mappings.ContainsKey(t))
+			{
+				Frame?.Navigate(mappings[t], parameter);
+			}
+			else
+			{
+				throw new Exception($"The type {t} is not mapped and cannot be navigated to.");
+			}
+		}
+
+		public void Navigate(Type t)
+		{
+			Navigate(t, null);
 		}
 	}
 }

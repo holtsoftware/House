@@ -4,15 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sannel.House.Client.Models;
+using System.Collections.ObjectModel;
 
 namespace Sannel.House.Client.ViewModels
 {
 	public class ShellViewModel : BaseViewModel, IShellViewModel
 	{
 		private ISettings settings;
-		public ShellViewModel(ISettings settings, INavigationService navigationService) : base(navigationService)
+		private IUser user;
+		public ShellViewModel(IUser user, ISettings settings, INavigationService navigationService) : base(navigationService)
 		{
 			this.settings = settings;
+			this.user = user;
 		}
 
 
@@ -35,6 +39,34 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the menu.
+		/// </summary>
+		/// <value>
+		/// The menu.
+		/// </value>
+		public ObservableCollection<MenuItem> Menu
+		{
+			get
+			{
+				return user.Menu;
+			}
+		}
+
+		/// <summary>
+		/// Gets the user.
+		/// </summary>
+		/// <value>
+		/// The user.
+		/// </value>
+		public IUser User
+		{
+			get
+			{
+				return user;
+			}
+		}
+
 		public override void NavigatedTo(object arg)
 		{
 			// navigationService on the Shell is pointed to the content frame in the split panel so were not navigating away from this page
@@ -49,5 +81,12 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+		public void MenuItemSelected(MenuItem item)
+		{
+			if(item != null)
+			{
+				item.NavigateTo(NavigationService);
+			}
+		}
 	}
 }

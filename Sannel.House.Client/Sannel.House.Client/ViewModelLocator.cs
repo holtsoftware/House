@@ -5,6 +5,7 @@ using Microsoft.Practices.Unity;
 using Sannel.House.Client.Data;
 using Sannel.House.Client.Interfaces;
 using Sannel.House.Client.Models;
+using Sannel.House.Client.Services;
 using Sannel.House.Client.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,11 @@ namespace Sannel.House.Client
 {
 	public class ViewModelLocator
 	{
-		public static ObservableCollection<Tuple<String, Type>> Menu
-		{
-			get;
-			private set;
-		} = new ObservableCollection<Tuple<String, Type>>();
-
 		static ViewModelLocator()
 		{
 			Container = new Microsoft.Practices.Unity.UnityContainer();
+
+			Container.RegisterInstance<IUser>(User);
 			if (ViewModelBase.IsInDesignModeStatic)
 			{
 
@@ -37,7 +34,9 @@ namespace Sannel.House.Client
 				Container.RegisterType<ISettingsViewModel, SettingsViewModel>(new ContainerControlledLifetimeManager());
 				Container.RegisterType<IServerContext, ServerContext>();
 				Container.RegisterType<IHomeViewModel, HomeViewModel>();
+				Container.RegisterType<ITemperatureSettingViewModel, TemperatureSettingViewModel>();
 			}
+			Container.RegisterType<IUserManager, UserManager>(new ContainerControlledLifetimeManager());
 		}
 
 		public static User User
@@ -48,6 +47,14 @@ namespace Sannel.House.Client
 		public static void SetNavigationService(INavigationService service)
 		{
 			Container.RegisterInstance<INavigationService>(service);
+		}
+
+		public static ITemperatureSettingViewModel TemperatureSettingViewModel
+		{
+			get
+			{
+				return Container.Resolve<ITemperatureSettingViewModel>();
+			}
 		}
 
 		public static INavigationService NavigationService

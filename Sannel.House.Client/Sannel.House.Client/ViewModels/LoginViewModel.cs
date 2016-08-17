@@ -19,10 +19,12 @@ namespace Sannel.House.Client.ViewModels
 	{
 		private ISettings settings;
 		private IServerContext context;
-		public LoginViewModel(INavigationService navService, ISettings settings, IServerContext context) : base(navService)
+		private IUserManager manager;
+		public LoginViewModel(IUserManager manager, INavigationService navService, ISettings settings, IServerContext context) : base(navService)
 		{
 			this.settings = settings;
 			this.context = context;
+			this.manager = manager;
 		}
 
 		public override void NavigatedTo(object arg)
@@ -30,13 +32,14 @@ namespace Sannel.House.Client.ViewModels
 			base.NavigatedTo(arg);
 		}
 
-		private async Task getPermissionsAndRedirectAsync()
+		private async Task getProfileAndRedirectAsync()
 		{
 			try
 			{
-				var results = await context.GetRolesAsync();
-				ViewModelLocator.User.Roles = results;
-				NavigationService.Navigate<IHomeViewModel>();
+				if(await manager.LoadProfileAsync())
+				{
+					NavigationService.Navigate<IHomeViewModel>();
+				}
 			}
 			catch (NotLoggedInException)
 			{
@@ -87,7 +90,7 @@ namespace Sannel.House.Client.ViewModels
 					IsBusy = false;
 					return;
 				}
-				await getPermissionsAndRedirectAsync();
+				await getProfileAndRedirectAsync();
 			}
 			IsBusy = false;
 		}

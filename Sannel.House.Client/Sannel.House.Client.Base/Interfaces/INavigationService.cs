@@ -13,5 +13,9 @@ namespace Sannel.House.Client.Interfaces
 
 		void Navigate<T>()
 			where T : IBaseViewModel;
+
+		void Navigate(Type t, Object parameter);
+
+		void Navigate(Type t);
 	}
 }

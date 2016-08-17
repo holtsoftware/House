@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sannel.House.Client.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,12 @@ namespace Sannel.House.Client.Interfaces
 		/// </summary>
 		/// <returns></returns>
 		Task<IList<String>> GetRolesAsync();
+
+		/// <summary>
+		/// Gets the profile for the user who is current logged in
+		/// </summary>
+		/// <returns></returns>
+		Task<ClientProfile> GetProfileAsync();
+
 	}
 }

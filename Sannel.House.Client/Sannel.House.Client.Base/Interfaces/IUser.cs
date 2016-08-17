@@ -8,18 +8,19 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.Client.Interfaces
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface IShellViewModel : IBaseViewModel
+	public interface IUser : System.ComponentModel.INotifyPropertyChanged
 	{
-		bool IsPaneOpen
+		bool IsLoggedIn
 		{
 			get;
-			set;
 		}
 
-		IUser User
+		String Name
+		{
+			get;
+		}
+
+		ObservableCollection<String> Groups
 		{
 			get;
 		}
@@ -28,7 +29,5 @@ namespace Sannel.House.Client.Interfaces
 		{
 			get;
 		}
-
-		void MenuItemSelected(MenuItem item);
 	}
 }

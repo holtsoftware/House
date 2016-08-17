@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sannel.House.Client.Exceptions;
 using System.Net;
+using Sannel.House.Client.Models;
 
 namespace Sannel.House.Client.Data
 {
@@ -26,6 +27,44 @@ namespace Sannel.House.Client.Data
 
 		public void Dispose()
 		{
+		}
+
+		/// <summary>
+		/// Gets the profile for the user who is current logged in
+		/// </summary>
+		/// <returns></returns>
+		/// <exception cref="NotLoggedInException">
+		/// Please login.
+		/// or
+		/// Please login again.
+		/// </exception>
+		/// <exception cref="ServerException">Error from server</exception>
+		public async Task<ClientProfile> GetProfileAsync()
+		{
+			if(settings.AuthzCookieValue == null)
+			{
+				throw new NotLoggedInException("Please login.");
+			}
+
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+			using(HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = "/Account/GetProfile";
+				var response = await client.GetAsync(builder.Uri);
+				if (!response.IsSuccessStatusCode)
+				{
+					throw new ServerException("Error from server", (int)response.StatusCode);
+				}
+				if(response.RequestMessage.RequestUri != builder.Uri)
+				{
+					throw new NotLoggedInException("Please login again.");
+				}
+				var data = await response.Content.ReadAsStringAsync();
+				var profile = JsonConvert.DeserializeObject<ClientProfile>(data);
+				return profile;
+			}
 		}
 
 		public async Task<IList<string>> GetRolesAsync()

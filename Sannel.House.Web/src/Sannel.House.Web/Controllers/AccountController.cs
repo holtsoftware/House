@@ -161,6 +161,20 @@ namespace Sannel.House.Web.Controllers
 			return Json(roles);
 		}
 
+		[HttpGet]
+		public async Task<JsonResult> GetProfile()
+		{
+			var user = await userManager.GetUserAsync(User);
+
+			var roles = await userManager.GetRolesAsync(user);
+
+			return Json(new ClientProfile
+			{
+				Name = user.Name,
+				Roles = roles
+			});
+		}
+
 		private IActionResult RedirectToLocal(string returnUrl)
 		{
 			if (Url.IsLocalUrl(returnUrl))

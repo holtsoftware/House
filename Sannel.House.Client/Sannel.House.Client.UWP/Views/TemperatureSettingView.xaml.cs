@@ -1,7 +1,4 @@
-﻿using Sannel.House.Client.Interfaces;
-using Sannel.House.Client.Models;
-using Sannel.House.Client.UWP.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,31 +20,11 @@ namespace Sannel.House.Client.UWP.Views
 	/// <summary>
 	/// An empty page that can be used on its own or navigated to within a Frame.
 	/// </summary>
-	public sealed partial class ShellView : BaseView
+	public sealed partial class TemperatureSettingView : BaseView
 	{
-		public IShellViewModel ShellViewModel
-		{
-			get
-			{
-				return DataContext as IShellViewModel;
-			}
-		}
-
-		public ShellView()
+		public TemperatureSettingView()
 		{
 			this.InitializeComponent();
-			NavigationService service = ViewModelLocator.NavigationService as NavigationService;
-			if (service != null)
-			{
-				service.Frame = MainFrame;
-			}
-		}
-
-		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			ListView lv = (ListView)sender;
-			var mi = lv.SelectedItem as MenuItem;
-			ShellViewModel.MenuItemSelected(mi);
 		}
 	}
 }
