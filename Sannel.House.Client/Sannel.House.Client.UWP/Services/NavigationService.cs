@@ -53,5 +53,10 @@ namespace Sannel.House.Client.UWP.Services
 		{
 			Navigate(t, null);
 		}
+
+		public void ClearHistory()
+		{
+			Frame?.BackStack.Clear();
+		}
 	}
 }

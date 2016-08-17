@@ -20,7 +20,7 @@ namespace Sannel.House.Client.ViewModels
 		}
 
 
-		private bool isPaneOpen;
+		private bool isPaneOpen = true;
 		/// <summary>
 		/// Gets or sets the IsPaneOpen
 		/// </summary>
@@ -65,11 +65,25 @@ namespace Sannel.House.Client.ViewModels
 		/// <value>
 		/// The menu.
 		/// </value>
-		public ObservableCollection<MenuItem> Menu
+		public ObservableCollection<MenuItem> MenuTop
 		{
 			get
 			{
-				return user.Menu;
+				return user.MenuTop;
+			}
+		}
+
+		/// <summary>
+		/// Gets the menu bottom.
+		/// </summary>
+		/// <value>
+		/// The menu bottom.
+		/// </value>
+		public ObservableCollection<MenuItem> MenuBottom
+		{
+			get
+			{
+				return user.MenuBottom;
 			}
 		}
 
@@ -101,11 +115,18 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
-		public void MenuItemSelected(MenuItem item)
+		public void MenuItemClick(MenuItem item)
 		{
 			if(item != null)
 			{
-				item.NavigateTo(NavigationService);
+				if (item.Click != null)
+				{
+					item.Click();
+				}
+				else
+				{
+					item.NavigateTo(NavigationService);
+				}
 			}
 		}
 	}

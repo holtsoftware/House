@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using Sannel.House.Client.Exceptions;
+using System.Net.Http;
 
 namespace Sannel.House.Client.ViewModels
 {
@@ -52,6 +53,10 @@ namespace Sannel.House.Client.ViewModels
 				// Were on the login screen so just catch this so we can reauthenticate
 			}
 			catch (ServerException)
+			{
+				ErrorKeys.Add("ErrorConnectingToTheServer");
+			}
+			catch (HttpRequestException)
 			{
 				ErrorKeys.Add("ErrorConnectingToTheServer");
 			}

@@ -25,7 +25,12 @@ namespace Sannel.House.Client.Interfaces
 			get;
 		}
 
-		ObservableCollection<MenuItem> Menu
+		ObservableCollection<MenuItem> MenuTop
+		{
+			get;
+		}
+
+		ObservableCollection<MenuItem> MenuBottom
 		{
 			get;
 		}

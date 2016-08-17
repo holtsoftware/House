@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Sannel.House.Client.Interfaces
 {
@@ -30,6 +31,17 @@ namespace Sannel.House.Client.Interfaces
 			get;
 		}
 
+		/// <summary>
+		/// Refreshes this instance.
+		/// </summary>
 		void Refresh();
+
+		/// <summary>
+		/// Gets the update default command.
+		/// </summary>
+		/// <value>
+		/// The update default command.
+		/// </value>
+		ICommand UpdateDefaultCommand { get; }
 	}
 }

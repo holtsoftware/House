@@ -37,11 +37,10 @@
 			<SplitView.Pane>
 				<Grid>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
 						<RowDefinition />
+						<RowDefinition Height="Auto" />
 					</Grid.RowDefinitions>
-					<TextBlock Visibility="{Binding User.IsLoggedIn}" Text="{Binding User.Name}" />
-					<ListView Grid.Row="1" ItemsSource="{Binding Menu}"  SelectionChanged="ListView_SelectionChanged">
+					<ListView Grid.Row="0" ItemsSource="{Binding MenuTop}" ItemClick="ListView_ItemClick" IsItemClickEnabled="True">
 						<ListView.ItemTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">
@@ -50,6 +49,18 @@
 							</DataTemplate>
 						</ListView.ItemTemplate>
 					</ListView>
+					<StackPanel Grid.Row="1">
+						<TextBlock Visibility="{Binding User.IsLoggedIn}" Text="{Binding User.Name}" />
+						<ListView ItemsSource="{Binding MenuBottom}" ItemClick="ListView_ItemClick" IsItemClickEnabled="True" SelectionMode="None">
+							<ListView.ItemTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<TextBlock Text="{Binding TextKey}" />
+									</StackPanel>
+								</DataTemplate>
+							</ListView.ItemTemplate>
+						</ListView>
+					</StackPanel>
 				</Grid>
 			</SplitView.Pane>
 			<Frame x:Name="MainFrame" Padding="12">

@@ -43,11 +43,10 @@ namespace Sannel.House.Client.UWP.Views
 			}
 		}
 
-		private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		private void ListView_ItemClick(object sender, ItemClickEventArgs e)
 		{
-			ListView lv = (ListView)sender;
-			var mi = lv.SelectedItem as MenuItem;
-			ShellViewModel.MenuItemSelected(mi);
+			MenuItem mi = e.ClickedItem as MenuItem;
+			ShellViewModel.MenuItemClick(mi);
 		}
 	}
 }

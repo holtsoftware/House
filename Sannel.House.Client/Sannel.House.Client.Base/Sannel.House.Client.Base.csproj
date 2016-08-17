@@ -34,11 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\Sannel.House.Web\src\Sannel.House.Web.Base\Models\TemperatureSetting.cs">
+      <Link>Models\TemperatureSetting.cs</Link>
+    </Compile>
     <Compile Include="..\..\Sannel.House.Web\src\Sannel.House.Web\Models\ClientProfile.cs">
       <Link>Models\ClientProfile.cs</Link>
     </Compile>
     <Compile Include="Exceptions\NotLoggedInException.cs" />
     <Compile Include="Exceptions\ServerException.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IBaseViewModel.cs" />
     <Compile Include="Interfaces\IErrorViewModel.cs" />
     <Compile Include="Interfaces\IHomeViewModel.cs" />

@@ -13,6 +13,8 @@ namespace Sannel.House.Client.Models
 
 		public String TextKey { get; set; }
 		public String IconKey { get; set; }
+		public bool IsBottom { get; set; }
+		public Action Click { get; set; }
 
 		public String[] Groups { get; set; }
 

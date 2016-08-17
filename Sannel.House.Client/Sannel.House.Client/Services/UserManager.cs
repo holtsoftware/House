@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Practices.Unity;
 
 namespace Sannel.House.Client.Services
 {
@@ -37,11 +38,26 @@ namespace Sannel.House.Client.Services
 			{
 				TextKey = "Settings",
 				IconKey = "Settings",
+				IsBottom = true,
 				Groups = new string[]
 				{
 					"All"
 				}
-			}.SetNavigationType<ISettingsViewModel>()
+			}.SetNavigationType<ISettingsViewModel>(),
+			new MenuItem
+			{
+				TextKey = "LogOff",
+				IconKey = "LogOff",
+				IsBottom = true,
+				Groups = new String[]
+				{
+					"All"
+				},
+				Click = async ()=>
+				{
+					await ViewModelLocator.Container.Resolve<IUserManager>().LogoffAsync();
+				}
+			}
 		};
 
 		public UserManager(IUser user, IServerContext server)
@@ -53,31 +69,45 @@ namespace Sannel.House.Client.Services
 		public async Task<bool> LoadProfileAsync()
 		{
 			var result = await server.GetProfileAsync();
-			if(result != null)
+			if (result != null)
 			{
 				user.IsLoggedIn = true;
 				user.Name = result.Name;
 				user.Groups.Clear();
-				user.Menu.Clear();
-				foreach(var g in result.Roles)
+				user.MenuTop.Clear();
+				foreach (var g in result.Roles)
 				{
 					user.Groups.Add(g);
 				}
 
 				// Seams like this can be refactered to be faster
-				foreach(var mi in allMenuItems)
+				foreach (var mi in allMenuItems)
 				{
 					if (mi.Groups.Contains("All"))
 					{
-						user.Menu.Add(mi);
+						if (mi.IsBottom)
+						{
+							user.MenuBottom.Add(mi);
+						}
+						else
+						{
+							user.MenuTop.Add(mi);
+						}
 					}
 					else
 					{
-						foreach(var g in mi.Groups)
+						foreach (var g in mi.Groups)
 						{
 							if (user.Groups.Contains(g))
 							{
-								user.Menu.Add(mi);
+								if (mi.IsBottom)
+								{
+									user.MenuBottom.Add(mi);
+								}
+								else
+								{
+									user.MenuTop.Add(mi);
+								}
 								break;
 							}
 						}
@@ -88,9 +118,21 @@ namespace Sannel.House.Client.Services
 			return false;
 		}
 
-		public Task<bool> Logoff()
+		public async Task LogoffAsync()
 		{
-			return null;
+			user.MenuTop.Clear();
+			user.MenuBottom.Clear();
+			user.IsLoggedIn = false;
+			user.Name = "";
+			try
+			{
+				await server.LogOffAsync();
+			}
+			catch (Exception)
+			{
+			}
+			ViewModelLocator.NavigationService.Navigate<ILoginViewModel>();
+			ViewModelLocator.NavigationService.ClearHistory();	
 		}
 	}
 }

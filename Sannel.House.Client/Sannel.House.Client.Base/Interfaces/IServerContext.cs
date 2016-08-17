@@ -20,6 +20,12 @@ namespace Sannel.House.Client.Interfaces
 		Task<Tuple<bool, String>> LoginAsync(String username, String password);
 
 		/// <summary>
+		/// Logs the user off.
+		/// </summary>
+		/// <returns></returns>
+		Task LogOffAsync();
+
+		/// <summary>
 		/// Gets the roles asynchronous.
 		/// </summary>
 		/// <returns></returns>
@@ -31,5 +37,16 @@ namespace Sannel.House.Client.Interfaces
 		/// <returns></returns>
 		Task<ClientProfile> GetProfileAsync();
 
+		/// <summary>
+		/// Gets the default temperature setting.
+		/// </summary>
+		/// <returns></returns>
+		Task<IList<TemperatureSetting>> GetTemperatureSettingsAsync();
+
+		/// <summary>
+		/// Puts the temperature settings asynchronous.
+		/// </summary>
+		/// <returns></returns>
+		Task PutTemperatureSettingsAsync(TemperatureSetting setting);
 	}
 }

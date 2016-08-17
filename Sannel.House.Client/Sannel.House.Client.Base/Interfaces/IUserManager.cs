@@ -10,6 +10,6 @@ namespace Sannel.House.Client.Interfaces
 	{
 		Task<bool> LoadProfileAsync();
 
-		Task<bool> Logoff();
+		Task LogoffAsync();
 	}
 }

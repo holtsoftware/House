@@ -144,7 +144,6 @@ namespace Sannel.House.Web.Controllers
 		//
 		// POST: /Account/LogOff
 		[HttpPost]
-		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> LogOff()
 		{
 			await signInManager.SignOutAsync();

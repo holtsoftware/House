@@ -28,7 +28,7 @@ namespace Sannel.House.Client.Models
 		/// <value>
 		/// The menu.
 		/// </value>
-		public ObservableCollection<MenuItem> Menu
+		public ObservableCollection<MenuItem> MenuTop
 		{
 			get;
 		} = new ObservableCollection<MenuItem>();
@@ -72,5 +72,10 @@ namespace Sannel.House.Client.Models
 				Set(ref isLoggedIn, value);
 			}
 		}
+
+		public ObservableCollection<MenuItem> MenuBottom
+		{
+			get;
+		} = new ObservableCollection<MenuItem>();
 	}
 }

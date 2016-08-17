@@ -23,20 +23,18 @@ namespace Sannel.House.Web.Controllers.api
 		[HttpGet]
 		public IEnumerable<TemperatureSetting> Get()
 		{
-			return Get(DateTime.Now);
+			return new TemperatureSetting[]
+			{
+				getDefault()
+			};
 		}
 
-		/// <summary>
-		/// Gets the default temperature setting i.e. nothing else is set use this
-		/// </summary>
-		/// <returns></returns>
-		[HttpGet]
-		public TemperatureSetting GetDefault()
+		private TemperatureSetting getDefault()
 		{
 			var first = (from f in context.TemperatureSettings
 					where f.DayOfWeek == null
-						&& f.LongStartDate == null
-						&& f.LongEndDate == null
+						&& f.Start == null
+						&& f.End == null
 					orderby f.DateModified descending
 					select f).FirstOrDefault();
 			if(first == null)
@@ -56,70 +54,93 @@ namespace Sannel.House.Web.Controllers.api
 		/// Gets the TemperatureSettings that would be applyed from today -1, today, today +1, today +2
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet]
-		public IEnumerable<TemperatureSetting> Get(DateTime now)
-		{
-			var resultDefaults = (from f in context.TemperatureSettings
-								  where f.DayOfWeek == null
-									  && f.LongStartDate == null
-									  && f.LongEndDate == null
-								  orderby f.DateModified descending
-								  select f).Take(1);
-			if(resultDefaults.Count() == 0)
-			{
-				var first = new TemperatureSetting();
-				first.HeatTemperatureC = 15.6;
-				first.CoolTemperatureC = 29.5;
-				context.TemperatureSettings.Add(first);
-				context.SaveChanges();
+		//[HttpGet]
+		//public IEnumerable<TemperatureSetting> Get(DateTime now)
+		//{
+		//	var resultDefaults = (from f in context.TemperatureSettings
+		//						  where f.DayOfWeek == null
+		//							  && f.LongStartDate == null
+		//							  && f.LongEndDate == null
+		//						  orderby f.DateModified descending
+		//						  select f).Take(1);
+		//	if(resultDefaults.Count() == 0)
+		//	{
+		//		var first = new TemperatureSetting();
+		//		first.HeatTemperatureC = 15.6;
+		//		first.CoolTemperatureC = 29.5;
+		//		context.TemperatureSettings.Add(first);
+		//		context.SaveChanges();
 
-				resultDefaults = (from f in context.TemperatureSettings
-								  where f.DayOfWeek == null
-									  && f.LongStartDate == null
-									  && f.LongEndDate == null
-								  orderby f.DateModified descending
-								  select f).Take(1);
-			}
+		//		resultDefaults = (from f in context.TemperatureSettings
+		//						  where f.DayOfWeek == null
+		//							  && f.LongStartDate == null
+		//							  && f.LongEndDate == null
+		//						  orderby f.DateModified descending
+		//						  select f).Take(1);
+		//	}
 
-			var yesterday = now.AddDays(-1);
-			var tomorrow = now.AddDays(1);
-			var twoDays = now.AddDays(2);
-			var resultsDay = from f in context.TemperatureSettings
-							 where (f.DayOfWeek == yesterday.DayOfWeek ||
-								f.DayOfWeek == now.DayOfWeek ||
-								f.DayOfWeek == tomorrow.DayOfWeek ||
-								f.DayOfWeek == twoDays.DayOfWeek) &&
-								f.LongStartDate == null &&
-								f.LongEndDate == null
-							 orderby f.DayOfWeek, f.ShortTimeStart
-							 select f;
+		//	var yesterday = now.AddDays(-1);
+		//	var tomorrow = now.AddDays(1);
+		//	var twoDays = now.AddDays(2);
+		//	var resultsDay = from f in context.TemperatureSettings
+		//					 where (f.DayOfWeek == yesterday.DayOfWeek ||
+		//						f.DayOfWeek == now.DayOfWeek ||
+		//						f.DayOfWeek == tomorrow.DayOfWeek ||
+		//						f.DayOfWeek == twoDays.DayOfWeek) &&
+		//						f.LongStartDate == null &&
+		//						f.LongEndDate == null
+		//					 orderby f.DayOfWeek, f.ShortTimeStart
+		//					 select f;
 
-			return resultDefaults.Union(resultsDay);
-		}
+		//	return resultDefaults.Union(resultsDay);
+		//}
 
-		// GET api/values/5
-		[HttpGet("{id}")]
-		public string Get(int id)
-		{
-			return "value";
-		}
+		//// GET api/values/5
+		//[HttpGet("{id}")]
+		//public string Get(int id)
+		//{
+		//	return "value";
+		//}
 
-		// POST api/values
-		[HttpPost]
-		public void Post([FromBody]string value)
-		{
-		}
+		//// POST api/values
+		//[HttpPost]
+		//public void Post([FromBody]string value)
+		//{
+		//}
 
 		// PUT api/values/5
 		[HttpPut("{id}")]
-		public void Put(int id, [FromBody]string value)
+		public void Put(int id, [FromBody]TemperatureSetting updatedValue)
 		{
+			var current = context.TemperatureSettings.FirstOrDefault(i => i.Id == id);
+			if(current != null)
+			{
+				if(updatedValue.CoolTemperatureC <= updatedValue.HeatTemperatureC + 2.222222222)
+				{
+					updatedValue.CoolTemperatureC += 2.2222222;
+				}
+				else if(updatedValue.HeatTemperatureC >= updatedValue.CoolTemperatureC - 2.2222222)
+				{
+					updatedValue.HeatTemperatureC -= 2.2222222;
+				}
+
+				current.HeatTemperatureC = updatedValue.HeatTemperatureC;
+				current.CoolTemperatureC = updatedValue.CoolTemperatureC;
+				current.DateModified = DateTime.Now;
+				current.DayOfWeek = updatedValue.DayOfWeek;
+				current.Month = updatedValue.Month;
+				current.End = updatedValue.End;
+				current.Start = updatedValue.Start;
+				current.IsEndOnly = updatedValue.IsEndOnly;
+				current.IsStartOnly = updatedValue.IsStartOnly;
+				context.SaveChanges();
+			}
 		}
 
-		// DELETE api/values/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
-		}
+		//// DELETE api/values/5
+		//[HttpDelete("{id}")]
+		//public void Delete(int id)
+		//{
+		//}
 	}
 }

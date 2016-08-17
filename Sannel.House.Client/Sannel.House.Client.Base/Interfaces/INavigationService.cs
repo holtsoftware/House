@@ -17,5 +17,7 @@ namespace Sannel.House.Client.Interfaces
 		void Navigate(Type t, Object parameter);
 
 		void Navigate(Type t);
+
+		void ClearHistory();
 	}
 }

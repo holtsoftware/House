@@ -30,6 +30,35 @@ namespace Sannel.House.Client.Data
 		}
 
 		/// <summary>
+		/// Gets the default temperature setting.
+		/// </summary>
+		/// <returns></returns>
+		public async Task<IList<TemperatureSetting>> GetTemperatureSettingsAsync()
+		{
+			if(settings.AuthzCookieValue == null)
+			{
+				throw new NotLoggedInException("Please login.");
+			}
+
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+			using (HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = "/api/TemperatureSettings";
+				var response = await client.GetAsync(builder.Uri);
+				if (!response.IsSuccessStatusCode)
+				{
+					throw new ServerException("Error from server", (int)response.StatusCode);
+				}
+
+				var data = await response.Content.ReadAsStringAsync();
+				var dts = JsonConvert.DeserializeObject<IList<TemperatureSetting>>(data);
+				return dts;
+			}
+		}
+
+		/// <summary>
 		/// Gets the profile for the user who is current logged in
 		/// </summary>
 		/// <returns></returns>
@@ -165,6 +194,46 @@ namespace Sannel.House.Client.Data
 				catch(HttpRequestException re)
 				{
 					throw new ServerException("Server Unavailable", 503, re);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Logs the user off.
+		/// </summary>
+		/// <returns></returns>
+		public async Task LogOffAsync()
+		{
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+			settings.AuthzCookieValue = null;	
+
+			using (HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = "/Account/LogOff";
+				var response = await client.PostAsync(builder.Uri, new FormUrlEncodedContent(new KeyValuePair<String, String>[] { }));
+			}
+		}
+
+		/// <summary>
+		/// Puts the temperature settings asynchronous.
+		/// </summary>
+		/// <param name="setting"></param>
+		/// <returns></returns>
+		public async Task PutTemperatureSettingsAsync(TemperatureSetting setting)
+		{
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+
+			using (HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = $"/api/TemperatureSettings/{setting.Id}";
+				var result = await client.PutAsync(builder.Uri, new StringContent(JsonConvert.SerializeObject(setting), Encoding.UTF8, "application/json"));
+				if(!result.IsSuccessStatusCode)
+				{
+					throw new ServerException("Server Error", (int)result.StatusCode);
 				}
 			}
 		}

@@ -10,12 +10,13 @@
 	DataContext="{Binding TemperatureSettingViewModel, Source={StaticResource Locator}}">
 
 	<RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<TextBlock x:Name="DefaultHeader">Default Temperatures</TextBlock>
-		<TextBlock x:Name="DefaultCoolHeader" RelativePanel.Below="DefaultHeader">Cool</TextBlock>
-		<ComboBox x:Name="DefaultCool" SelectedItem="{Binding DefaultCool}" RelativePanel.RightOf="DefaultCoolHeader" RelativePanel.AlignTopWith="DefaultCoolHeader">
+		<TextBlock x:Name="DefaultHeader">1. Default Temperatures</TextBlock>
+		<TextBlock x:Name="DefaultCoolHeader" RelativePanel.Below="DefaultHeader">2. Cool</TextBlock>
+		<ComboBox x:Name="DefaultCool" SelectedItem="{Binding DefaultCool, Mode=TwoWay}" RelativePanel.RightOf="DefaultCoolHeader" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader">
 		</ComboBox>
-		<TextBlock x:Name="DefaultHeatHeader" RelativePanel.RightOf="DefaultCool" RelativePanel.AlignTopWith="DefaultCool">Heat</TextBlock>
-		<ComboBox x:Name="DefaultHeat" SelectedItem="{Binding DefaultHeat}" RelativePanel.RightOf="DefaultHeatHeader" RelativePanel.AlignTopWith="DefaultHeatHeader">
+		<TextBlock x:Name="DefaultHeatHeader" RelativePanel.RightOf="DefaultCool" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader">3. Heat</TextBlock>
+		<ComboBox x:Name="DefaultHeat" SelectedItem="{Binding DefaultHeat, Mode=TwoWay}" RelativePanel.RightOf="DefaultHeatHeader" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader">
 		</ComboBox>
+		<Button RelativePanel.RightOf="DefaultHeat" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader" Command="{Binding UpdateDefaultCommand}">4. Save</Button>
 	</RelativePanel>
 </views:BaseView>

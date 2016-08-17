@@ -26,12 +26,12 @@ namespace Sannel.House.Client.UWP.Views
 		{
 			this.InitializeComponent();
 			var coolTemps = new List<int>();
-			for(int i = 85; i >= 64; i--)
+			for(int i = 85; i >= 68; i--)
 			{
 				coolTemps.Add(i);
 			}
 			var heatTemps = new List<int>();
-			for(int i=81;i >= 60; i--)
+			for(int i=76;i >= 60; i--)
 			{
 				heatTemps.Add(i);
 			}
