@@ -17,14 +17,14 @@ namespace Sannel.House.Client.ViewModels
 		}
 
 
-		private float defaultCool;
+		private int defaultCool =80;
 		/// <summary>
 		/// Gets or sets the DefaultCool.
 		/// </summary>
 		/// <value>
 		/// The DefaultCool
 		/// </value>
-		public float DefaultCool
+		public int DefaultCool
 		{
 			get
 			{
@@ -37,7 +37,7 @@ namespace Sannel.House.Client.ViewModels
 		}
 
 
-		private float defaultHeat;
+		private int defaultHeat = 65;
 
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Sannel.House.Client.ViewModels
 		/// <value>
 		/// The DefaultHeat
 		/// </value>
-		public float DefaultHeat
+		public int DefaultHeat
 		{
 			get
 			{

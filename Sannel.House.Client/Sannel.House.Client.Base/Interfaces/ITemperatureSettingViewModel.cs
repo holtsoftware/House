@@ -14,7 +14,7 @@ namespace Sannel.House.Client.Interfaces
 		/// <value>
 		/// The default heat.
 		/// </value>
-		float DefaultHeat
+		int DefaultHeat
 		{
 			get;
 		}
@@ -25,7 +25,7 @@ namespace Sannel.House.Client.Interfaces
 		/// <value>
 		/// The default cool.
 		/// </value>
-		float DefaultCool
+		int DefaultCool
 		{
 			get;
 		}

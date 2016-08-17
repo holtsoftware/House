@@ -20,6 +20,5 @@
 			<CheckBox IsChecked="{Binding StayLoggedIn, Mode=TwoWay}">3. Stay logged in</CheckBox>
 			<Button Command="{Binding LoginCommand}">4. Login</Button>
 		</StackPanel>
-		<controls:BusyControl />
 	</Grid>
 </views:BaseView>

@@ -25,6 +25,16 @@ namespace Sannel.House.Client.Services
 			}.SetNavigationType<IHomeViewModel>(),
 			new MenuItem
 			{
+				TextKey = "TempSetting",
+				IconKey = "TempSetting",
+				Groups=new String[]
+				{
+					"TempSettings",
+					"Admin"
+				}
+			}.SetNavigationType<ITemperatureSettingViewModel>(),
+			new MenuItem
+			{
 				TextKey = "Settings",
 				IconKey = "Settings",
 				Groups = new string[]
@@ -49,7 +59,7 @@ namespace Sannel.House.Client.Services
 				user.Name = result.Name;
 				user.Groups.Clear();
 				user.Menu.Clear();
-				foreach(var g in user.Groups)
+				foreach(var g in result.Roles)
 				{
 					user.Groups.Add(g);
 				}

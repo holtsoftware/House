@@ -13,6 +13,11 @@ namespace Sannel.House.Client.Interfaces
 	/// </summary>
 	public interface IShellViewModel : IBaseViewModel
 	{
+		new bool IsBusy
+		{
+			get;
+			set;
+		}
 		bool IsPaneOpen
 		{
 			get;

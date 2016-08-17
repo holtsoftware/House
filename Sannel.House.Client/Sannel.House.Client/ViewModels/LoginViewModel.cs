@@ -27,9 +27,15 @@ namespace Sannel.House.Client.ViewModels
 			this.manager = manager;
 		}
 
-		public override void NavigatedTo(object arg)
+		public override async void NavigatedTo(object arg)
 		{
 			base.NavigatedTo(arg);
+			if(settings.AuthzCookieValue != null)
+			{
+				IsBusy = true;
+				await getProfileAndRedirectAsync();
+				IsBusy = false;
+			}
 		}
 
 		private async Task getProfileAndRedirectAsync()

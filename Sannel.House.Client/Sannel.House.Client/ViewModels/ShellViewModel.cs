@@ -39,6 +39,26 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+
+		private bool isBusy;
+		/// <summary>
+		/// Gets or sets the IsBusy
+		/// </summary>
+		/// <value>
+		/// The IsBusy
+		/// </value>
+		public new bool IsBusy
+		{
+			get
+			{
+				return isBusy;
+			}
+			set
+			{
+				Set(ref isBusy, value);
+			}
+		}
+
 		/// <summary>
 		/// Gets the menu.
 		/// </summary>

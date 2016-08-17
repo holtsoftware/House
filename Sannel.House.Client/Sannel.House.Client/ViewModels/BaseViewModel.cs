@@ -18,7 +18,6 @@ namespace Sannel.House.Client.ViewModels
 			this.NavigationService = navigationService;
 		}
 
-		private bool isBusy;
 		/// <summary>
 		/// Gets or sets the IsBusy.
 		/// </summary>
@@ -29,11 +28,11 @@ namespace Sannel.House.Client.ViewModels
 		{
 			get
 			{
-				return isBusy;
+				return ViewModelLocator.ShellViewModel.IsBusy;
 			}
-			protected set
+			set
 			{
-				Set(ref isBusy, value);
+				ViewModelLocator.ShellViewModel.IsBusy = value;
 			}
 		}
 

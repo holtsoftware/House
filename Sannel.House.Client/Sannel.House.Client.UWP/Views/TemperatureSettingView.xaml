@@ -1,15 +1,21 @@
 ﻿<views:BaseView
-    x:Class="Sannel.House.Client.UWP.Views.TemperatureSettingView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Sannel.House.Client.UWP.Views"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	x:Class="Sannel.House.Client.UWP.Views.TemperatureSettingView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Sannel.House.Client.UWP.Views"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:views="using:Sannel.House.Client.UWP.Views"
-    mc:Ignorable="d"
+	mc:Ignorable="d"
 	DataContext="{Binding TemperatureSettingViewModel, Source={StaticResource Locator}}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-    </Grid>
+	<RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<TextBlock x:Name="DefaultHeader">Default Temperatures</TextBlock>
+		<TextBlock x:Name="DefaultCoolHeader" RelativePanel.Below="DefaultHeader">Cool</TextBlock>
+		<ComboBox x:Name="DefaultCool" SelectedItem="{Binding DefaultCool}" RelativePanel.RightOf="DefaultCoolHeader" RelativePanel.AlignTopWith="DefaultCoolHeader">
+		</ComboBox>
+		<TextBlock x:Name="DefaultHeatHeader" RelativePanel.RightOf="DefaultCool" RelativePanel.AlignTopWith="DefaultCool">Heat</TextBlock>
+		<ComboBox x:Name="DefaultHeat" SelectedItem="{Binding DefaultHeat}" RelativePanel.RightOf="DefaultHeatHeader" RelativePanel.AlignTopWith="DefaultHeatHeader">
+		</ComboBox>
+	</RelativePanel>
 </views:BaseView>
