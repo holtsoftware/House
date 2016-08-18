@@ -51,11 +51,8 @@ namespace Sannel.House.Web.Base.Models
 			set;
 		}
 
-		[JsonProperty(nameof(IsStartOnly))]
-		public bool IsStartOnly { get; set; }
-
-		[JsonProperty(nameof(IsEndOnly))]
-		public bool IsEndOnly { get; set; }
+		[JsonProperty(nameof(IsTimeOnly))]
+		public bool IsTimeOnly { get; set; }
 
 		[JsonProperty(nameof(Start))]
 		public DateTime? Start { get; set; }

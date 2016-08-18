@@ -20,13 +20,29 @@ namespace Sannel.House.Web.Controllers.api
 			this.context = context;
 		}
 
-		[HttpGet]
 		public IEnumerable<TemperatureSetting> Get()
 		{
-			return new TemperatureSetting[]
-			{
-				getDefault()
-			};
+			return Get(DateTime.Now);
+		}
+
+		[HttpGet("{dt}")]
+		public IEnumerable<TemperatureSetting> Get(DateTime dt)
+		{
+			var first = (from f in context.TemperatureSettings
+						 where f.DayOfWeek == null
+							&& f.Month == null
+							&& f.Start == null
+							&& f.End == null
+						 orderby f.DateModified descending
+						 select f).Take(1);
+			var daysOfWeek = (from f in context.TemperatureSettings
+							  where f.DayOfWeek != null
+							  && f.Month == null
+							  && f.Start == null
+							  && f.End == null
+							  select f);
+
+			return first.Union(daysOfWeek);
 		}
 
 		private TemperatureSetting getDefault()
@@ -131,8 +147,7 @@ namespace Sannel.House.Web.Controllers.api
 				current.Month = updatedValue.Month;
 				current.End = updatedValue.End;
 				current.Start = updatedValue.Start;
-				current.IsEndOnly = updatedValue.IsEndOnly;
-				current.IsStartOnly = updatedValue.IsStartOnly;
+				current.IsTimeOnly = updatedValue.IsTimeOnly;
 				context.SaveChanges();
 			}
 		}

@@ -99,11 +99,155 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+
+		private TemperatureSetting sundayDefault;
+		/// <summary>
+		/// Gets or sets the SundayDefault.
+		/// </summary>
+		/// <value>
+		/// The SundayDefault
+		/// </value>
+		public TemperatureSetting SundayDefault
+		{
+			get
+			{
+				return sundayDefault;
+			}
+			set
+			{
+				Set(ref sundayDefault, value);
+			}
+		}
+
+
+		private TemperatureSetting mondayDefault;
+		/// <summary>
+		/// Gets or sets the MondayDefault.
+		/// </summary>
+		/// <value>
+		/// The MondayDefault
+		/// </value>
+		public TemperatureSetting MondayDefault
+		{
+			get
+			{
+				return mondayDefault;
+			}
+			set
+			{
+				Set(ref mondayDefault, value);
+			}
+		}
+
+
+		private TemperatureSetting tuesdayDefault;
+		/// <summary>
+		/// Gets or sets the TuesdayDefault.
+		/// </summary>
+		/// <value>
+		/// The TuesdayDefault
+		/// </value>
+		public TemperatureSetting TuesdayDefault
+		{
+			get
+			{
+				return tuesdayDefault;
+			}
+			set
+			{
+				Set(ref tuesdayDefault, value);
+			}
+		}
+
+
+		private TemperatureSetting wensdayDefault;
+		/// <summary>
+		/// Gets or sets the WensdayDefault.
+		/// </summary>
+		/// <value>
+		/// The WensdayDefault
+		/// </value>
+		public TemperatureSetting WensdayDefault
+		{
+			get
+			{
+				return wensdayDefault;
+			}
+			set
+			{
+				Set(ref wensdayDefault, value);
+			}
+		}
+
+
+		private TemperatureSetting thursdayDefault;
+		/// <summary>
+		/// Gets or sets the ThursdayDefault.
+		/// </summary>
+		/// <value>
+		/// The ThursdayDefault
+		/// </value>
+		public TemperatureSetting ThursdayDefault
+		{
+			get
+			{
+				return thursdayDefault;
+			}
+			set
+			{
+				Set(ref thursdayDefault, value);
+			}
+		}
+
+
+		private TemperatureSetting fridayDefault;
+		/// <summary>
+		/// Gets or sets the FridayDefault.
+		/// </summary>
+		/// <value>
+		/// The FridayDefault
+		/// </value>
+		public TemperatureSetting FridayDefault
+		{
+			get
+			{
+				return fridayDefault;
+			}
+			set
+			{
+				Set(ref fridayDefault, value);
+			}
+		}
+
+
+		private TemperatureSetting saturdayDefault;
+		/// <summary>
+		/// Gets or sets the SaturdayDefault.
+		/// </summary>
+		/// <value>
+		/// The SaturdayDefault
+		/// </value>
+		public TemperatureSetting SaturdayDefault
+		{
+			get
+			{
+				return saturdayDefault;
+			}
+			set
+			{
+				Set(ref saturdayDefault, value);
+			}
+		}
+
 		public async void Refresh()
 		{
 			IsBusy = true;
 			var temperatureSettings = await server.GetTemperatureSettingsAsync();
-			defaultTemperatureSetting = temperatureSettings.FirstOrDefault();
+			defaultTemperatureSetting = temperatureSettings.First(i => i.DayOfWeek == null
+											&& i.Month == null
+											&& i.Start == null
+											&& i.End == null);
+			temperatureSettings.Remove(defaultTemperatureSetting);
 			DefaultCool = (int)defaultTemperatureSetting.CoolTemperatureC.CelsiusToFahrenheit();
 			DefaultHeat = (int)defaultTemperatureSetting.HeatTemperatureC.CelsiusToFahrenheit();
 			IsBusy = false;
