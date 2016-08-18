@@ -221,7 +221,7 @@ namespace Sannel.House.Client.Data
 		/// </summary>
 		/// <param name="setting"></param>
 		/// <returns></returns>
-		public async Task PutTemperatureSettingsAsync(TemperatureSetting setting)
+		public async Task PutTemperatureSettingAsync(TemperatureSetting setting)
 		{
 			var clientHandler = new HttpClientHandler();
 			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
@@ -235,6 +235,31 @@ namespace Sannel.House.Client.Data
 				{
 					throw new ServerException("Server Error", (int)result.StatusCode);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Posts the temperature setting asynchronous.
+		/// </summary>
+		/// <param name="setting">The setting.</param>
+		/// <returns></returns>
+		/// <exception cref="ServerException">Server Error</exception>
+		public async Task<long> PostTemperatureSettingAsync(TemperatureSetting setting)
+		{
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+
+			using (HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = "/api/TemperatureSettings";
+				var result = await client.PostAsync(builder.Uri, new StringContent(JsonConvert.SerializeObject(setting), Encoding.UTF8, "application/json"));
+				if(!result.IsSuccessStatusCode)
+				{
+					throw new ServerException("Server Error", (int)result.StatusCode);
+				}
+				var data = await result.Content.ReadAsStringAsync();
+				return JsonConvert.DeserializeObject<long>(data);
 			}
 		}
 	}

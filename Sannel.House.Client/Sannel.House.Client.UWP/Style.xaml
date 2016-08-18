@@ -2,6 +2,19 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:Sannel.House.Client.UWP">
+	<Style x:Key="TempHourStart" TargetType="Border">
+		<Setter Property="BorderBrush" Value="#FFcccccc" />
+		<Setter Property="BorderThickness" Value="1,1,1,0" />
+	</Style>
+
+	<Style TargetType="Border" x:Key="TempHourEnd">
+		<Setter Property="BorderBrush" Value="#FFCCCCCC" />
+		<Setter Property="BorderThickness" Value="1,1,1,0" />
+	</Style>
+
+	<Style TargetType="TextBlock" x:Key="HourText">
+	</Style>
+	
 	<Style x:Key="TemperatureDefault" TargetType="Button">
 		<Setter Property="Background" Value="Orange"/>
 		<Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>

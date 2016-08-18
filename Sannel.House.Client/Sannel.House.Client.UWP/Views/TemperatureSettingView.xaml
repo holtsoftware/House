@@ -7,11 +7,21 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:views="using:Sannel.House.Client.UWP.Views"
 	xmlns:controls="using:Sannel.House.Client.UWP.Controls"
+	VerticalAlignment="Stretch"
+	HorizontalAlignment="Stretch"
 	mc:Ignorable="d"
 	DataContext="{Binding TemperatureSettingViewModel, Source={StaticResource Locator}}">
 
-	<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<Grid>
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<Border Grid.Row="0" Height="4">
+			<ProgressBar IsIndeterminate="True" Visibility="{Binding IsBackgroundBusy}"/>
+		</Border>
+		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition />
 				<ColumnDefinition />
@@ -40,7 +50,7 @@
 					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
 				</StackPanel>
 				<Button.Flyout>
-					<Flyout>
+					<Flyout Closed="Flyout_Closed">
 						<controls:TemperaturePicker />
 					</Flyout>
 				</Button.Flyout>
@@ -52,12 +62,156 @@
 					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
 				</StackPanel>
 				<Button.Flyout>
-					<Flyout>
+					<Flyout Closed="Flyout_Closed">
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="2" DataContext="{Binding TuesdayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="TueDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="TueDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout Closed="Flyout_Closed">
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="3" DataContext="{Binding WednesdayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="WedDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="WedDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout Closed="Flyout_Closed">
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="4" DataContext="{Binding ThursdayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="ThuDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="ThuDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout Closed="Flyout_Closed">
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="5" DataContext="{Binding FridayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="FriDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="FriDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout Closed="Flyout_Closed">
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="6" DataContext="{Binding SaturdayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="SatDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="SatDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout Closed="Flyout_Closed">
 						<controls:TemperaturePicker />
 					</Flyout>
 				</Button.Flyout>
 			</Button>
 		</Grid>
+		<ScrollViewer Grid.Row="2" HorizontalScrollMode="Auto">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+					<RowDefinition Height="30" />
+				</Grid.RowDefinitions>
+				<Border Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<TextBlock Style="{StaticResource HourText}">12 a</TextBlock>
+				</Border>
+				<Border Grid.Row="1" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					
+				</Border>
+				<Border Grid.Row="2" Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<TextBlock Style="{StaticResource HourText}">1 a</TextBlock>
+				</Border>
+				<Border Grid.Row="3" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+				</Border>
+				<Border Grid.Row="4" Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<TextBlock Style="{StaticResource HourText}">2 a</TextBlock>
+				</Border>
+				<Border Grid.Row="5" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+				</Border>
+				<Border Grid.Row="6" Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+					<TextBlock Style="{StaticResource HourText}">3 a</TextBlock>
+				</Border>
+				<Border Grid.Row="7" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+				</Border>
+			</Grid>
+		</ScrollViewer>
 
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup>
@@ -75,6 +229,16 @@
 						<Setter Target="SunDefaultSep.Visibility" Value="Visible" />
 						<Setter Target="MonDefault.Orientation" Value="Horizontal" />
 						<Setter Target="MonDefaultSep.Visibility" Value="Visible" />
+						<Setter Target="TueDefault.Orientation" Value="Horizontal" />
+						<Setter Target="TueDefaultSep.Visibility" Value="Visible" />
+						<Setter Target="WedDefault.Orientation" Value="Horizontal" />
+						<Setter Target="WedDefaultSep.Visibility" Value="Visible" />
+						<Setter Target="ThuDefault.Orientation" Value="Horizontal" />
+						<Setter Target="ThuDefaultSep.Visibility" Value="Visible" />
+						<Setter Target="FriDefault.Orientation" Value="Horizontal" />
+						<Setter Target="FriDefaultSep.Visibility" Value="Visible" />
+						<Setter Target="SatDefault.Orientation" Value="Horizontal" />
+						<Setter Target="SatDefaultSep.Visibility" Value="Visible" />
 					</VisualState.Setters>
 				</VisualState>
 				<VisualState>
@@ -91,9 +255,19 @@
 						<Setter Target="SunDefaultSep.Visibility" Value="Collapsed" />
 						<Setter Target="MonDefault.Orientation" Value="Vertical" />
 						<Setter Target="MonDefaultSep.Visibility" Value="Collapsed" />
+						<Setter Target="TueDefault.Orientation" Value="Vertical" />
+						<Setter Target="TueDefaultSep.Visibility" Value="Collapsed" />
+						<Setter Target="WedDefault.Orientation" Value="Vertical" />
+						<Setter Target="WedDefaultSep.Visibility" Value="Collapsed" />
+						<Setter Target="ThuDefault.Orientation" Value="Vertical" />
+						<Setter Target="ThuDefaultSep.Visibility" Value="Collapsed" />
+						<Setter Target="FriDefault.Orientation" Value="Vertical" />
+						<Setter Target="FriDefaultSep.Visibility" Value="Collapsed" />
+						<Setter Target="SatDefault.Orientation" Value="Vertical" />
+						<Setter Target="SatDefaultSep.Visibility" Value="Collapsed" />
 					</VisualState.Setters>
 				</VisualState>
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
-	</StackPanel>
+	</Grid>
 </views:BaseView>

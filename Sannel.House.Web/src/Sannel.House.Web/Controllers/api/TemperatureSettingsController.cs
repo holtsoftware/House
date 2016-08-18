@@ -41,12 +41,12 @@ namespace Sannel.House.Web.Controllers.api
 		private TemperatureSetting getDefault()
 		{
 			var first = (from f in context.TemperatureSettings
-					where f.DayOfWeek == null
-						&& f.Start == null
-						&& f.End == null
-					orderby f.DateModified descending
-					select f).FirstOrDefault();
-			if(first == null)
+						 where f.DayOfWeek == null
+							 && f.Start == null
+							 && f.End == null
+						 orderby f.DateModified descending
+						 select f).FirstOrDefault();
+			if (first == null)
 			{
 				first = new TemperatureSetting();
 				first.HeatTemperatureC = 15.6;
@@ -117,24 +117,42 @@ namespace Sannel.House.Web.Controllers.api
 		//{
 		//}
 
+		private void updateTemperatureData(TemperatureSetting setting)
+		{
+			if (setting.CoolTemperatureC < setting.HeatTemperatureC + 2.222222222)
+			{
+				setting.CoolTemperatureC = setting.HeatTemperatureC + 2.2222222;
+			}
+			else if (setting.HeatTemperatureC > setting.CoolTemperatureC - 2.2222222)
+			{
+				setting.HeatTemperatureC = setting.CoolTemperatureC - 2.2222222;
+			}
+		}
+
+		// POST api/values
+		[HttpPost]
+		public long Post([FromBody]TemperatureSetting setting)
+		{
+			setting.Id = 0;
+			setting.DateCreated = DateTime.Now;
+			setting.DateModified = DateTime.Now;
+			updateTemperatureData(setting);
+			context.TemperatureSettings.Add(setting);
+			context.SaveChanges();
+			return setting.Id;
+		}
+
 		// PUT api/values/5
 		[HttpPut("{id}")]
 		public void Put(int id, [FromBody]TemperatureSetting updatedValue)
 		{
 			var current = context.TemperatureSettings.FirstOrDefault(i => i.Id == id);
-			if(current != null)
+			if (current != null)
 			{
-				if(updatedValue.CoolTemperatureC <= updatedValue.HeatTemperatureC + 2.222222222)
-				{
-					updatedValue.CoolTemperatureC += 2.2222222;
-				}
-				else if(updatedValue.HeatTemperatureC >= updatedValue.CoolTemperatureC - 2.2222222)
-				{
-					updatedValue.HeatTemperatureC -= 2.2222222;
-				}
 
 				current.HeatTemperatureC = updatedValue.HeatTemperatureC;
 				current.CoolTemperatureC = updatedValue.CoolTemperatureC;
+				updateTemperatureData(current);
 				current.DateModified = DateTime.Now;
 				current.DayOfWeek = updatedValue.DayOfWeek;
 				current.Month = updatedValue.Month;

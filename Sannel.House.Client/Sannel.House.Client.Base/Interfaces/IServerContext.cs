@@ -44,9 +44,16 @@ namespace Sannel.House.Client.Interfaces
 		Task<IList<TemperatureSetting>> GetTemperatureSettingsAsync();
 
 		/// <summary>
-		/// Puts the temperature settings asynchronous.
+		/// Puts the temperature setting asynchronous.
 		/// </summary>
 		/// <returns></returns>
-		Task PutTemperatureSettingsAsync(TemperatureSetting setting);
+		Task PutTemperatureSettingAsync(TemperatureSetting setting);
+
+		/// <summary>
+		/// Posts the temperature setting asynchronous.
+		/// </summary>
+		/// <param name="setting">The setting.</param>
+		/// <returns></returns>
+		Task<long> PostTemperatureSettingAsync(TemperatureSetting setting);
 	}
 }

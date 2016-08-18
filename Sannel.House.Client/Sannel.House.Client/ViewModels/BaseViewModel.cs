@@ -36,6 +36,51 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+
+		private bool isBackgroundBusy;
+		/// <summary>
+		/// Gets or sets the IsBackgroundBusy.
+		/// </summary>
+		/// <value>
+		/// The IsBackgroundBusy
+		/// </value>
+		public bool IsBackgroundBusy
+		{
+			get
+			{
+				return isBackgroundBusy;
+			}
+			set
+			{
+				Set(ref isBackgroundBusy, value);
+			}
+		}
+
+		private int backgroundStackNumber;
+		protected void AddBackgroudStackNumber()
+		{
+			backgroundStackNumber++;
+			if(backgroundStackNumber > 0)
+			{
+				if (!IsBackgroundBusy)
+				{
+					IsBackgroundBusy = true;
+				}
+			}
+		}
+
+		protected void RemoveBackgroundStackNumber()
+		{
+			backgroundStackNumber--;
+			if(backgroundStackNumber <= 0)
+			{
+				if (IsBackgroundBusy)
+				{
+					IsBackgroundBusy = false;
+				}
+			}
+		}
+
 		public virtual void NavigatedTo(Object arg)
 		{
 

@@ -99,5 +99,12 @@ namespace Sannel.House.Client.Interfaces
 		/// The update default command.
 		/// </value>
 		ICommand UpdateDefaultCommand { get; }
+
+		/// <summary>
+		/// Saves the temperature setting asynchronous.
+		/// </summary>
+		/// <param name="temperature">The temperature.</param>
+		/// <returns></returns>
+		Task SaveTemperatureSettingAsync(TemperatureSetting temperature);
 	}
 }

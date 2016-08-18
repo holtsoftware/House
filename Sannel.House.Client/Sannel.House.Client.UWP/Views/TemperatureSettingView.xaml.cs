@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Sannel.House.Client.Interfaces;
+using Sannel.House.Client.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,9 +24,30 @@ namespace Sannel.House.Client.UWP.Views
 	/// </summary>
 	public sealed partial class TemperatureSettingView : BaseView
 	{
+		private ITemperatureSettingViewModel TempViewModel
+		{
+			get
+			{
+				return ViewModel as ITemperatureSettingViewModel;
+			}
+		}
 		public TemperatureSettingView()
 		{
 			this.InitializeComponent();
+		}
+
+		private void Button_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
+		{
+		}
+
+		private async void Flyout_Closed(object sender, object e)
+		{
+
+			Flyout flyout = (Flyout)sender;
+			Button button = (Button)flyout.Target;
+
+			TemperatureSetting ts = button.DataContext as TemperatureSetting;
+			await TempViewModel.SaveTemperatureSettingAsync(ts);
 		}
 	}
 }

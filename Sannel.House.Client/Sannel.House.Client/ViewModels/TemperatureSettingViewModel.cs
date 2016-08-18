@@ -244,7 +244,7 @@ namespace Sannel.House.Client.ViewModels
 											{
 												CoolTemperatureC = ((double)DefaultCool).FahrenheitToCelsius(),
 												HeatTemperatureC = ((double)DefaultHeat).FahrenheitToCelsius(),
-												DayOfWeek = DayOfWeek.Sunday,
+												DayOfWeek = dow,
 												DateCreated = DateTime.Now,
 												DateModified = DateTime.Now
 											};
@@ -271,6 +271,20 @@ namespace Sannel.House.Client.ViewModels
 		public override void NavigatedTo(object arg)
 		{
 			Refresh();
+		}
+
+		public async Task SaveTemperatureSettingAsync(TemperatureSetting temperature)
+		{
+			AddBackgroudStackNumber();
+			if(temperature.Id > 0)
+			{
+				await server.PutTemperatureSettingAsync(temperature);
+			}
+			else
+			{
+				temperature.Id = await server.PostTemperatureSettingAsync(temperature);
+			}
+			RemoveBackgroundStackNumber();
 		}
 	}
 }

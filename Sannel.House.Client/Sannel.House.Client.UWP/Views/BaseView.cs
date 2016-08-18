@@ -11,7 +11,7 @@ namespace Sannel.House.Client.UWP.Views
 {
 	public abstract class BaseView : Page
 	{
-		protected IBaseViewModel ViewModel
+		public IBaseViewModel ViewModel
 		{
 			get
 			{
