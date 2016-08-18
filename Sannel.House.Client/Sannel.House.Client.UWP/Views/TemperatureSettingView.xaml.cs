@@ -25,18 +25,6 @@ namespace Sannel.House.Client.UWP.Views
 		public TemperatureSettingView()
 		{
 			this.InitializeComponent();
-			var coolTemps = new List<int>();
-			for(int i = 85; i >= 68; i--)
-			{
-				coolTemps.Add(i);
-			}
-			var heatTemps = new List<int>();
-			for(int i=76;i >= 60; i--)
-			{
-				heatTemps.Add(i);
-			}
-			DefaultCool.ItemsSource = coolTemps;
-			DefaultHeat.ItemsSource = heatTemps;
 		}
 	}
 }

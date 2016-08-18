@@ -6,17 +6,94 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:views="using:Sannel.House.Client.UWP.Views"
+	xmlns:controls="using:Sannel.House.Client.UWP.Controls"
 	mc:Ignorable="d"
 	DataContext="{Binding TemperatureSettingViewModel, Source={StaticResource Locator}}">
 
-	<RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<TextBlock x:Name="DefaultHeader">1. Default Temperatures</TextBlock>
-		<TextBlock x:Name="DefaultCoolHeader" RelativePanel.Below="DefaultHeader">2. Cool</TextBlock>
-		<ComboBox x:Name="DefaultCool" SelectedItem="{Binding DefaultCool, Mode=TwoWay}" RelativePanel.RightOf="DefaultCoolHeader" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader">
-		</ComboBox>
-		<TextBlock x:Name="DefaultHeatHeader" RelativePanel.RightOf="DefaultCool" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader">3. Heat</TextBlock>
-		<ComboBox x:Name="DefaultHeat" SelectedItem="{Binding DefaultHeat, Mode=TwoWay}" RelativePanel.RightOf="DefaultHeatHeader" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader">
-		</ComboBox>
-		<Button RelativePanel.RightOf="DefaultHeat" RelativePanel.AlignVerticalCenterWith="DefaultCoolHeader" Command="{Binding UpdateDefaultCommand}">4. Save</Button>
-	</RelativePanel>
+	<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<TextBlock>1 Sun</TextBlock>
+			<TextBlock Grid.Column="1">2 Mon</TextBlock>
+			<TextBlock Grid.Column="2">3 Tue</TextBlock>
+			<TextBlock Grid.Column="3">4 Wed</TextBlock>
+			<TextBlock Grid.Column="4">5 Thu</TextBlock>
+			<TextBlock Grid.Column="5">6 Fri</TextBlock>
+			<TextBlock Grid.Column="6">7 Sat</TextBlock>
+			<Button Grid.Row="1" DataContext="{Binding SundayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="SunDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="SunDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout>
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+			<Button Grid.Row="1" Grid.Column="1" DataContext="{Binding MondayDefault}" Style="{StaticResource TemperatureDefault}">
+				<StackPanel x:Name="MonDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+					<TextBlock x:Name="MonDefaultSep" Text="/" />
+					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+				</StackPanel>
+				<Button.Flyout>
+					<Flyout>
+						<controls:TemperaturePicker />
+					</Flyout>
+				</Button.Flyout>
+			</Button>
+		</Grid>
+
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup>
+				<VisualState>
+					<!-- VisualState to be triggered when window width is >=760 effective pixels -->
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="760" />
+					</VisualState.StateTriggers>
+					<VisualState.Setters>
+						<!-- Widest possible layout moves some elements around to optimize for more available width 
+						and keeps SplitView pane always showing inline -->
+						<!--Setter Target="Splitter.DisplayMode" Value="Inline" />
+						<Setter Target="Splitter.IsPaneOpen" Value="True" /-->
+						<Setter Target="SunDefault.Orientation" Value="Horizontal" />
+						<Setter Target="SunDefaultSep.Visibility" Value="Visible" />
+						<Setter Target="MonDefault.Orientation" Value="Horizontal" />
+						<Setter Target="MonDefaultSep.Visibility" Value="Visible" />
+					</VisualState.Setters>
+				</VisualState>
+				<VisualState>
+					<!-- VisualState to be triggered when window width is >=0 and <548 effective pixels -->
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="0" />
+					</VisualState.StateTriggers>
+					<VisualState.Setters>
+						<!-- For the most narrow windows and phones in portrait orientation, this state collapses the SplitView pane into overlay mode
+						and adds dynamic RelativePanel constraints that puts all elements stacked below each other -->
+						<!--Setter Target="Splitter.DisplayMode" Value="Overlay" />
+						<Setter Target="Splitter.IsPaneOpen" Value="False" /-->
+						<Setter Target="SunDefault.Orientation" Value="Vertical" />
+						<Setter Target="SunDefaultSep.Visibility" Value="Collapsed" />
+						<Setter Target="MonDefault.Orientation" Value="Vertical" />
+						<Setter Target="MonDefaultSep.Visibility" Value="Collapsed" />
+					</VisualState.Setters>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+	</StackPanel>
 </views:BaseView>

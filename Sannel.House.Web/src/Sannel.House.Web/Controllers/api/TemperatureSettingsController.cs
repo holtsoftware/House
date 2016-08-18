@@ -28,13 +28,6 @@ namespace Sannel.House.Web.Controllers.api
 		[HttpGet("{dt}")]
 		public IEnumerable<TemperatureSetting> Get(DateTime dt)
 		{
-			var first = (from f in context.TemperatureSettings
-						 where f.DayOfWeek == null
-							&& f.Month == null
-							&& f.Start == null
-							&& f.End == null
-						 orderby f.DateModified descending
-						 select f).Take(1);
 			var daysOfWeek = (from f in context.TemperatureSettings
 							  where f.DayOfWeek != null
 							  && f.Month == null
@@ -42,7 +35,7 @@ namespace Sannel.House.Web.Controllers.api
 							  && f.End == null
 							  select f);
 
-			return first.Union(daysOfWeek);
+			return daysOfWeek;
 		}
 
 		private TemperatureSetting getDefault()

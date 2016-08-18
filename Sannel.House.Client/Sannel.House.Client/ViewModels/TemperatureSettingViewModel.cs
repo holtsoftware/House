@@ -14,7 +14,6 @@ namespace Sannel.House.Client.ViewModels
 	public class TemperatureSettingViewModel : ErrorViewModel, ITemperatureSettingViewModel
 	{
 		private IServerContext server;
-		private TemperatureSetting defaultTemperatureSetting;
 
 		public TemperatureSettingViewModel(IServerContext server, INavigationService navigationService) : base(navigationService)
 		{
@@ -76,9 +75,6 @@ namespace Sannel.House.Client.ViewModels
 		private async void updateDefaultCommandAction()
 		{
 			IsBusy = true;
-			defaultTemperatureSetting.CoolTemperatureC = ((double)DefaultCool).FahrenheitToCelsius();
-			defaultTemperatureSetting.HeatTemperatureC = ((double)DefaultHeat).FahrenheitToCelsius();
-			await server.PutTemperatureSettingsAsync(defaultTemperatureSetting);
 			IsBusy = false;
 			Refresh();
 		}
@@ -167,7 +163,7 @@ namespace Sannel.House.Client.ViewModels
 		/// <value>
 		/// The WensdayDefault
 		/// </value>
-		public TemperatureSetting WensdayDefault
+		public TemperatureSetting WednesdayDefault
 		{
 			get
 			{
@@ -239,17 +235,36 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+		private TemperatureSetting getTemperatureSettingForDay(IList<TemperatureSetting> settings, DayOfWeek dow)
+		{
+			var ts = settings.FirstOrDefault(i => i.DayOfWeek == dow
+											&& i.Month == null
+											&& i.Start == null
+											&& i.End == null) ?? new TemperatureSetting
+											{
+												CoolTemperatureC = ((double)DefaultCool).FahrenheitToCelsius(),
+												HeatTemperatureC = ((double)DefaultHeat).FahrenheitToCelsius(),
+												DayOfWeek = DayOfWeek.Sunday,
+												DateCreated = DateTime.Now,
+												DateModified = DateTime.Now
+											};
+			settings.Remove(ts);
+			return ts;
+		}
+
 		public async void Refresh()
 		{
 			IsBusy = true;
 			var temperatureSettings = await server.GetTemperatureSettingsAsync();
-			defaultTemperatureSetting = temperatureSettings.First(i => i.DayOfWeek == null
-											&& i.Month == null
-											&& i.Start == null
-											&& i.End == null);
-			temperatureSettings.Remove(defaultTemperatureSetting);
-			DefaultCool = (int)defaultTemperatureSetting.CoolTemperatureC.CelsiusToFahrenheit();
-			DefaultHeat = (int)defaultTemperatureSetting.HeatTemperatureC.CelsiusToFahrenheit();
+
+			SundayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Sunday);
+			MondayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Monday);
+			TuesdayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Tuesday);
+			WednesdayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Wednesday);
+			ThursdayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Thursday);
+			FridayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Friday);
+			SaturdayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Saturday);
+
 			IsBusy = false;
 		}
 

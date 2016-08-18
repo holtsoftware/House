@@ -11,28 +11,6 @@ namespace Sannel.House.Client.Interfaces
 	public interface ITemperatureSettingViewModel : IErrorViewModel
 	{
 		/// <summary>
-		/// Gets the default heat.
-		/// </summary>
-		/// <value>
-		/// The default heat.
-		/// </value>
-		int DefaultHeat
-		{
-			get;
-		}
-
-		/// <summary>
-		/// Gets the default cool.
-		/// </summary>
-		/// <value>
-		/// The default cool.
-		/// </value>
-		int DefaultCool
-		{
-			get;
-		}
-
-		/// <summary>
 		/// Gets the sunday default.
 		/// </summary>
 		/// <value>
@@ -71,7 +49,7 @@ namespace Sannel.House.Client.Interfaces
 		/// <value>
 		/// The wensday default.
 		/// </value>
-		TemperatureSetting WensdayDefault
+		TemperatureSetting WednesdayDefault
 		{
 			get;
 		}

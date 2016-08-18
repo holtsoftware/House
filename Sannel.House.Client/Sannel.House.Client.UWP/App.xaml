@@ -9,9 +9,11 @@
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="ms-appx:///Style.xaml" />
 				<ResourceDictionary>
 					<vm:ViewModelLocator x:Key="Locator" />
 					<converters:ErrorKeyConverter x:Key="ErrorKeyConverter" />
+					<converters:TemperatureConverter x:Key="TemperatureConverter" />
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
