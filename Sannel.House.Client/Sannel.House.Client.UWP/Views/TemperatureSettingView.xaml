@@ -15,204 +15,218 @@
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<Border Grid.Row="0" Height="4">
 			<ProgressBar IsIndeterminate="True" Visibility="{Binding IsBackgroundBusy}"/>
 		</Border>
-		<Grid Grid.Row="1">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-				<ColumnDefinition />
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-				<RowDefinition />
-			</Grid.RowDefinitions>
-			<TextBlock>1 Sun</TextBlock>
-			<TextBlock Grid.Column="1">2 Mon</TextBlock>
-			<TextBlock Grid.Column="2">3 Tue</TextBlock>
-			<TextBlock Grid.Column="3">4 Wed</TextBlock>
-			<TextBlock Grid.Column="4">5 Thu</TextBlock>
-			<TextBlock Grid.Column="5">6 Fri</TextBlock>
-			<TextBlock Grid.Column="6">7 Sat</TextBlock>
-			<Button Grid.Row="1" DataContext="{Binding SundayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="SunDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="SunDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<Button Grid.Row="1" Grid.Column="1" DataContext="{Binding MondayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="MonDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="MonDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<Button Grid.Row="1" Grid.Column="2" DataContext="{Binding TuesdayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="TueDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="TueDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<Button Grid.Row="1" Grid.Column="3" DataContext="{Binding WednesdayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="WedDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="WedDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<Button Grid.Row="1" Grid.Column="4" DataContext="{Binding ThursdayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="ThuDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="ThuDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<Button Grid.Row="1" Grid.Column="5" DataContext="{Binding FridayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="FriDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="FriDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<Button Grid.Row="1" Grid.Column="6" DataContext="{Binding SaturdayDefault}" Style="{StaticResource TemperatureDefault}">
-				<StackPanel x:Name="SatDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-					<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-					<TextBlock x:Name="SatDefaultSep" Text="/" />
-					<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
-				</StackPanel>
-				<Button.Flyout>
-					<Flyout Closed="Flyout_Closed">
-						<controls:TemperaturePicker />
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-		</Grid>
-		<ScrollViewer Grid.Row="2" HorizontalScrollMode="Auto">
+		<Border Grid.Row="1" Style="{StaticResource TempHourStart}">
 			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-				</Grid.ColumnDefinitions>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
-					<RowDefinition Height="30" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition />
 				</Grid.RowDefinitions>
-				<Border Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<TextBlock Style="{StaticResource HourText}">12 a</TextBlock>
-				</Border>
-				<Border Grid.Row="1" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					
-				</Border>
-				<Border Grid.Row="2" Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<TextBlock Style="{StaticResource HourText}">1 a</TextBlock>
-				</Border>
-				<Border Grid.Row="3" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-				</Border>
-				<Border Grid.Row="4" Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<TextBlock Style="{StaticResource HourText}">2 a</TextBlock>
-				</Border>
-				<Border Grid.Row="5" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-				</Border>
-				<Border Grid.Row="6" Style="{StaticResource TempHourStart}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-					<TextBlock Style="{StaticResource HourText}">3 a</TextBlock>
-				</Border>
-				<Border Grid.Row="7" Style="{StaticResource TempHourEnd}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-				</Border>
-			</Grid>
-		</ScrollViewer>
+				<Grid Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="30" />
+						<RowDefinition Height="30" />
+						<RowDefinition />
+					</Grid.RowDefinitions>
+					<Border Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">1 Sun</TextBlock>
+					</Border>
+					<Border Grid.Column="1" Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">2 Mon</TextBlock>
+					</Border>
+					<Border Grid.Column="2" Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">3 Tue</TextBlock>
+					</Border>
+					<Border Grid.Column="3" Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">4 Wed</TextBlock>
+					</Border>
+					<Border Grid.Column="4" Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">5 Thu</TextBlock>
+					</Border>
+					<Border Grid.Column="5" Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">6 Fri</TextBlock>
+					</Border>
+					<Border Grid.Column="6" Style="{StaticResource TempHourStart}">
+						<TextBlock Style="{StaticResource CalanderHeader}">7 Sat</TextBlock>
+					</Border>
 
+					<Border Grid.Row="1" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding SundayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="SunDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="SunDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+					<Border Grid.Row="1" Grid.Column="1" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding MondayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="MonDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="MonDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+					<Border Grid.Row="1" Grid.Column="2" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding TuesdayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="TueDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="TueDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+					<Border Grid.Row="1" Grid.Column="3" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding WednesdayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="WedDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="WedDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+					<Border Grid.Row="1" Grid.Column="4" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding ThursdayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="ThuDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="ThuDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+					<Border Grid.Row="1" Grid.Column="5" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding FridayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="FriDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="FriDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+					<Border Grid.Row="1" Grid.Column="6" Style="{StaticResource TempHourStart}">
+						<Button DataContext="{Binding SaturdayDefault}" Style="{StaticResource TemperatureDefault}">
+							<StackPanel x:Name="SatDefault" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+								<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+								<TextBlock x:Name="SatDefaultSep" Text="/" />
+								<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" />
+							</StackPanel>
+							<Button.Flyout>
+								<Flyout Closed="Flyout_Closed">
+									<controls:TemperaturePicker />
+								</Flyout>
+							</Button.Flyout>
+						</Button>
+					</Border>
+				</Grid>
+				<ScrollViewer Grid.Row="1" HorizontalScrollMode="Auto">
+					<Grid x:Name="Calander">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+							<ColumnDefinition />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+							<RowDefinition Height="30" />
+						</Grid.RowDefinitions>
+					</Grid>
+				</ScrollViewer>
+			</Grid>
+		</Border>
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup>
 				<VisualState>

@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="Converters\ErrorKeyConverter.cs" />
     <Compile Include="Converters\TemperatureConverter.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

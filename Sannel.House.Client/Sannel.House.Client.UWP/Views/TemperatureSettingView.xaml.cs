@@ -34,6 +34,52 @@ namespace Sannel.House.Client.UWP.Views
 		public TemperatureSettingView()
 		{
 			this.InitializeComponent();
+			buildCalander();
+		}
+
+		private void buildCalander()
+		{
+			int start = (int)DayOfWeek.Sunday;
+			int end = (int)DayOfWeek.Saturday;
+			for (int i = start; i <= end; i++)
+			{
+				buildColumn(i);
+			}
+		}
+		private Style tempHourStart;
+		private Style tempHourEnd;
+
+		private void buildColumn(int dayOfWeek)
+		{
+			int row = 0;
+			var end = new DateTime(1, 1, 2, 0, 0, 0);
+			for(DateTime dt=new DateTime(1,1,1,0,0,0);dt < end; dt = dt.AddMinutes(30))
+			{
+				Border b = new Border();
+				b.SetValue(Grid.ColumnProperty, dayOfWeek);
+				b.SetValue(Grid.RowProperty, row);
+
+				if(dt.Minute == 0)
+				{
+					b.Style = tempHourStart ?? (tempHourStart = this.TryFindResource("TempHourStart") as Style);
+					b.HorizontalAlignment = HorizontalAlignment.Stretch;
+					b.VerticalAlignment = VerticalAlignment.Stretch;
+
+					TextBlock tb = new TextBlock();
+					b.Child = tb;
+					tb.Text = dt.ToString("h t").ToLower();
+				}
+				else
+				{
+					b.Style = tempHourEnd ?? (tempHourEnd = this.TryFindResource("TempHourEnd") as Style);
+					b.HorizontalAlignment = HorizontalAlignment.Stretch;
+					b.VerticalAlignment = VerticalAlignment.Stretch;
+
+				}
+				Calander.Children.Add(b);
+
+				row++;
+			}
 		}
 
 		private void Button_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
@@ -48,6 +94,10 @@ namespace Sannel.House.Client.UWP.Views
 
 			TemperatureSetting ts = button.DataContext as TemperatureSetting;
 			await TempViewModel.SaveTemperatureSettingAsync(ts);
+		}
+
+		private void Border_Tapped(object sender, TappedRoutedEventArgs e)
+		{
 		}
 	}
 }

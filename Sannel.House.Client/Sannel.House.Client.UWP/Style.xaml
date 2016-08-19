@@ -3,23 +3,30 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="using:Sannel.House.Client.UWP">
 	<Style x:Key="TempHourStart" TargetType="Border">
-		<Setter Property="BorderBrush" Value="#FFcccccc" />
-		<Setter Property="BorderThickness" Value="1,1,1,0" />
+		<Setter Property="BorderBrush" Value="#FFB0B0B0" />
+		<Setter Property="BorderThickness" Value="1" />
 	</Style>
 
 	<Style TargetType="Border" x:Key="TempHourEnd">
-		<Setter Property="BorderBrush" Value="#FFCCCCCC" />
-		<Setter Property="BorderThickness" Value="1,1,1,0" />
+		<Setter Property="BorderBrush" Value="#FFB0B0B0" />
+		<Setter Property="BorderThickness" Value="1" />
+		<Setter Property="Background" Value="#FFEBEBEB" />
 	</Style>
 
 	<Style TargetType="TextBlock" x:Key="HourText">
 	</Style>
+
+	<Style TargetType="TextBlock" x:Key="CalanderHeader">
+		<Setter Property="TextAlignment" Value="Center" />
+		<Setter Property="VerticalAlignment" Value="Center" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+	</Style>
 	
 	<Style x:Key="TemperatureDefault" TargetType="Button">
-		<Setter Property="Background" Value="Orange"/>
+		<Setter Property="Background" Value="#FFFFC04C"/>
 		<Setter Property="Foreground" Value="{ThemeResource ButtonForeground}"/>
 		<Setter Property="BorderBrush" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
-		<Setter Property="BorderThickness" Value="0,0,2,2"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Padding" Value="4"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
