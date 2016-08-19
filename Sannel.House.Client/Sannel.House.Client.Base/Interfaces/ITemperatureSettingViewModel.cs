@@ -106,5 +106,11 @@ namespace Sannel.House.Client.Interfaces
 		/// <param name="temperature">The temperature.</param>
 		/// <returns></returns>
 		Task SaveTemperatureSettingAsync(TemperatureSetting temperature);
+
+		/// <summary>
+		/// Creates the new temperature setting.
+		/// </summary>
+		/// <returns></returns>
+		TemperatureSetting CreateNewTemperatureSetting();
 	}
 }

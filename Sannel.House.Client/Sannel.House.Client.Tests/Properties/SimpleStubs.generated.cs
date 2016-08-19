@@ -604,16 +604,29 @@ namespace Sannel.House.Client.Interfaces
             return this;
         }
 
-        global::System.Threading.Tasks.Task global::Sannel.House.Client.Interfaces.IServerContext.PutTemperatureSettingsAsync(global::Sannel.House.Client.Models.TemperatureSetting setting)
+        global::System.Threading.Tasks.Task global::Sannel.House.Client.Interfaces.IServerContext.PutTemperatureSettingAsync(global::Sannel.House.Client.Models.TemperatureSetting setting)
         {
-            return ((PutTemperatureSettingsAsync_TemperatureSetting_Delegate)_stubs[nameof(PutTemperatureSettingsAsync_TemperatureSetting_Delegate)]).Invoke(setting);
+            return ((PutTemperatureSettingAsync_TemperatureSetting_Delegate)_stubs[nameof(PutTemperatureSettingAsync_TemperatureSetting_Delegate)]).Invoke(setting);
         }
 
-        public delegate global::System.Threading.Tasks.Task PutTemperatureSettingsAsync_TemperatureSetting_Delegate(global::Sannel.House.Client.Models.TemperatureSetting setting);
+        public delegate global::System.Threading.Tasks.Task PutTemperatureSettingAsync_TemperatureSetting_Delegate(global::Sannel.House.Client.Models.TemperatureSetting setting);
 
-        public StubIServerContext PutTemperatureSettingsAsync(PutTemperatureSettingsAsync_TemperatureSetting_Delegate del)
+        public StubIServerContext PutTemperatureSettingAsync(PutTemperatureSettingAsync_TemperatureSetting_Delegate del)
         {
-            _stubs[nameof(PutTemperatureSettingsAsync_TemperatureSetting_Delegate)] = del;
+            _stubs[nameof(PutTemperatureSettingAsync_TemperatureSetting_Delegate)] = del;
+            return this;
+        }
+
+        global::System.Threading.Tasks.Task<long> global::Sannel.House.Client.Interfaces.IServerContext.PostTemperatureSettingAsync(global::Sannel.House.Client.Models.TemperatureSetting setting)
+        {
+            return ((PostTemperatureSettingAsync_TemperatureSetting_Delegate)_stubs[nameof(PostTemperatureSettingAsync_TemperatureSetting_Delegate)]).Invoke(setting);
+        }
+
+        public delegate global::System.Threading.Tasks.Task<long> PostTemperatureSettingAsync_TemperatureSetting_Delegate(global::Sannel.House.Client.Models.TemperatureSetting setting);
+
+        public StubIServerContext PostTemperatureSettingAsync(PostTemperatureSettingAsync_TemperatureSetting_Delegate del)
+        {
+            _stubs[nameof(PostTemperatureSettingAsync_TemperatureSetting_Delegate)] = del;
             return this;
         }
     }
@@ -1165,6 +1178,32 @@ namespace Sannel.House.Client.Interfaces
         public StubITemperatureSettingViewModel UpdateDefaultCommand_Get(UpdateDefaultCommand_Get_Delegate del)
         {
             _stubs[nameof(UpdateDefaultCommand_Get_Delegate)] = del;
+            return this;
+        }
+
+        global::System.Threading.Tasks.Task global::Sannel.House.Client.Interfaces.ITemperatureSettingViewModel.SaveTemperatureSettingAsync(global::Sannel.House.Client.Models.TemperatureSetting temperature)
+        {
+            return ((SaveTemperatureSettingAsync_TemperatureSetting_Delegate)_stubs[nameof(SaveTemperatureSettingAsync_TemperatureSetting_Delegate)]).Invoke(temperature);
+        }
+
+        public delegate global::System.Threading.Tasks.Task SaveTemperatureSettingAsync_TemperatureSetting_Delegate(global::Sannel.House.Client.Models.TemperatureSetting temperature);
+
+        public StubITemperatureSettingViewModel SaveTemperatureSettingAsync(SaveTemperatureSettingAsync_TemperatureSetting_Delegate del)
+        {
+            _stubs[nameof(SaveTemperatureSettingAsync_TemperatureSetting_Delegate)] = del;
+            return this;
+        }
+
+        global::Sannel.House.Client.Models.TemperatureSetting global::Sannel.House.Client.Interfaces.ITemperatureSettingViewModel.CreateNewTemperatureSetting()
+        {
+            return ((CreateNewTemperatureSetting_Delegate)_stubs[nameof(CreateNewTemperatureSetting_Delegate)]).Invoke();
+        }
+
+        public delegate global::Sannel.House.Client.Models.TemperatureSetting CreateNewTemperatureSetting_Delegate();
+
+        public StubITemperatureSettingViewModel CreateNewTemperatureSetting(CreateNewTemperatureSetting_Delegate del)
+        {
+            _stubs[nameof(CreateNewTemperatureSetting_Delegate)] = del;
             return this;
         }
 

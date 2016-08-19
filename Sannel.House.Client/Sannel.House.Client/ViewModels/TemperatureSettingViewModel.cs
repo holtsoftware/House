@@ -239,8 +239,8 @@ namespace Sannel.House.Client.ViewModels
 		{
 			var ts = settings.FirstOrDefault(i => i.DayOfWeek == dow
 											&& i.Month == null
-											&& i.Start == null
-											&& i.End == null) ?? new TemperatureSetting
+											&& i.StartTime == null
+											&& i.EndTime == null) ?? new TemperatureSetting
 											{
 												CoolTemperatureC = ((double)DefaultCool).FahrenheitToCelsius(),
 												HeatTemperatureC = ((double)DefaultHeat).FahrenheitToCelsius(),
@@ -285,6 +285,18 @@ namespace Sannel.House.Client.ViewModels
 				temperature.Id = await server.PostTemperatureSettingAsync(temperature);
 			}
 			RemoveBackgroundStackNumber();
+		}
+
+		/// <summary>
+		/// Creates the new temperature setting.
+		/// </summary>
+		/// <returns></returns>
+		public TemperatureSetting CreateNewTemperatureSetting()
+		{
+			var ts = new TemperatureSetting();
+			ts.CoolTemperatureC = ((double)DefaultCool).FahrenheitToCelsius();
+			ts.HeatTemperatureC = ((double)DefaultHeat).FahrenheitToCelsius();
+			return ts;	
 		}
 	}
 }

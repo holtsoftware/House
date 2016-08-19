@@ -1,5 +1,6 @@
 ﻿using Sannel.House.Client.Interfaces;
 using Sannel.House.Client.Models;
+using Sannel.House.Client.UWP.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,6 +59,12 @@ namespace Sannel.House.Client.UWP.Views
 				Border b = new Border();
 				b.SetValue(Grid.ColumnProperty, dayOfWeek);
 				b.SetValue(Grid.RowProperty, row);
+				b.Tag = new BorderTag()
+				{
+					DayOfWeek = dayOfWeek,
+					CellDateTime = dt
+				};
+				b.Tapped += Border_Tapped;
 
 				if(dt.Minute == 0)
 				{
@@ -96,8 +103,21 @@ namespace Sannel.House.Client.UWP.Views
 			await TempViewModel.SaveTemperatureSettingAsync(ts);
 		}
 
-		private void Border_Tapped(object sender, TappedRoutedEventArgs e)
+		private async void Border_Tapped(object sender, TappedRoutedEventArgs e)
 		{
+			Border b = (Border)sender;
+			var tag = b.Tag as BorderTag;
+			TemperatureSetting ts = TempViewModel.CreateNewTemperatureSetting();
+			ts.StartTime = tag.CellDateTime;
+			ts.DayOfWeek = (DayOfWeek)tag.DayOfWeek;
+			EditControl.DataContext = ts;
+			var results = await EditControl.ShowAsync();
+			if(results == ContentDialogResult.Primary)
+			{
+				await TempViewModel.SaveTemperatureSettingAsync(ts);
+			}
+
+			EditControl.DataContext = null;
 		}
 	}
 }

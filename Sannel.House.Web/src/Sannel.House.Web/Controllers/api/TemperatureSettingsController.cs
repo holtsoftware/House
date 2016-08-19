@@ -31,8 +31,8 @@ namespace Sannel.House.Web.Controllers.api
 			var daysOfWeek = (from f in context.TemperatureSettings
 							  where f.DayOfWeek != null
 							  && f.Month == null
-							  && f.Start == null
-							  && f.End == null
+							  && f.StartTime == null
+							  && f.EndTime == null
 							  select f);
 
 			return daysOfWeek;
@@ -42,8 +42,8 @@ namespace Sannel.House.Web.Controllers.api
 		{
 			var first = (from f in context.TemperatureSettings
 						 where f.DayOfWeek == null
-							 && f.Start == null
-							 && f.End == null
+							 && f.StartTime == null
+							 && f.EndTime == null
 						 orderby f.DateModified descending
 						 select f).FirstOrDefault();
 			if (first == null)
@@ -156,8 +156,8 @@ namespace Sannel.House.Web.Controllers.api
 				current.DateModified = DateTime.Now;
 				current.DayOfWeek = updatedValue.DayOfWeek;
 				current.Month = updatedValue.Month;
-				current.End = updatedValue.End;
-				current.Start = updatedValue.Start;
+				current.EndTime = updatedValue.EndTime;
+				current.StartTime = updatedValue.StartTime;
 				current.IsTimeOnly = updatedValue.IsTimeOnly;
 				context.SaveChanges();
 			}
