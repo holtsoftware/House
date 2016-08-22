@@ -105,6 +105,9 @@
     <Compile Include="Controls\TemperaturePicker.xaml.cs">
       <DependentUpon>TemperaturePicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TemperatureSection.xaml.cs">
+      <DependentUpon>TemperatureSection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\ErrorKeyConverter.cs" />
     <Compile Include="Converters\TemperatureConverter.cs" />
     <Compile Include="Extensions.cs" />
@@ -162,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\TemperaturePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TemperatureSection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
