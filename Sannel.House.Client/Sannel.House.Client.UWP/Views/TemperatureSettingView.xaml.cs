@@ -1,5 +1,6 @@
 ﻿using Sannel.House.Client.Interfaces;
 using Sannel.House.Client.Models;
+using Sannel.House.Client.UWP.Controls;
 using Sannel.House.Client.UWP.Models;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace Sannel.House.Client.UWP.Views
 				return ViewModel as ITemperatureSettingViewModel;
 			}
 		}
+		private List<TemperatureSection> sections = new List<TemperatureSection>();
+
 		public TemperatureSettingView()
 		{
 			this.InitializeComponent();
@@ -54,7 +57,7 @@ namespace Sannel.House.Client.UWP.Views
 		{
 			int row = 0;
 			var end = new DateTime(1, 1, 2, 0, 0, 0);
-			for(DateTime dt=new DateTime(1,1,1,0,0,0);dt < end; dt = dt.AddMinutes(30))
+			for (DateTime dt = new DateTime(1, 1, 1, 0, 0, 0); dt < end; dt = dt.AddMinutes(30))
 			{
 				Border b = new Border();
 				b.SetValue(Grid.ColumnProperty, dayOfWeek);
@@ -66,7 +69,7 @@ namespace Sannel.House.Client.UWP.Views
 				};
 				b.Tapped += Border_Tapped;
 
-				if(dt.Minute == 0)
+				if (dt.Minute == 0)
 				{
 					b.Style = tempHourStart ?? (tempHourStart = this.TryFindResource("TempHourStart") as Style);
 					b.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -89,6 +92,74 @@ namespace Sannel.House.Client.UWP.Views
 			}
 		}
 
+		protected override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			TempViewModel.DaySettings.CollectionChanged += daySettings_CollectionChanged;
+			base.OnNavigatedTo(e);
+		}
+
+		protected override void OnNavigatingFrom(NavigatingCancelEventArgs e)
+		{
+			base.OnNavigatingFrom(e);
+			TempViewModel.DaySettings.CollectionChanged -= daySettings_CollectionChanged;
+		}
+		private void daySettings_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			if (e.OldItems != null)
+			{
+				foreach (TemperatureSetting ts in e.OldItems)
+				{
+					removeSection(ts);
+				}
+			}
+			if (e.NewItems != null)
+			{
+				foreach (TemperatureSetting ts in e.NewItems)
+				{
+					addDayTemperatureToWeek(ts);
+				}
+			}
+		}
+
+		private void removeSection(TemperatureSetting temperatureSetting)
+		{
+			for(int i = 0; i < sections.Count; i++)
+			{
+				if(sections[i].DataContext == temperatureSetting)
+				{
+					sections.RemoveAt(i);
+					break;
+				}
+			}
+		}
+
+		private void addDayTemperatureToWeek(TemperatureSetting temperatureSetting)
+		{
+			TemperatureSection tempSection = new TemperatureSection();
+			tempSection.DataContext = temperatureSetting;
+			tempSection.SetValue(Grid.ColumnProperty, (int)temperatureSetting.DayOfWeek);
+
+			int rowSpan = 0;
+			int row = 0;
+			var end = new DateTime(1, 1, 2, 0, 0, 0);
+			for (DateTime dt = new DateTime(1, 1, 1, 0, 0, 0); dt <= end; dt = dt.AddMinutes(30))
+			{
+				if (temperatureSetting.StartTime == dt)
+				{
+					tempSection.SetValue(Grid.RowProperty, row);
+				}
+				if(temperatureSetting.StartTime < dt && temperatureSetting.EndTime >= dt)
+				{
+					rowSpan++;
+				}
+				row++;
+			}
+
+			tempSection.SetValue(Grid.RowSpanProperty, rowSpan);
+			sections.Add(tempSection);
+			Calander.Children.Add(tempSection);
+		}
+
 		private void Button_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
 		{
 		}
@@ -109,10 +180,12 @@ namespace Sannel.House.Client.UWP.Views
 			var tag = b.Tag as BorderTag;
 			TemperatureSetting ts = TempViewModel.CreateNewTemperatureSetting();
 			ts.StartTime = tag.CellDateTime;
+			ts.EndTime = tag.CellDateTime;
+			ts.IsTimeOnly = true;
 			ts.DayOfWeek = (DayOfWeek)tag.DayOfWeek;
 			EditControl.DataContext = ts;
 			var results = await EditControl.ShowAsync();
-			if(results == ContentDialogResult.Primary)
+			if (results == ContentDialogResult.Primary)
 			{
 				await TempViewModel.SaveTemperatureSettingAsync(ts);
 			}

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Sannel.House.Client;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
 
 namespace Sannel.House.Client.ViewModels
 {
@@ -72,7 +73,7 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
-		private async void updateDefaultCommandAction()
+		private void updateDefaultCommandAction()
 		{
 			IsBusy = true;
 			IsBusy = false;
@@ -235,6 +236,18 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets the settings that start on a spacific day and time and end on that same day.
+		/// </summary>
+		/// <value>
+		/// The day settings.
+		/// </value>
+		public ObservableCollection<TemperatureSetting> DaySettings
+		{
+			get;
+			private set;
+		} = new ObservableCollection<TemperatureSetting>();
+
 		private TemperatureSetting getTemperatureSettingForDay(IList<TemperatureSetting> settings, DayOfWeek dow)
 		{
 			var ts = settings.FirstOrDefault(i => i.DayOfWeek == dow
@@ -265,6 +278,17 @@ namespace Sannel.House.Client.ViewModels
 			FridayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Friday);
 			SaturdayDefault = getTemperatureSettingForDay(temperatureSettings, DayOfWeek.Saturday);
 
+			foreach(var f in temperatureSettings)
+			{
+				if(f.DayOfWeek != null 
+					&& f.StartTime != null
+					&& f.EndTime != null
+					&& f.IsTimeOnly)
+				{
+					DaySettings.Add(f);
+				}
+			}
+
 			IsBusy = false;
 		}
 
@@ -283,6 +307,10 @@ namespace Sannel.House.Client.ViewModels
 			else
 			{
 				temperature.Id = await server.PostTemperatureSettingAsync(temperature);
+				if(temperature.DayOfWeek != null && temperature.StartTime != null)
+				{
+					DaySettings.Add(temperature);
+				}
 			}
 			RemoveBackgroundStackNumber();
 		}

@@ -27,7 +27,7 @@ namespace Sannel.House.Client.Services
 			new MenuItem
 			{
 				TextKey = "TempSetting",
-				IconKey = "TempSetting",
+				IconKey = "Setting",
 				Groups=new String[]
 				{
 					"TempSettings",
@@ -37,7 +37,7 @@ namespace Sannel.House.Client.Services
 			new MenuItem
 			{
 				TextKey = "Settings",
-				IconKey = "Settings",
+				IconKey = "Setting",
 				IsBottom = true,
 				Groups = new string[]
 				{
@@ -47,7 +47,7 @@ namespace Sannel.House.Client.Services
 			new MenuItem
 			{
 				TextKey = "LogOff",
-				IconKey = "LogOff",
+				IconKey = "LogOffIcon",
 				IsBottom = true,
 				Groups = new String[]
 				{

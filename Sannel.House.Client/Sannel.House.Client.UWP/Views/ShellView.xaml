@@ -44,6 +44,7 @@
 						<ListView.ItemTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">
+									<SymbolIcon Symbol="{Binding IconKey}" />
 									<TextBlock Text="{Binding TextKey}" />
 								</StackPanel>
 							</DataTemplate>

@@ -38,7 +38,7 @@
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="30" />
-						<RowDefinition Height="30" />
+						<RowDefinition x:Name="DayDefaultsRow" Height="30" />
 						<RowDefinition />
 					</Grid.RowDefinitions>
 					<Border Style="{StaticResource TempHourStart}">
@@ -163,7 +163,7 @@
 					</Border>
 				</Grid>
 				<ScrollViewer Grid.Row="1" HorizontalScrollMode="Auto">
-					<Grid x:Name="Calander">
+					<Grid x:Name="Calander" Height="1440">
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition />
 							<ColumnDefinition />
@@ -174,54 +174,54 @@
 							<ColumnDefinition />
 						</Grid.ColumnDefinitions>
 						<Grid.RowDefinitions>
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
-							<RowDefinition Height="30" />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
+							<RowDefinition />
 						</Grid.RowDefinitions>
 					</Grid>
 				</ScrollViewer>
@@ -240,6 +240,8 @@
 						and keeps SplitView pane always showing inline -->
 						<!--Setter Target="Splitter.DisplayMode" Value="Inline" />
 						<Setter Target="Splitter.IsPaneOpen" Value="True" /-->
+						<Setter Target="DayDefaultsRow.Height" Value="30" />
+						<Setter Target="Calander.Height" Value="1440" />
 						<Setter Target="SunDefault.Orientation" Value="Horizontal" />
 						<Setter Target="SunDefaultSep.Visibility" Value="Visible" />
 						<Setter Target="MonDefault.Orientation" Value="Horizontal" />
@@ -266,6 +268,8 @@
 						and adds dynamic RelativePanel constraints that puts all elements stacked below each other -->
 						<!--Setter Target="Splitter.DisplayMode" Value="Overlay" />
 						<Setter Target="Splitter.IsPaneOpen" Value="False" /-->
+						<Setter Target="DayDefaultsRow.Height" Value="60" />
+						<Setter Target="Calander.Height" Value="2880" />
 						<Setter Target="SunDefault.Orientation" Value="Vertical" />
 						<Setter Target="SunDefaultSep.Visibility" Value="Collapsed" />
 						<Setter Target="MonDefault.Orientation" Value="Vertical" />

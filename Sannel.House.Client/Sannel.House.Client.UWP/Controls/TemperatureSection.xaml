@@ -9,11 +9,35 @@
 	d:DesignHeight="300"
 	d:DesignWidth="400">
 
-	<Grid Background="#880000FF">
-		<StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch" Orientation="Vertical">
+	<Grid Background="#BB0000FF">
+		<StackPanel x:Name="StackText" VerticalAlignment="Top" Padding="0" HorizontalAlignment="Center" Orientation="Horizontal">
 			<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}">2</TextBlock>
-			<TextBlock>/</TextBlock>
-			<TextBlock Text="{Binding CoolTemperatureF, Converter={StaticResource TemperatureConverter}}">2</TextBlock>
+			<TextBlock x:Name="Seperator" Visibility="Visible">/</TextBlock>
+			<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}">2</TextBlock>
 		</StackPanel>
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup>
+				<VisualState>
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="760" />
+					</VisualState.StateTriggers>
+					<VisualState.Setters>
+						<Setter Target="StackText.Orientation" Value="Horizontal" />
+						<Setter Target="StackText.Padding" Value="0" />
+						<Setter Target="Seperator.Visibility" Value="Visible" />
+					</VisualState.Setters>
+				</VisualState>
+				<VisualState>
+					<VisualState.StateTriggers>
+						<AdaptiveTrigger MinWindowWidth="0" />
+					</VisualState.StateTriggers>
+					<VisualState.Setters>
+						<Setter Target="StackText.Orientation" Value="Vertical" />
+						<Setter Target="StackText.Padding" Value="0,20,0,0" />
+						<Setter Target="Seperator.Visibility" Value="Collapsed" />
+					</VisualState.Setters>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
 	</Grid>
 </UserControl>

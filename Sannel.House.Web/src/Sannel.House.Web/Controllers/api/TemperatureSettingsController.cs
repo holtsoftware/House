@@ -34,8 +34,14 @@ namespace Sannel.House.Web.Controllers.api
 							  && f.StartTime == null
 							  && f.EndTime == null
 							  select f);
+			var days = (from f in context.TemperatureSettings
+						where f.DayOfWeek != null
+							&& f.StartTime != null
+							&& f.EndTime != null
+							&& f.IsTimeOnly
+						select f);
 
-			return daysOfWeek;
+			return daysOfWeek.Union(days);
 		}
 
 		private TemperatureSetting getDefault()

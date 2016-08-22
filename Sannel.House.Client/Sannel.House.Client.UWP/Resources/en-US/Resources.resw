@@ -120,6 +120,9 @@
   <data name="ErrorConnectingToTheServer" xml:space="preserve">
     <value>Error connecting to the server</value>
   </data>
+  <data name="HomeIcon" xml:space="preserve">
+    <value>E80F</value>
+  </data>
   <data name="InvalidUsernameOrPassword" xml:space="preserve">
     <value>Invalid Username Or Password</value>
   </data>

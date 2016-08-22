@@ -1,6 +1,7 @@
 ﻿using Sannel.House.Client.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -112,5 +113,16 @@ namespace Sannel.House.Client.Interfaces
 		/// </summary>
 		/// <returns></returns>
 		TemperatureSetting CreateNewTemperatureSetting();
+
+		/// <summary>
+		/// Gets the settings that start on a spacific day and time and end on that same day.
+		/// </summary>
+		/// <value>
+		/// The day settings.
+		/// </value>
+		ObservableCollection<TemperatureSetting> DaySettings
+		{
+			get;
+		}
 	}
 }
