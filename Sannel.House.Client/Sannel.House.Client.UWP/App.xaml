@@ -14,6 +14,7 @@
 					<vm:ViewModelLocator x:Key="Locator" />
 					<converters:ErrorKeyConverter x:Key="ErrorKeyConverter" />
 					<converters:TemperatureConverter x:Key="TemperatureConverter" />
+					<converters:TimeConverter x:Key="TimeConverter" />
 				</ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

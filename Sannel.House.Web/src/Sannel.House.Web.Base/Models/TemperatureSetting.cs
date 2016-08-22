@@ -103,43 +103,43 @@ namespace Sannel.House.Web.Base.Models
 		}
 
 
-		private DateTime? start;
+		private DateTime? startTime;
 		/// <summary>
 		/// Gets or sets the Start
 		/// </summary>
 		/// <value>
 		/// The Start
 		/// </value>
-		[JsonProperty(nameof(Start))]
-		public DateTime? Start
+		[JsonProperty(nameof(StartTime))]
+		public DateTime? StartTime
 		{
 			get
 			{
-				return start;
+				return startTime;
 			}
 			set
 			{
-				Set(ref start, value);
+				Set(ref startTime, value);
 			}
 		}
 
-		private DateTime? end;
+		private DateTime? endTime;
 		/// <summary>
 		/// Gets or sets the End
 		/// </summary>
 		/// <value>
 		/// The End
 		/// </value>
-		[JsonProperty(nameof(End))]
-		public DateTime? End
+		[JsonProperty(nameof(EndTime))]
+		public DateTime? EndTime
 		{
 			get
 			{
-				return end;
+				return endTime;
 			}
 			set
 			{
-				Set(ref end, value);
+				Set(ref endTime, value);
 			}
 		}
 

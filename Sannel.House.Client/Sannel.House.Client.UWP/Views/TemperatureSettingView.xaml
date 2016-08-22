@@ -227,6 +227,7 @@
 				</ScrollViewer>
 			</Grid>
 		</Border>
+		<controls:TemperatureEditControl x:Name="EditControl" Grid.RowSpan="2"></controls:TemperatureEditControl>
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup>
 				<VisualState>
