@@ -1,6 +1,9 @@
-﻿using Sannel.House.Client.UWP.Models;
+﻿using Sannel.House.Client.Interfaces;
+using Sannel.House.Client.Models;
+using Sannel.House.Client.UWP.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -20,6 +23,65 @@ namespace Sannel.House.Client.UWP.Controls
 {
 	public sealed partial class TemperatureEditControl : ContentDialog
 	{
+		private ObservableCollection<TimeItem> startTimes = new ObservableCollection<TimeItem>();
+		private ObservableCollection<TimeItem> endTimes = new ObservableCollection<TimeItem>();
+
+		public ITemperatureSettingViewModel TemperatureViewModel { get; set; }
+
+		private TemperatureSetting temperatureSetting;
+		public TemperatureSetting TemperatureSetting
+		{
+			get
+			{
+				return temperatureSetting;
+			}
+			set
+			{
+				if (temperatureSetting != null)
+				{
+					temperatureSetting.PropertyChanged -= temperatureSetting_PropertyChanged;
+				}
+				temperatureSetting = value;
+				DataContext = temperatureSetting;
+				temperatureSetting.PropertyChanged += temperatureSetting_PropertyChanged;
+			}
+		}
+
+		private void temperatureSetting_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
+			{
+				calculateEndItems();
+			}
+		}
+
+		private void calculateEndItems()
+		{
+			if (TemperatureSetting.StartTime.HasValue)
+			{
+				var end = new DateTime(1, 1, 2, 0, 0, 0);
+				var others = TemperatureViewModel.DaySettings.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
+				endTimes.Clear();
+
+				for (DateTime dt = TemperatureSetting.StartTime.Value.AddMinutes(30); dt <= end; dt = dt.AddMinutes(30))
+				{
+					var ti = new TimeItem
+					{
+						Value = dt
+					};
+					endTimes.Add(ti);
+					if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) != null)
+					{
+						break; // stop after first item that would conflict
+					}
+				}
+			}
+			else
+			{
+				endTimes.Clear();
+			}
+		}
+
 		public TemperatureEditControl()
 		{
 			this.InitializeComponent();
@@ -35,8 +97,16 @@ namespace Sannel.House.Client.UWP.Controls
 			}
 			CoolTemperatureInput.ItemsSource = coolTemps;
 			HeatTemperatureInput.ItemsSource = heatTemps;
-			var startTimeItems = new List<TimeItem>();
-			var endTimeItems = new List<TimeItem>();
+			StartTimeInput.ItemsSource = startTimes;
+			EndTimeInput.ItemsSource = endTimes;
+
+			Opened += TemperatureEditControl_Opened;
+		}
+
+		private void fillStartTimes()
+		{
+			startTimes.Clear();
+			var others = TemperatureViewModel.DaySettings.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
 			var end = new DateTime(1, 1, 2, 0, 0, 0);
 
 			for (DateTime dt = new DateTime(1, 1, 1, 0, 0, 0); dt < end; dt = dt.AddMinutes(30))
@@ -45,20 +115,19 @@ namespace Sannel.House.Client.UWP.Controls
 				{
 					Value = dt
 				};
-				startTimeItems.Add(ti);
-				endTimeItems.Add(ti);
+				if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) == null)
+				{
+					startTimes.Add(ti);
+				}
 			}
-			endTimeItems.Add(new TimeItem { Value = end });
-			StartTimeInput.ItemsSource = startTimeItems;
-			EndTimeInput.ItemsSource = endTimeItems;
-
-			Opened += TemperatureEditControl_Opened;
 		}
 
 		public DateTime StartDateTime { get; set; }
 
 		private void TemperatureEditControl_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
 		{
+			fillStartTimes();
+			calculateEndItems();
 		}
 
 		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

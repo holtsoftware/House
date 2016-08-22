@@ -179,11 +179,12 @@ namespace Sannel.House.Client.UWP.Views
 			Border b = (Border)sender;
 			var tag = b.Tag as BorderTag;
 			TemperatureSetting ts = TempViewModel.CreateNewTemperatureSetting();
+			EditControl.TemperatureViewModel = TempViewModel;
+			EditControl.TemperatureSetting = ts;
 			ts.StartTime = tag.CellDateTime;
 			ts.EndTime = tag.CellDateTime;
 			ts.IsTimeOnly = true;
 			ts.DayOfWeek = (DayOfWeek)tag.DayOfWeek;
-			EditControl.DataContext = ts;
 			var results = await EditControl.ShowAsync();
 			if (results == ContentDialogResult.Primary)
 			{

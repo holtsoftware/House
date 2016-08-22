@@ -9,11 +9,11 @@
 	d:DesignHeight="300"
 	d:DesignWidth="400">
 
-	<Grid Background="#BB0000FF">
+	<Grid Background="#990000FF" BorderBrush="Black" BorderThickness="1">
 		<StackPanel x:Name="StackText" VerticalAlignment="Top" Padding="0" HorizontalAlignment="Center" Orientation="Horizontal">
-			<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}">2</TextBlock>
-			<TextBlock x:Name="Seperator" Visibility="Visible">/</TextBlock>
-			<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}">2</TextBlock>
+			<TextBlock Text="{Binding CoolTemperatureC, Converter={StaticResource TemperatureConverter}}" Foreground="White">2</TextBlock>
+			<TextBlock x:Name="Seperator" Visibility="Visible" Foreground="White">/</TextBlock>
+			<TextBlock Text="{Binding HeatTemperatureC, Converter={StaticResource TemperatureConverter}}" Foreground="White">2</TextBlock>
 		</StackPanel>
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup>
