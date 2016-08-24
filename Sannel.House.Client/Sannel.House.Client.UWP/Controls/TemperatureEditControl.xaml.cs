@@ -41,37 +41,25 @@ namespace Sannel.House.Client.UWP.Controls
 			}
 			set
 			{
+				if(temperatureSetting != null)
+				{
+					temperatureSetting.PropertyChanged -= temperatureSetting_PropertyChanged;
+				}
 				temperatureSetting = value;
 				TemperatureEditViewModel.TemperatureSetting = value;
+				value.PropertyChanged += temperatureSetting_PropertyChanged;
 			}
 		}
 
-		//private void calculateEndItems()
-		//{
-		//	if (TemperatureSetting.StartTime.HasValue)
-		//	{
-		//		var end = new DateTime(1, 1, 2, 0, 0, 0);
-		//		var others = TemperatureViewModel.DaySettings.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
-		//		endTimes.Clear();
+		private void temperatureSetting_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if(String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
+			{
+				StartTimeInput.SelectedItem = temperatureSetting.StartTime;
+			}
+		}
 
-		//		for (DateTime dt = TemperatureSetting.StartTime.Value.AddMinutes(30); dt <= end; dt = dt.AddMinutes(30))
-		//		{
-		//			var ti = new TimeItem
-		//			{
-		//				Value = dt
-		//			};
-		//			endTimes.Add(ti);
-		//			if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) != null)
-		//			{
-		//				break; // stop after first item that would conflict
-		//			}
-		//		}
-		//	}
-		//	else
-		//	{
-		//		endTimes.Clear();
-		//	}
-		//}
+		
 
 		public TemperatureEditControl()
 		{
@@ -95,6 +83,7 @@ namespace Sannel.House.Client.UWP.Controls
 
 		private void TemperatureEditControl_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
 		{
+			TemperatureSetting.NotifyPropertyChanged(nameof(TemperatureSetting.StartTime));
 		}
 
 		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -103,6 +92,15 @@ namespace Sannel.House.Client.UWP.Controls
 
 		private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
+		}
+
+		private void StartTimeInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			DateTime? st = StartTimeInput.SelectedItem as DateTime?;
+			if(st != TemperatureSetting.StartTime)
+			{
+				TemperatureSetting.StartTime = st;
+			}
 		}
 	}
 }

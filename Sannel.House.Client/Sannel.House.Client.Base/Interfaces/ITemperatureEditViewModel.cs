@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Sannel.House.Client.Interfaces
 {
@@ -33,13 +34,14 @@ namespace Sannel.House.Client.Interfaces
 		}
 
 		/// <summary>
-		/// Sets the current day settings used to removed used starttimes and determan the last end times.
+		/// Gets or sets the temperature setting view model.
 		/// </summary>
 		/// <value>
-		/// The current day settings.
+		/// The temperature setting view model.
 		/// </value>
-		ICollection<TemperatureSetting> CurrentDaySettings
+		ITemperatureSettingViewModel TemperatureSettingViewModel
 		{
+			get;
 			set;
 		}
 
@@ -56,9 +58,14 @@ namespace Sannel.House.Client.Interfaces
 		}
 
 		/// <summary>
-		/// Saves the temperature setting asynchronous.
+		/// Gets the save temperature setting command.
 		/// </summary>
-		/// <returns></returns>
-		Task SaveTemperatureSettingAsync();
+		/// <value>
+		/// The save temperature setting command.
+		/// </value>
+		ICommand SaveTemperatureSettingCommand
+		{
+			get;
+		}
 	}
 }

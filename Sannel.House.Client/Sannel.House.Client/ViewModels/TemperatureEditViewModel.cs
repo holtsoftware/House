@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Sannel.House.Client.Models;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
 
 namespace Sannel.House.Client.ViewModels
 {
@@ -16,23 +18,22 @@ namespace Sannel.House.Client.ViewModels
 		{
 		}
 
-		private ICollection<TemperatureSetting> currentDaySettings;
+		private ITemperatureSettingViewModel temperatureSettingViewModel;
 		/// <summary>
-		/// Sets the current day settings used to removed used starttimes and determan the last end times.
+		/// Gets or sets the TemperatureSettingViewModel.
 		/// </summary>
 		/// <value>
-		/// The current day settings.
+		/// The TemperatureSettingViewModel
 		/// </value>
-		public ICollection<TemperatureSetting> CurrentDaySettings
+		public ITemperatureSettingViewModel TemperatureSettingViewModel
 		{
-			private get
+			get
 			{
-				return currentDaySettings;
+				return temperatureSettingViewModel;
 			}
 			set
 			{
-				Set(ref currentDaySettings, value);
-				updateStartTime();
+				Set(ref temperatureSettingViewModel, value);
 			}
 		}
 
@@ -84,13 +85,43 @@ namespace Sannel.House.Client.ViewModels
 			}
 		}
 
+
 		private void temperatureSetting_PropertyChange(object sender, PropertyChangedEventArgs e)
 		{
+			if(String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
+			{
+				calculateEndItems();
+			}
+		}
+
+		private void calculateEndItems()
+		{
+			var cds = TemperatureSettingViewModel.DaySettings;
+			var ts = TemperatureSetting;
+			if (cds != null && ts?.StartTime.HasValue == true)
+			{
+				var end = new DateTime(1, 1, 2, 0, 0, 0);
+				var others = cds.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
+				EndTimes.Clear();
+
+				for (DateTime dt = TemperatureSetting.StartTime.Value.AddMinutes(30); dt <= end; dt = dt.AddMinutes(30))
+				{
+					EndTimes.Add(dt);
+					if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) != null)
+					{
+						break; // stop after first item that would conflict
+					}
+				}
+			}
+			else
+			{
+				EndTimes.Clear();
+			}
 		}
 
 		private void updateStartTime()
 		{
-			var cds = CurrentDaySettings;
+			var cds = TemperatureSettingViewModel.DaySettings;
 			var ts = TemperatureSetting;
 			if(cds != null && ts != null)
 			{
@@ -105,7 +136,10 @@ namespace Sannel.House.Client.ViewModels
 						StartTimes.Add(dt);
 					}
 				}
+
+				TemperatureSetting.NotifyPropertyChanged(nameof(TemperatureSetting.StartTime));
 			}
+
 		}
 
 		/// <summary>
@@ -125,9 +159,19 @@ namespace Sannel.House.Client.ViewModels
 		/// Saves the temperature setting asynchronous.
 		/// </summary>
 		/// <returns></returns>
-		public async Task SaveTemperatureSettingAsync()
+		private async void saveTemperatureSetting()
 		{
-			await Task.Delay(1);
+			await TemperatureSettingViewModel.SaveTemperatureSettingAsync(TemperatureSetting);
+		}
+
+		private RelayCommand saveTemperatureSettingCommand;
+		
+		public ICommand SaveTemperatureSettingCommand
+		{
+			get
+			{
+				return saveTemperatureSettingCommand ?? (saveTemperatureSettingCommand = new RelayCommand(saveTemperatureSetting));
+			}
 		}
 	}
 }

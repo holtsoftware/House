@@ -12,13 +12,10 @@ namespace Sannel.House.Client.UWP.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
-			if (value != null)
+			var dt = value as DateTime?;
+			if (dt != null)
 			{
-				var dt = (DateTime)value;
-				return new TimeItem()
-				{
-					Value = new DateTime(1, 1, 1, dt.Hour, dt.Minute, 0)
-				};
+				return dt.Value.ToString("hh:mm t");
 			}
 			else
 			{
@@ -28,15 +25,7 @@ namespace Sannel.House.Client.UWP.Converters
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)
 		{
-			if (value != null)
-			{
-				var dt = (TimeItem)value;
-				return dt.Value;
-			}
-			else
-			{
-				return null;
-			}
+			return null;
 		}
 	}
 }
