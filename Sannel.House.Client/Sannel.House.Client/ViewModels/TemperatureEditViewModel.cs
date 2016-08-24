@@ -80,6 +80,7 @@ namespace Sannel.House.Client.ViewModels
 				}
 				Set(ref temperatureSetting, value);
 				temperatureSetting.PropertyChanged += temperatureSetting_PropertyChange;
+				updateStartTime();
 			}
 		}
 

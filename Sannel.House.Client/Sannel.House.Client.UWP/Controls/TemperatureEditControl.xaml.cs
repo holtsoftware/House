@@ -104,6 +104,5 @@ namespace Sannel.House.Client.UWP.Controls
 		private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
 		}
-
 	}
 }

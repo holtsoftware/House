@@ -179,6 +179,7 @@ namespace Sannel.House.Client.UWP.Views
 			Border b = (Border)sender;
 			var tag = b.Tag as BorderTag;
 			TemperatureSetting ts = TempViewModel.CreateNewTemperatureSetting();
+			EditControl.TemperatureEditViewModel.CurrentDaySettings = TempViewModel.DaySettings;
 			EditControl.TemperatureSetting = ts;
 			ts.StartTime = tag.CellDateTime;
 			ts.EndTime = tag.CellDateTime;
@@ -189,8 +190,6 @@ namespace Sannel.House.Client.UWP.Views
 			{
 				await TempViewModel.SaveTemperatureSettingAsync(ts);
 			}
-
-			EditControl.DataContext = null;
 		}
 	}
 }
