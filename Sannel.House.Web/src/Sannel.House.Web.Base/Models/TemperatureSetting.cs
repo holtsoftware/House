@@ -262,7 +262,7 @@ namespace Sannel.House.Web.Base.Models
 				NotifyPropertyChanged(propName);
 			}
 		}
-		protected void NotifyPropertyChanged([CallerMemberName]String memberName = null)
+		public void NotifyPropertyChanged([CallerMemberName]String memberName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
 		}

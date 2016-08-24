@@ -35,6 +35,7 @@ namespace Sannel.House.Client
 				Container.RegisterType<IServerContext, ServerContext>();
 				Container.RegisterType<IHomeViewModel, HomeViewModel>();
 				Container.RegisterType<ITemperatureSettingViewModel, TemperatureSettingViewModel>();
+				Container.RegisterType<ITemperatureEditViewModel, TemperatureEditViewModel>();
 			}
 			Container.RegisterType<IUserManager, UserManager>(new ContainerControlledLifetimeManager());
 		}
@@ -54,6 +55,14 @@ namespace Sannel.House.Client
 			get
 			{
 				return Container.Resolve<ITemperatureSettingViewModel>();
+			}
+		}
+
+		public static ITemperatureEditViewModel TemperatureEditViewModel
+		{
+			get
+			{
+				return Container.Resolve<ITemperatureEditViewModel>();
 			}
 		}
 

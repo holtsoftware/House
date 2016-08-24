@@ -44,6 +44,7 @@
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\TemperatureEditViewModel.cs" />
     <Compile Include="ViewModels\TemperatureSettingViewModel.cs" />
   </ItemGroup>
   <ItemGroup />

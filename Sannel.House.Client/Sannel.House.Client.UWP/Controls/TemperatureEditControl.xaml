@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+	DataContext="{Binding TemperatureEditViewModel, Source={StaticResource Locator}}"
     Title="1 Temperature Edit"
     PrimaryButtonText="2 Save"
     SecondaryButtonText="3 Cancel"
@@ -25,18 +26,13 @@
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<TextBlock>1. Cool</TextBlock>
-		<ComboBox Grid.Row="1" x:Name="CoolTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{Binding CoolTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
+		<ComboBox Grid.Row="1" x:Name="CoolTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{Binding TemperatureSetting.CoolTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
 		</ComboBox>
 		<TextBlock Grid.Column="2">2. Heat</TextBlock>
-		<ComboBox Grid.Column="2" Grid.Row="1" x:Name="HeatTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{Binding HeatTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
+		<ComboBox Grid.Column="2" Grid.Row="1" x:Name="HeatTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{Binding TemperatureSetting.HeatTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
 		</ComboBox>
 		<TextBlock Grid.Row="2">3 Start Time</TextBlock>
-		<ComboBox Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="StartTimeInput" SelectedItem="{Binding StartTime, Mode=TwoWay, Converter={StaticResource TimeConverter}}">
-			<ComboBox.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Display}" />
-				</DataTemplate>
-			</ComboBox.ItemTemplate>
+		<ComboBox Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="StartTimeInput" ItemsSource="{Binding StartTimes}">
 		</ComboBox>
 		<TextBlock Grid.Row="2" Grid.Column="2">4 End Time</TextBlock>
 		<ComboBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="EndTimeInput" SelectedItem="{Binding EndTime, Mode=TwoWay, Converter={StaticResource TimeConverter}}">

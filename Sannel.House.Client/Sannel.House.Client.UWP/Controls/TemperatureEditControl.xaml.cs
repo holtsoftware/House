@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -23,10 +24,13 @@ namespace Sannel.House.Client.UWP.Controls
 {
 	public sealed partial class TemperatureEditControl : ContentDialog
 	{
-		private ObservableCollection<TimeItem> startTimes = new ObservableCollection<TimeItem>();
-		private ObservableCollection<TimeItem> endTimes = new ObservableCollection<TimeItem>();
-
-		public ITemperatureSettingViewModel TemperatureViewModel { get; set; }
+		public ITemperatureEditViewModel TemperatureEditViewModel
+		{
+			get
+			{
+				return (ITemperatureEditViewModel)DataContext;
+			}
+		}
 
 		private TemperatureSetting temperatureSetting;
 		public TemperatureSetting TemperatureSetting
@@ -37,50 +41,37 @@ namespace Sannel.House.Client.UWP.Controls
 			}
 			set
 			{
-				if (temperatureSetting != null)
-				{
-					temperatureSetting.PropertyChanged -= temperatureSetting_PropertyChanged;
-				}
 				temperatureSetting = value;
-				DataContext = temperatureSetting;
-				temperatureSetting.PropertyChanged += temperatureSetting_PropertyChanged;
+				TemperatureEditViewModel.TemperatureSetting = value;
 			}
 		}
 
-		private void temperatureSetting_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if (String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
-			{
-				calculateEndItems();
-			}
-		}
+		//private void calculateEndItems()
+		//{
+		//	if (TemperatureSetting.StartTime.HasValue)
+		//	{
+		//		var end = new DateTime(1, 1, 2, 0, 0, 0);
+		//		var others = TemperatureViewModel.DaySettings.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
+		//		endTimes.Clear();
 
-		private void calculateEndItems()
-		{
-			if (TemperatureSetting.StartTime.HasValue)
-			{
-				var end = new DateTime(1, 1, 2, 0, 0, 0);
-				var others = TemperatureViewModel.DaySettings.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
-				endTimes.Clear();
-
-				for (DateTime dt = TemperatureSetting.StartTime.Value.AddMinutes(30); dt <= end; dt = dt.AddMinutes(30))
-				{
-					var ti = new TimeItem
-					{
-						Value = dt
-					};
-					endTimes.Add(ti);
-					if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) != null)
-					{
-						break; // stop after first item that would conflict
-					}
-				}
-			}
-			else
-			{
-				endTimes.Clear();
-			}
-		}
+		//		for (DateTime dt = TemperatureSetting.StartTime.Value.AddMinutes(30); dt <= end; dt = dt.AddMinutes(30))
+		//		{
+		//			var ti = new TimeItem
+		//			{
+		//				Value = dt
+		//			};
+		//			endTimes.Add(ti);
+		//			if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) != null)
+		//			{
+		//				break; // stop after first item that would conflict
+		//			}
+		//		}
+		//	}
+		//	else
+		//	{
+		//		endTimes.Clear();
+		//	}
+		//}
 
 		public TemperatureEditControl()
 		{
@@ -97,37 +88,13 @@ namespace Sannel.House.Client.UWP.Controls
 			}
 			CoolTemperatureInput.ItemsSource = coolTemps;
 			HeatTemperatureInput.ItemsSource = heatTemps;
-			StartTimeInput.ItemsSource = startTimes;
-			EndTimeInput.ItemsSource = endTimes;
 
 			Opened += TemperatureEditControl_Opened;
 		}
 
-		private void fillStartTimes()
-		{
-			startTimes.Clear();
-			var others = TemperatureViewModel.DaySettings.Where(i => i.DayOfWeek == TemperatureSetting.DayOfWeek && i != TemperatureSetting).ToList();
-			var end = new DateTime(1, 1, 2, 0, 0, 0);
-
-			for (DateTime dt = new DateTime(1, 1, 1, 0, 0, 0); dt < end; dt = dt.AddMinutes(30))
-			{
-				var ti = new TimeItem
-				{
-					Value = dt
-				};
-				if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) == null)
-				{
-					startTimes.Add(ti);
-				}
-			}
-		}
-
-		public DateTime StartDateTime { get; set; }
 
 		private void TemperatureEditControl_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
 		{
-			fillStartTimes();
-			calculateEndItems();
 		}
 
 		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -137,5 +104,6 @@ namespace Sannel.House.Client.UWP.Controls
 		private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
 		}
+
 	}
 }

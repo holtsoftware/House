@@ -23,6 +23,7 @@ namespace Sannel.House.Client.UWP.Models
 			{
 				return Value == ((TimeItem)obj).Value;
 			}
+
 			return base.Equals(obj);
 		}
 

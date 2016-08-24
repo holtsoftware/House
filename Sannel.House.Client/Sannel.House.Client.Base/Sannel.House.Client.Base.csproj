@@ -52,6 +52,7 @@
     <Compile Include="Interfaces\ISettings.cs" />
     <Compile Include="Interfaces\ISettingsViewModel.cs" />
     <Compile Include="Interfaces\IShellViewModel.cs" />
+    <Compile Include="Interfaces\ITemperatureEditViewModel.cs" />
     <Compile Include="Interfaces\ITemperatureSettingViewModel.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Interfaces\IUserManager.cs" />
