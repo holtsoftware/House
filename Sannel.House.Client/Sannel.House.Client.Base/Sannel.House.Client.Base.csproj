@@ -56,6 +56,7 @@
     <Compile Include="Interfaces\ITemperatureSettingViewModel.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Interfaces\IUserManager.cs" />
+    <Compile Include="Models\AsyncRelayCommand.cs" />
     <Compile Include="Models\BasePropertyChange.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

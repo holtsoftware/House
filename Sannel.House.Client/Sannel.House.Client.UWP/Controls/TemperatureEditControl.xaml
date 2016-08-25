@@ -6,11 +6,11 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
-	DataContext="{Binding TemperatureEditViewModel, Source={StaticResource Locator}}"
+	xmlns:controls="using:Sannel.House.Client.UWP.Controls"
 	Title="1 Temperature Edit"
 	PrimaryButtonText="2 Save"
+	PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
 	SecondaryButtonText="3 Cancel"
-	PrimaryButtonCommand="{Binding SaveTemperatureSettingCommand}"
 	SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
 	<Grid>
@@ -20,27 +20,29 @@
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition />
 			<RowDefinition />
 			<RowDefinition />
 			<RowDefinition />
 		</Grid.RowDefinitions>
-		<TextBlock>1. Cool</TextBlock>
-		<ComboBox Grid.Row="1" x:Name="CoolTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{Binding TemperatureSetting.CoolTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
+		<controls:ErrorControl Grid.Row="0" Grid.ColumnSpan="3"/>
+		<TextBlock Grid.Row="1">1. Cool</TextBlock>
+		<ComboBox Grid.Row="2" x:Name="CoolTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{x:Bind TemperatureEditViewModel.TemperatureSetting.CoolTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
 		</ComboBox>
-		<TextBlock Grid.Column="2">2. Heat</TextBlock>
-		<ComboBox Grid.Column="2" Grid.Row="1" x:Name="HeatTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedItem="{Binding TemperatureSetting.HeatTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
+		<TextBlock Grid.Row="1" Grid.Column="2">2. Heat</TextBlock>
+		<ComboBox Grid.Column="2" Grid.Row="2" x:Name="HeatTemperatureInput" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" SelectedValue="{x:Bind TemperatureEditViewModel.TemperatureSetting.HeatTemperatureC, Mode=TwoWay, Converter={StaticResource TemperatureConverter}}">
 		</ComboBox>
-		<TextBlock Grid.Row="2">3 Start Time</TextBlock>
-		<ComboBox Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="StartTimeInput" ItemsSource="{Binding StartTimes}" SelectionChanged="StartTimeInput_SelectionChanged">
+		<TextBlock Grid.Row="3">3 Start Time</TextBlock>
+		<ComboBox Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="StartTimeInput" ItemsSource="{x:Bind TemperatureEditViewModel.StartTimes}" SelectedIndex="{x:Bind TemperatureEditViewModel.StartTimeIndex, Mode=TwoWay}">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock Text="{Binding Converter={StaticResource TimeConverter}}" />
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<TextBlock Grid.Row="2" Grid.Column="2">4 End Time</TextBlock>
-		<ComboBox Grid.Row="3" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="EndTimeInput" ItemsSource="{Binding EndTimes}" SelectedItem="{Binding TemperatureSetting.EndTime, Mode=TwoWay}">
+		<TextBlock Grid.Row="3" Grid.Column="2">4 End Time</TextBlock>
+		<ComboBox Grid.Row="4" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="EndTimeInput" ItemsSource="{x:Bind TemperatureEditViewModel.EndTimes, Mode=OneWay}">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock Text="{Binding Converter={StaticResource TimeConverter}}" />

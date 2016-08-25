@@ -12,7 +12,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace Sannel.House.Client.ViewModels
 {
-	public class TemperatureEditViewModel : BaseViewModel, ITemperatureEditViewModel
+	public class TemperatureEditViewModel : ErrorViewModel, ITemperatureEditViewModel
 	{
 		public TemperatureEditViewModel(INavigationService navigationService) : base(navigationService)
 		{
@@ -57,7 +57,41 @@ namespace Sannel.House.Client.ViewModels
 		public ObservableCollection<DateTime> StartTimes
 		{
 			get;
-		} = new ObservableCollection<DateTime>();
+		} = new ObservableCollection<DateTime>()
+		{
+			new DateTime(1,1,1,0,0,0)
+		};
+
+
+		private int startTimeIndex;
+		/// <summary>
+		/// Gets or sets the StartTimeIndex.
+		/// </summary>
+		/// <value>
+		/// The StartTimeIndex
+		/// </value>
+		public int StartTimeIndex
+		{
+			get
+			{
+				return startTimeIndex;
+			}
+			set
+			{
+				Set(ref startTimeIndex, value);
+				if(TemperatureSetting != null)
+				{
+					if (StartTimeIndex > -1)
+					{
+						TemperatureSetting.StartTime = StartTimes[StartTimeIndex];
+					}
+					else
+					{
+						TemperatureSetting.StartTime = null;
+					}
+				}
+			}
+		}
 
 
 		private TemperatureSetting temperatureSetting;
@@ -90,6 +124,14 @@ namespace Sannel.House.Client.ViewModels
 		{
 			if(String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
 			{
+				if (TemperatureSetting.StartTime.HasValue)
+				{
+					var i = StartTimes.IndexOf(TemperatureSetting.StartTime.Value);
+					if (StartTimeIndex != i)
+					{
+						StartTimeIndex = i;
+					}
+				}
 				calculateEndItems();
 			}
 		}
@@ -134,24 +176,25 @@ namespace Sannel.House.Client.ViewModels
 					if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) == null)
 					{
 						StartTimes.Add(dt);
+						if(dt == TemperatureSetting?.StartTime)
+						{
+							StartTimeIndex = StartTimes.Count - 1;
+						}
 					}
 				}
-
-				TemperatureSetting.NotifyPropertyChanged(nameof(TemperatureSetting.StartTime));
 			}
-
 		}
 
-		/// <summary>
-		/// Navigateds to.
-		/// </summary>
-		/// <param name="arg">The argument.</param>
-		public override void NavigatedTo(object arg)
+		private void verifyTemperatureSetting()
 		{
-			base.NavigatedTo(arg);
-			if(arg is TemperatureSetting)
+			ErrorKeys.Clear();
+			if(TemperatureSetting.StartTime == null)
 			{
-				TemperatureSetting = (TemperatureSetting)arg;
+				ErrorKeys.Add("StartTimeIsRequired");
+			}
+			if(TemperatureSetting.EndTime == null)
+			{
+				ErrorKeys.Add("EndTimeIsRequired");
 			}
 		}
 
@@ -159,18 +202,26 @@ namespace Sannel.House.Client.ViewModels
 		/// Saves the temperature setting asynchronous.
 		/// </summary>
 		/// <returns></returns>
-		private async void saveTemperatureSetting()
+		private async Task saveTemperatureSetting(object obj)
 		{
-			await TemperatureSettingViewModel.SaveTemperatureSettingAsync(TemperatureSetting);
+			verifyTemperatureSetting();
+			if (HasErrors)
+			{
+				return;
+			}
+			else
+			{
+				await TemperatureSettingViewModel.SaveTemperatureSettingAsync(TemperatureSetting);
+			}
 		}
 
-		private RelayCommand saveTemperatureSettingCommand;
+		private AsyncRelayCommand saveTemperatureSettingCommand;
 		
-		public ICommand SaveTemperatureSettingCommand
+		public AsyncRelayCommand SaveTemperatureSettingCommand
 		{
 			get
 			{
-				return saveTemperatureSettingCommand ?? (saveTemperatureSettingCommand = new RelayCommand(saveTemperatureSetting));
+				return saveTemperatureSettingCommand ?? (saveTemperatureSettingCommand = new AsyncRelayCommand(saveTemperatureSetting));
 			}
 		}
 	}

@@ -303,6 +303,8 @@ namespace Sannel.House.Client.ViewModels
 			if(temperature.Id > 0)
 			{
 				await server.PutTemperatureSettingAsync(temperature);
+				DaySettings.Remove(temperature);
+				DaySettings.Add(temperature);
 			}
 			else
 			{

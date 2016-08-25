@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -127,7 +128,10 @@ namespace Sannel.House.Client.UWP.Views
 			{
 				if(sections[i].DataContext == temperatureSetting)
 				{
+					var section = sections[i];
+					section.Tapped -= tempSection_Tapped;
 					sections.RemoveAt(i);
+					Calander.Children.Remove(section);
 					break;
 				}
 			}
@@ -156,8 +160,18 @@ namespace Sannel.House.Client.UWP.Views
 			}
 
 			tempSection.SetValue(Grid.RowSpanProperty, rowSpan);
+			tempSection.Tapped += tempSection_Tapped;
 			sections.Add(tempSection);
 			Calander.Children.Add(tempSection);
+		}
+
+		private async void tempSection_Tapped(object sender, TappedRoutedEventArgs e)
+		{
+			TemperatureSection section = ((TemperatureSection)sender);
+			var ts = (TemperatureSetting)section.DataContext;
+			EditControl.TemperatureEditViewModel.TemperatureSettingViewModel = TempViewModel;
+			EditControl.TemperatureEditViewModel.TemperatureSetting = ts;
+			await EditControl.ShowAsync();
 		}
 
 		private void Button_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
@@ -182,7 +196,7 @@ namespace Sannel.House.Client.UWP.Views
 			ts.IsTimeOnly = true;
 			ts.DayOfWeek = (DayOfWeek)tag.DayOfWeek;
 			EditControl.TemperatureEditViewModel.TemperatureSettingViewModel = TempViewModel;
-			EditControl.TemperatureSetting = ts;
+			EditControl.TemperatureEditViewModel.TemperatureSetting = ts;
 			ts.StartTime = tag.CellDateTime;
 			var results = await EditControl.ShowAsync();
 		}

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EndTimeIsRequired" xml:space="preserve">
+    <value>End Time is required.</value>
+  </data>
   <data name="ErrorConnectingToTheServer" xml:space="preserve">
     <value>Error connecting to the server</value>
   </data>
@@ -131,6 +134,9 @@
   </data>
   <data name="ServerUrlError" xml:space="preserve">
     <value>Server Url is invalid</value>
+  </data>
+  <data name="StartTimeIsRequired" xml:space="preserve">
+    <value>Start Time is required.</value>
   </data>
   <data name="UsernameMustBeEmail" xml:space="preserve">
     <value>Username must be a valid email address.</value>

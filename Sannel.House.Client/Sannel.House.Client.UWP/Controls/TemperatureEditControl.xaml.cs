@@ -24,42 +24,14 @@ namespace Sannel.House.Client.UWP.Controls
 {
 	public sealed partial class TemperatureEditControl : ContentDialog
 	{
+		private ITemperatureEditViewModel temperatureEditViewModel;
 		public ITemperatureEditViewModel TemperatureEditViewModel
 		{
 			get
 			{
-				return (ITemperatureEditViewModel)DataContext;
+				return temperatureEditViewModel ?? (temperatureEditViewModel = ViewModelLocator.TemperatureEditViewModel);
 			}
 		}
-
-		private TemperatureSetting temperatureSetting;
-		public TemperatureSetting TemperatureSetting
-		{
-			get
-			{
-				return temperatureSetting;
-			}
-			set
-			{
-				if(temperatureSetting != null)
-				{
-					temperatureSetting.PropertyChanged -= temperatureSetting_PropertyChanged;
-				}
-				temperatureSetting = value;
-				TemperatureEditViewModel.TemperatureSetting = value;
-				value.PropertyChanged += temperatureSetting_PropertyChanged;
-			}
-		}
-
-		private void temperatureSetting_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			if(String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
-			{
-				StartTimeInput.SelectedItem = temperatureSetting.StartTime;
-			}
-		}
-
-		
 
 		public TemperatureEditControl()
 		{
@@ -77,30 +49,33 @@ namespace Sannel.House.Client.UWP.Controls
 			CoolTemperatureInput.ItemsSource = coolTemps;
 			HeatTemperatureInput.ItemsSource = heatTemps;
 
+			DataContext = TemperatureEditViewModel;
 			Opened += TemperatureEditControl_Opened;
 		}
 
 
 		private void TemperatureEditControl_Opened(ContentDialog sender, ContentDialogOpenedEventArgs args)
 		{
-			TemperatureSetting.NotifyPropertyChanged(nameof(TemperatureSetting.StartTime));
 		}
 
-		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+		private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
+			var deferral = args.GetDeferral();
+			var command = TemperatureEditViewModel.SaveTemperatureSettingCommand;
+			if (command.CanExecute(null))
+			{
+				await command.ExecuteAsync(null);
+			}
+			if (TemperatureEditViewModel.HasErrors)
+			{
+				args.Cancel = true;
+			}
+			deferral.Complete();
 		}
 
 		private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
 		}
 
-		private void StartTimeInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			DateTime? st = StartTimeInput.SelectedItem as DateTime?;
-			if(st != TemperatureSetting.StartTime)
-			{
-				TemperatureSetting.StartTime = st;
-			}
-		}
 	}
 }

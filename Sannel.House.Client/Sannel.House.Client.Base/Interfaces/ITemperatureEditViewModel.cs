@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace Sannel.House.Client.Interfaces
 {
-	public interface ITemperatureEditViewModel : IBaseViewModel
+	public interface ITemperatureEditViewModel : IErrorViewModel, IBaseViewModel
 	{
 		/// <summary>
 		/// Gets the start times.
@@ -46,6 +46,18 @@ namespace Sannel.House.Client.Interfaces
 		}
 
 		/// <summary>
+		/// Gets or sets the start index of the time.
+		/// </summary>
+		/// <value>
+		/// The start index of the time.
+		/// </value>
+		int StartTimeIndex
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// Gets or sets the temperature setting.
 		/// </summary>
 		/// <value>
@@ -63,7 +75,7 @@ namespace Sannel.House.Client.Interfaces
 		/// <value>
 		/// The save temperature setting command.
 		/// </value>
-		ICommand SaveTemperatureSettingCommand
+		AsyncRelayCommand SaveTemperatureSettingCommand
 		{
 			get;
 		}
