@@ -205,6 +205,9 @@ namespace Sannel.House.Client.Droid
 			// aapt resource value: 0x7f060001
 			public const int ApplicationName = 2131099649;
 			
+			// aapt resource value: 0x7f06000a
+			public const int EndTimeIsRequired = 2131099658;
+			
 			// aapt resource value: 0x7f060005
 			public const int ErrorConnectingToTheServer = 2131099653;
 			
@@ -219,6 +222,9 @@ namespace Sannel.House.Client.Droid
 			
 			// aapt resource value: 0x7f060002
 			public const int ServerUrlError = 2131099650;
+			
+			// aapt resource value: 0x7f060009
+			public const int StartTimeIsRequired = 2131099657;
 			
 			// aapt resource value: 0x7f060003
 			public const int UsernameMustBeEmail = 2131099651;

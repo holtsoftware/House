@@ -85,11 +85,28 @@ namespace Sannel.House.Client.ViewModels
 					{
 						TemperatureSetting.StartTime = StartTimes[StartTimeIndex];
 					}
-					else
-					{
-						TemperatureSetting.StartTime = null;
-					}
+					calculateEndItems();
 				}
+			}
+		}
+
+
+		private int endTimeIndex;
+		/// <summary>
+		/// Gets or sets the EndTimeIndex
+		/// </summary>
+		/// <value>
+		/// The EndTimeIndex
+		/// </value>
+		public int EndTimeIndex
+		{
+			get
+			{
+				return endTimeIndex;
+			}
+			set
+			{
+				Set(ref endTimeIndex, value);
 			}
 		}
 

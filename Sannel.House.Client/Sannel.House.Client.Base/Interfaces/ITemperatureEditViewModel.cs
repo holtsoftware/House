@@ -58,6 +58,18 @@ namespace Sannel.House.Client.Interfaces
 		}
 
 		/// <summary>
+		/// Gets or sets the end index of the time.
+		/// </summary>
+		/// <value>
+		/// The end index of the time.
+		/// </value>
+		int EndTimeIndex
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
 		/// Gets or sets the temperature setting.
 		/// </summary>
 		/// <value>
