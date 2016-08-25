@@ -205,3 +205,4 @@ connectionStrings.config
 
 # Developer settings
 appsettings.development.json
+BundleArtifacts/

@@ -328,5 +328,23 @@ namespace Sannel.House.Client.ViewModels
 			ts.HeatTemperatureC = ((double)DefaultHeat).FahrenheitToCelsius();
 			return ts;	
 		}
+
+		/// <summary>
+		/// Deletes the tempeerature setting asynchronous.
+		/// </summary>
+		/// <param name="temperature">The temperature.</param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		public async Task DeleteTemperatureSettingAsync(TemperatureSetting temperature)
+		{
+			if(temperature == null)
+			{
+				throw new ArgumentNullException(nameof(temperature));
+			}
+			AddBackgroudStackNumber();
+			await server.DeleteTemperatureSettingAsync(temperature.Id);
+			DaySettings.Remove(temperature);
+			RemoveBackgroundStackNumber();
+		}
 	}
 }

@@ -109,6 +109,13 @@ namespace Sannel.House.Client.Interfaces
 		Task SaveTemperatureSettingAsync(TemperatureSetting temperature);
 
 		/// <summary>
+		/// Deletes the tempeerature setting asynchronous.
+		/// </summary>
+		/// <param name="temperature">The temperature.</param>
+		/// <returns></returns>
+		Task DeleteTemperatureSettingAsync(TemperatureSetting temperature);
+
+		/// <summary>
 		/// Creates the new temperature setting.
 		/// </summary>
 		/// <returns></returns>

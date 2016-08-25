@@ -262,5 +262,27 @@ namespace Sannel.House.Client.Data
 				return JsonConvert.DeserializeObject<long>(data);
 			}
 		}
+
+		/// <summary>
+		/// Deletes the temperature setting asynchronous.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
+		public async Task DeleteTemperatureSettingAsync(long id)
+		{
+			var clientHandler = new HttpClientHandler();
+			clientHandler.CookieContainer.Add(settings.ServerUrl, new System.Net.Cookie(Constants.AuthzCookieName, settings.AuthzCookieValue));
+
+			using (HttpClient client = new HttpClient(clientHandler))
+			{
+				var builder = new UriBuilder(settings.ServerUrl);
+				builder.Path = $"/api/TemperatureSettings/{id}";
+				var result = await client.DeleteAsync(builder.Uri);
+				if(!result.IsSuccessStatusCode)
+				{
+					throw new ServerException("Server Error", (int)result.StatusCode);
+				}
+			}
+		}
 	}
 }

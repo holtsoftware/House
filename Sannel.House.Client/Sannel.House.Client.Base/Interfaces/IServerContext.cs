@@ -55,5 +55,12 @@ namespace Sannel.House.Client.Interfaces
 		/// <param name="setting">The setting.</param>
 		/// <returns></returns>
 		Task<long> PostTemperatureSettingAsync(TemperatureSetting setting);
+
+		/// <summary>
+		/// Deletes the temperature setting asynchronous.
+		/// </summary>
+		/// <param name="id">The identifier.</param>
+		/// <returns></returns>
+		Task DeleteTemperatureSettingAsync(long id);
 	}
 }

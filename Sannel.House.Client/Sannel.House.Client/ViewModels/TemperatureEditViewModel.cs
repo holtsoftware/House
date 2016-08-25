@@ -79,7 +79,7 @@ namespace Sannel.House.Client.ViewModels
 			set
 			{
 				Set(ref startTimeIndex, value);
-				if(TemperatureSetting != null)
+				if (TemperatureSetting != null)
 				{
 					if (StartTimeIndex > -1)
 					{
@@ -91,7 +91,7 @@ namespace Sannel.House.Client.ViewModels
 		}
 
 
-		private int endTimeIndex;
+		private int endTimeIndex = -1;
 		/// <summary>
 		/// Gets or sets the EndTimeIndex
 		/// </summary>
@@ -107,6 +107,13 @@ namespace Sannel.House.Client.ViewModels
 			set
 			{
 				Set(ref endTimeIndex, value);
+				if(TemperatureSetting != null)
+				{
+					if(EndTimeIndex > -1)
+					{
+						TemperatureSetting.EndTime = EndTimes[EndTimeIndex];
+					}
+				}
 			}
 		}
 
@@ -126,11 +133,12 @@ namespace Sannel.House.Client.ViewModels
 			}
 			set
 			{
-				if(temperatureSetting != null)
+				if (temperatureSetting != null)
 				{
 					temperatureSetting.PropertyChanged -= temperatureSetting_PropertyChange;
 				}
 				Set(ref temperatureSetting, value);
+				NotifyPropertyChanged(nameof(IsEdit));
 				temperatureSetting.PropertyChanged += temperatureSetting_PropertyChange;
 				updateStartTime();
 			}
@@ -139,7 +147,7 @@ namespace Sannel.House.Client.ViewModels
 
 		private void temperatureSetting_PropertyChange(object sender, PropertyChangedEventArgs e)
 		{
-			if(String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
+			if (String.Compare(e.PropertyName, nameof(TemperatureSetting.StartTime)) == 0)
 			{
 				if (TemperatureSetting.StartTime.HasValue)
 				{
@@ -150,6 +158,10 @@ namespace Sannel.House.Client.ViewModels
 					}
 				}
 				calculateEndItems();
+			}
+			else if(String.Compare(e.PropertyName, nameof(TemperatureSetting.Id)) == 0)
+			{
+				NotifyPropertyChanged(nameof(IsEdit));
 			}
 		}
 
@@ -166,10 +178,18 @@ namespace Sannel.House.Client.ViewModels
 				for (DateTime dt = TemperatureSetting.StartTime.Value.AddMinutes(30); dt <= end; dt = dt.AddMinutes(30))
 				{
 					EndTimes.Add(dt);
+					if (ts.EndTime == dt)
+					{
+						EndTimeIndex = EndTimes.Count - 1;
+					}
 					if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) != null)
 					{
 						break; // stop after first item that would conflict
 					}
+				}
+				if (ts.EndTime == null && EndTimes.Count > 0)
+				{
+					EndTimeIndex = EndTimes.Count - 1;
 				}
 			}
 			else
@@ -182,7 +202,7 @@ namespace Sannel.House.Client.ViewModels
 		{
 			var cds = TemperatureSettingViewModel.DaySettings;
 			var ts = TemperatureSetting;
-			if(cds != null && ts != null)
+			if (cds != null && ts != null)
 			{
 				StartTimes.Clear();
 				var others = cds.Where(i => i.DayOfWeek == ts.DayOfWeek && i != TemperatureSetting).ToList();
@@ -193,7 +213,7 @@ namespace Sannel.House.Client.ViewModels
 					if (others.FirstOrDefault(i => dt >= i.StartTime && dt < i.EndTime) == null)
 					{
 						StartTimes.Add(dt);
-						if(dt == TemperatureSetting?.StartTime)
+						if (dt == TemperatureSetting?.StartTime)
 						{
 							StartTimeIndex = StartTimes.Count - 1;
 						}
@@ -205,11 +225,11 @@ namespace Sannel.House.Client.ViewModels
 		private void verifyTemperatureSetting()
 		{
 			ErrorKeys.Clear();
-			if(TemperatureSetting.StartTime == null)
+			if (TemperatureSetting.StartTime == null)
 			{
 				ErrorKeys.Add("StartTimeIsRequired");
 			}
-			if(TemperatureSetting.EndTime == null)
+			if (TemperatureSetting.EndTime == null)
 			{
 				ErrorKeys.Add("EndTimeIsRequired");
 			}
@@ -233,12 +253,50 @@ namespace Sannel.House.Client.ViewModels
 		}
 
 		private AsyncRelayCommand saveTemperatureSettingCommand;
-		
+
 		public AsyncRelayCommand SaveTemperatureSettingCommand
 		{
 			get
 			{
 				return saveTemperatureSettingCommand ?? (saveTemperatureSettingCommand = new AsyncRelayCommand(saveTemperatureSetting));
+			}
+		}
+
+		private async Task deleteTemperatureSettingAsync(Object obj)
+		{
+			if (TemperatureSetting != null)
+			{
+				await TemperatureSettingViewModel.DeleteTemperatureSettingAsync(TemperatureSetting);
+			}
+		}
+
+		private AsyncRelayCommand deleteTemperatureSettingCommand;
+
+		/// <summary>
+		/// Gets the delete temperature setting command.
+		/// </summary>
+		/// <value>
+		/// The delete temperature setting command.
+		/// </value>
+		public AsyncRelayCommand DeleteTemperatureSettingCommand
+		{
+			get
+			{
+				return deleteTemperatureSettingCommand ?? (deleteTemperatureSettingCommand = new AsyncRelayCommand(deleteTemperatureSettingAsync));
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is new.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is new; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsEdit
+		{
+			get
+			{
+				return TemperatureSetting?.Id > 0;
 			}
 		}
 	}

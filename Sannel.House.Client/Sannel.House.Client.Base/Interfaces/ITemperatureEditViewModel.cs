@@ -70,6 +70,17 @@ namespace Sannel.House.Client.Interfaces
 		}
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is new.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is new; otherwise, <c>false</c>.
+		/// </value>
+		bool IsEdit
+		{
+			get;
+		}
+
+		/// <summary>
 		/// Gets or sets the temperature setting.
 		/// </summary>
 		/// <value>
@@ -88,6 +99,17 @@ namespace Sannel.House.Client.Interfaces
 		/// The save temperature setting command.
 		/// </value>
 		AsyncRelayCommand SaveTemperatureSettingCommand
+		{
+			get;
+		}
+
+		/// <summary>
+		/// Gets the delete temperature setting command.
+		/// </summary>
+		/// <value>
+		/// The delete temperature setting command.
+		/// </value>
+		AsyncRelayCommand DeleteTemperatureSettingCommand
 		{
 			get;
 		}

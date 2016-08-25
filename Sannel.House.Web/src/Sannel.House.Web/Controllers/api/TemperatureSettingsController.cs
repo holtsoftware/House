@@ -169,10 +169,16 @@ namespace Sannel.House.Web.Controllers.api
 			}
 		}
 
-		//// DELETE api/values/5
-		//[HttpDelete("{id}")]
-		//public void Delete(int id)
-		//{
-		//}
+		// DELETE api/values/5
+		[HttpDelete("{id}")]
+		public void Delete(int id)
+		{
+			var current = context.TemperatureSettings.FirstOrDefault(i => i.Id == id);
+			if(current != null)
+			{
+				context.TemperatureSettings.Remove(current);
+				context.SaveChanges();
+			}
+		}
 	}
 }

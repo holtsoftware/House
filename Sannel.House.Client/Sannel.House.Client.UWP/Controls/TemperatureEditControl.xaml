@@ -25,6 +25,8 @@
 			<RowDefinition />
 			<RowDefinition />
 			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<controls:ErrorControl Grid.Row="0" Grid.ColumnSpan="3"/>
 		<TextBlock Grid.Row="1">1. Cool</TextBlock>
@@ -42,12 +44,27 @@
 			</ComboBox.ItemTemplate>
 		</ComboBox>
 		<TextBlock Grid.Row="3" Grid.Column="2">4 End Time</TextBlock>
-		<ComboBox Grid.Row="4" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="EndTimeInput" ItemsSource="{x:Bind TemperatureEditViewModel.EndTimes, Mode=OneWay}">
+		<ComboBox Grid.Row="4" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" x:Name="EndTimeInput" ItemsSource="{x:Bind TemperatureEditViewModel.EndTimes, Mode=OneWay}" SelectedIndex="{x:Bind TemperatureEditViewModel.EndTimeIndex, Mode=TwoWay}">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock Text="{Binding Converter={StaticResource TimeConverter}}" />
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
+		<HyperlinkButton Grid.Row="5" Grid.ColumnSpan="3" x:Name="DeleteButtonFirst" Click="DeleteButtonFirst_Click" Visibility="{x:Bind TemperatureEditViewModel.IsEdit, Mode=OneWay}">5 Delete Setting</HyperlinkButton>
+		<Grid Grid.Row="6" Grid.ColumnSpan="3" Visibility="{x:Bind IsDeleting, Mode=OneWay}">
+			<Grid.RowDefinitions>
+				<RowDefinition />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="10" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.ColumnSpan="3">6 Are you sure you want to delete this setting?</TextBlock>
+			<Button Grid.Row="1" Grid.Column="0" x:Name="DeleteYesButton" Click="DeleteYesButton_Click">7 Yes</Button>
+			<Button Grid.Row="1" Grid.Column="2" x:Name="DeleteNoButton" Click="DeleteNoButton_Click">8 No</Button>
+		</Grid>
 	</Grid>
 </ContentDialog>

@@ -33,6 +33,20 @@ namespace Sannel.House.Client.UWP.Controls
 			}
 		}
 
+
+
+		public bool IsDeleting
+		{
+			get { return (bool)GetValue(IsDeletingProperty); }
+			set { SetValue(IsDeletingProperty, value); }
+		}
+
+		// Using a DependencyProperty as the backing store for IsDeleting.  This enables animation, styling, binding, etc...
+		public static readonly DependencyProperty IsDeletingProperty =
+			DependencyProperty.Register("IsDeleting", typeof(bool), typeof(TemperatureEditControl), new PropertyMetadata(false));
+
+
+
 		public TemperatureEditControl()
 		{
 			this.InitializeComponent();
@@ -77,5 +91,25 @@ namespace Sannel.House.Client.UWP.Controls
 		{
 		}
 
+		private void DeleteButtonFirst_Click(object sender, RoutedEventArgs e)
+		{
+			IsDeleting = !IsDeleting;
+		}
+
+		private async void DeleteYesButton_Click(object sender, RoutedEventArgs e)
+		{
+			var command = TemperatureEditViewModel.DeleteTemperatureSettingCommand;
+			if (command.CanExecute(null))
+			{
+				await command.ExecuteAsync(null);
+			}
+
+			Hide();
+		}
+
+		private void DeleteNoButton_Click(object sender, RoutedEventArgs e)
+		{
+			IsDeleting = false;
+		}
 	}
 }
