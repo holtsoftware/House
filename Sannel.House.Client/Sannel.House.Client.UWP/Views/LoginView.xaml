@@ -19,6 +19,7 @@
 			<PasswordBox Password="{Binding Password, Mode=TwoWay}" />
 			<CheckBox IsChecked="{Binding StayLoggedIn, Mode=TwoWay}">3. Stay logged in</CheckBox>
 			<Button Command="{Binding LoginCommand}">4. Login</Button>
+			<HyperlinkButton>5. Edit Settings</HyperlinkButton>
 		</StackPanel>
 	</Grid>
 </views:BaseView>
