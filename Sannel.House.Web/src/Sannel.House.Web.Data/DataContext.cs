@@ -35,6 +35,17 @@ namespace Sannel.House.Web.Data
 			get;
 			set;
 		}
+		/// <summary>
+		/// Gets or sets the application log entries.
+		/// </summary>
+		/// <value>
+		/// The application log entries.
+		/// </value>
+		public DbSet<ApplicationLogEntry> ApplicationLogEntries
+		{
+			get;
+			set;
+		}
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
