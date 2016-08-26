@@ -104,10 +104,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="app.config" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LoggingContext.cs" />
+    <Compile Include="LoggingHelper.cs" />
+    <Compile Include="Migrations\20160826201319_Inital.cs" />
+    <Compile Include="Migrations\20160826201319_Inital.designer.cs">
+      <DependentUpon>20160826201319_Inital.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\LoggingContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Logging.Data.rd.xml" />
   </ItemGroup>

@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sannel.House.Logging.Interface;
-using Sannel.House.Logging.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Sannel.House.Logging.Interface;
+using Sannel.House.Logging.Models;
+using System.Threading;
 
-namespace Sannel.House.Logging.Data
+namespace Sannel.House.Logging.Tests.Mocks
 {
-	public class LoggingContext : DbContext, IDbContext
+	public class DbContextMock : DbContext, IDbContext
 	{
 		public DbSet<ApplicationLogEntry> ApplicationLogEntries
 		{
@@ -19,7 +21,8 @@ namespace Sannel.House.Logging.Data
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlite("Filename=Logging.db");
+			base.OnConfiguring(optionsBuilder);
+			optionsBuilder.UseInMemoryDatabase();
 		}
 	}
 }

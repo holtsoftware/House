@@ -110,6 +110,7 @@
     <Compile Include="..\..\Sannel.House.Web\src\Sannel.House.Web.Base\Models\ApplicationLogEntry.cs">
       <Link>Models\ApplicationLogEntry.cs</Link>
     </Compile>
+    <Compile Include="Interface\IDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Logging.Base.rd.xml" />
   </ItemGroup>

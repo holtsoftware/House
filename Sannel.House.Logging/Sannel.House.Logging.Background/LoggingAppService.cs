@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Sannel.House.Logging.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +18,11 @@ namespace Sannel.House.Logging.Background
 		{
 			taskInstance.Canceled += TaskInstance_Canceled;
 			deferral = taskInstance.GetDeferral();
+
+			using (LoggingContext context = new LoggingContext())
+			{
+				context.Database.Migrate();
+			}
 
 			var details = taskInstance.TriggerDetails as AppServiceTriggerDetails;
 			var connection = details.AppServiceConnection;
