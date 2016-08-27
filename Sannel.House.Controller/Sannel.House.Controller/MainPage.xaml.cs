@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sannel.House.Logging.SDK;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,15 +32,10 @@ namespace Sannel.House.Controller
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			base.OnNavigatedTo(e);
-			var connection = new AppServiceConnection();
-			connection.AppServiceName = "Sannel.House.Logging";
-			connection.PackageFamilyName = "Sannel.House.Logging_s9vwb96cpt7d6";
-			AppServiceConnectionStatus status = await connection.OpenAsync();
-			if(status == AppServiceConnectionStatus.Success)
+			using (LoggingManager manager = new LoggingManager())
 			{
-				ValueSet v = new ValueSet();
-				v.Add("Test", "Test");
-				await connection.SendMessageAsync(v);
+				await manager.ConnectAsync();
+				await manager.LogMessageAsync("Navigated To Main Page");
 			}
 		}
 	}

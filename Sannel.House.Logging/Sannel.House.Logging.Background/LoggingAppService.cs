@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Background;
+using Windows.Foundation.Collections;
 
 namespace Sannel.House.Logging.Background
 {
@@ -31,9 +32,30 @@ namespace Sannel.House.Logging.Background
 			connection.RequestReceived += Connection_RequestReceived;
 		}
 
-		private void Connection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
+		private async void Connection_RequestReceived(AppServiceConnection sender, AppServiceRequestReceivedEventArgs args)
 		{
-			
+			var lDeferral = args.GetDeferral();
+			try
+			{
+				var message = args.Request.Message;
+				if(message.ContainsKey("MessageType") && message.ContainsKey("Message"))
+				{
+					var type = message["MessageType"] as String;
+					var mes = message["Message"] as String;
+					if(type != null && mes != null)
+					{
+						using(var lh = new LoggingHelper())
+						{
+							var result = lh.LogEntry(type, mes);
+							var vs = new ValueSet();
+							vs["result"] = result;
+							await args.Request.SendResponseAsync(vs);
+						}
+					}
+				}
+			}
+			catch { }
+			lDeferral.Complete();	
 		}
 
 		private void TaskInstance_Canceled(IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason)

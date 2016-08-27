@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-#if LOGGING_SERVICE
+#if LOGGING_SERVICE || LOGGING_SDK
 namespace Sannel.House.Logging.Models
 #else
 namespace Sannel.House.Web.Base.Models
@@ -13,6 +13,7 @@ namespace Sannel.House.Web.Base.Models
 {
 	public class ApplicationLogEntry
 	{
+#if !LOGGING_SDK
 		[Key]
 		[JsonProperty(nameof(Id))]
 		public Guid Id
@@ -20,6 +21,7 @@ namespace Sannel.House.Web.Base.Models
 			get;
 			set;
 		}
+#endif
 
 		[JsonProperty(nameof(DeviceId))]
 		public int? DeviceId
@@ -51,7 +53,7 @@ namespace Sannel.House.Web.Base.Models
 			get;
 			set;
 		}
-
+#if !LOGGING_SDK
 		[Required]
 		[JsonProperty(nameof(EntryDateTime))]
 		public DateTime EntryDateTime
@@ -59,6 +61,7 @@ namespace Sannel.House.Web.Base.Models
 			get;
 			set;
 		}
+#endif
 
 #if LOGGING_SERVICE
 		public bool Synced
