@@ -13,18 +13,40 @@ namespace Sannel.House.Controller
 		public const String APPLICATION_ID = "Sannel.House.Controller";
 		public const int DEVICE_ID = 1;
 
-		public static Task<bool> LogMessageAsync(this LoggingManager manager, String message)
+		public static async void LogMessage(this LoggingManager manager, String message)
 		{
 			if(manager == null)
 			{
 				throw new ArgumentNullException(nameof(manager));
 			}
 
-			ApplicationLogEntry entry = new ApplicationLogEntry();
-			entry.ApplicationId = APPLICATION_ID;
-			entry.DeviceId = DEVICE_ID;
-			entry.Message = message;
-			return manager.LogApplicationEntry(entry);
+			if (manager.IsConnected)
+			{
+
+				ApplicationLogEntry entry = new ApplicationLogEntry();
+				entry.ApplicationId = APPLICATION_ID;
+				entry.DeviceId = DEVICE_ID;
+				entry.Message = message;
+				await manager.LogApplicationEntry(entry);
+			}
+		}
+
+		public static async Task<bool> LogMessageAsync(this LoggingManager manager, String message)
+		{
+			if(manager == null)
+			{
+				throw new ArgumentNullException(nameof(manager));
+			}
+
+			if (manager.IsConnected)
+			{
+				ApplicationLogEntry entry = new ApplicationLogEntry();
+				entry.ApplicationId = APPLICATION_ID;
+				entry.DeviceId = DEVICE_ID;
+				entry.Message = message;
+				return await manager.LogApplicationEntry(entry);
+			}
+			return false;
 		}
 	}
 }

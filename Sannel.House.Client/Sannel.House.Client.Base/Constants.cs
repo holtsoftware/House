@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Sannel.House.Client
+namespace Sannel.House
 {
 	public static class Constants
 	{

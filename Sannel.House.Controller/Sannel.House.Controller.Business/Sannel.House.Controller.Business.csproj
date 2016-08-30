@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0EA05BDF-99A0-41A0-84F3-1E7E3FD2D422}</ProjectGuid>
+    <ProjectGuid>{13AFF015-0AFC-4D0F-A755-C22C98156DAF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sannel.House.Controller</RootNamespace>
-    <AssemblyName>Sannel.House.Controller.Base</AssemblyName>
+    <RootNamespace>Sannel.House.Controller.Business</RootNamespace>
+    <AssemblyName>Sannel.House.Controller.Business</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
@@ -107,20 +107,14 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Sannel.House.Client\Sannel.House.Client.Base\Constants.cs">
-      <Link>Constants.cs</Link>
-    </Compile>
-    <Compile Include="Attributes\SingletonAttribute.cs" />
-    <Compile Include="Interfaces\IAppSettings.cs" />
-    <Compile Include="LoggingExtensions.cs" />
-    <Compile Include="Messages\TimerMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Sannel.House.Controller.Base.rd.xml" />
+    <Compile Include="TimerService.cs" />
+    <EmbeddedResource Include="Properties\Sannel.House.Controller.Business.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sannel.House.Logging.SDK\Sannel.House.Logging.SDK.csproj">
-      <Project>{94500030-10f8-4cb1-81a4-a33097d00eca}</Project>
-      <Name>Sannel.House.Logging.SDK</Name>
+    <ProjectReference Include="..\Sannel.House.Controller.Base\Sannel.House.Controller.Base.csproj">
+      <Project>{0ea05bdf-99a0-41a0-84f3-1e7e3fd2d422}</Project>
+      <Name>Sannel.House.Controller.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

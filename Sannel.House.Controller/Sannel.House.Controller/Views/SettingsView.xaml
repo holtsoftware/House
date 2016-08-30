@@ -1,0 +1,27 @@
+﻿<Page
+	x:Class="Sannel.House.Controller.Views.SettingsView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:Sannel.House.Controller.Views"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:controls="using:Sannel.House.Controller.Controls"
+	mc:Ignorable="d">
+
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<controls:ErrorsControl />
+		<StackPanel Grid.Row="1">
+			<TextBlock Style="{StaticResource Label}">1. Server Url</TextBlock>
+			<TextBox x:Name="ServerUrl" InputScope="Url" />
+			<TextBlock Style="{StaticResource Label}">2. Username</TextBlock>
+			<TextBox x:Name="Username" InputScope="EmailSmtpAddress" />
+			<TextBlock Style="{StaticResource Label}">3. Password</TextBlock>
+			<TextBox x:Name="Password" InputScope="Password" />
+			<Button x:Name="Verify" HorizontalAlignment="Center" Margin="0,12,0,0">4. Verify Settings</Button>
+		</StackPanel>
+	</Grid>
+</Page>
