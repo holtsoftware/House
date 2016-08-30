@@ -19,6 +19,7 @@ using Sannel.House.Controller.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
@@ -59,6 +60,7 @@ namespace Sannel.House.Controller.ViewModels
 			{
 				CanHomeAction = false;
 				CanSettingsAction = false;
+				navigationService.For<SettingsViewModel>().WithParam(i => i.IsFirstRun, true).Navigate();
 				//navigationService.For<ConfigureViewModel>().WithParam(i => i.IsFirstRun, true).Navigate();
 			}
 			else
@@ -69,7 +71,10 @@ namespace Sannel.House.Controller.ViewModels
 
 		private void NavigationService_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
 		{
-			var uri = e.Uri.ToString();
+			if(e.Uri != null)
+			{
+
+			}
 		}
 
 		protected override void OnActivate()
@@ -173,6 +178,14 @@ namespace Sannel.House.Controller.ViewModels
 				Set(ref date, value);
 			}
 		}
+		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
+		{
 
+			if (!Object.Equals(dest, source))
+			{
+				dest = source;
+				NotifyOfPropertyChange(propName);
+			}
+		}
 	}
 }

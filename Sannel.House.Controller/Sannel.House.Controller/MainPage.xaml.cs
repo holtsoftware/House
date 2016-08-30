@@ -1,4 +1,4 @@
-﻿using Sannel.House.Logging.SDK;
+﻿using Sannel.House.LoggingSDK;
 using System;
 using System.Collections.Generic;
 using System.IO;

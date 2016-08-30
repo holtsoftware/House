@@ -159,9 +159,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Sannel.House.Logging.SDK\Sannel.House.Logging.SDK.csproj">
-      <Project>{94500030-10F8-4CB1-81A4-A33097D00ECA}</Project>
-      <Name>Sannel.House.Logging.SDK</Name>
+    <ProjectReference Include="..\..\Sannel.House.LoggingSDK\Sannel.House.LoggingSDK.csproj">
+      <Project>{94500030-10f8-4cb1-81a4-a33097d00eca}</Project>
+      <Name>Sannel.House.LoggingSDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Sannel.House.ThermostatSDK\Sannel.House.ThermostatSDK.csproj">
+      <Project>{99a59479-fb0d-4605-8ad7-603759166598}</Project>
+      <Name>Sannel.House.ThermostatSDK</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sannel.House.Controller.Base\Sannel.House.Controller.Base.csproj">
       <Project>{0ea05bdf-99a0-41a0-84f3-1e7e3fd2d422}</Project>

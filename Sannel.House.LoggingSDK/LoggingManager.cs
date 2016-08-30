@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
 
-namespace Sannel.House.Logging.SDK
+namespace Sannel.House.LoggingSDK
 {
 	public class LoggingManager : IDisposable
 	{

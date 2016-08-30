@@ -9,6 +9,6 @@
 	d:DesignHeight="300"
 	d:DesignWidth="400">
 
-	<ListBox ItemsSource="{x:Bind Errors, Mode=OneWay}">
+	<ListBox x:Name="Errors" ItemsSource="{Binding Errors}">
 	</ListBox>
 </UserControl>

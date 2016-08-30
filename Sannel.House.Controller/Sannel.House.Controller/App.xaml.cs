@@ -17,7 +17,8 @@ using Sannel.House.Controller.Attributes;
 using Sannel.House.Controller.Business;
 using Sannel.House.Controller.Interfaces;
 using Sannel.House.Controller.Views;
-using Sannel.House.Logging.SDK;
+using Sannel.House.LoggingSDK;
+using Sannel.House.ThermostatSDK;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -81,6 +82,7 @@ namespace Sannel.House.Controller
 			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.Singleton<LoggingManager>();
 			container.Singleton<TimerService>();
+			container.Singleton<ThermostatManager>();
 
 			var types = GetType().GetTypeInfo().Assembly.GetTypes()
 				.Where(t => t.Namespace == "Sannel.House.Controller.ViewModels");

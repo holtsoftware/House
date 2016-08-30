@@ -5,15 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Sannel.House.Controller.Interfaces;
+using Sannel.House.ThermostatSDK;
 
 namespace Sannel.House.Controller.ViewModels
 {
 	public class SettingsViewModel : ErrorViewModel
 	{
-		private IAppSettings settings;
-		public SettingsViewModel(IAppSettings settings, WinRTContainer container, INavigationService service, IEventAggregator eventAggregator) : base(container, service, eventAggregator)
+		private ThermostatManager tmanager;
+
+		public SettingsViewModel(ThermostatManager tmanager, WinRTContainer container, INavigationService service, IEventAggregator eventAggregator) : base(container, service, eventAggregator)
 		{
-			this.settings = settings;
+			this.tmanager = tmanager;
 		}
 
 
@@ -41,7 +43,6 @@ namespace Sannel.House.Controller.ViewModels
 			set
 			{
 				Set(ref serverUrl, value);
-				settings.ServerUrl = value;
 			}
 		}
 
@@ -61,7 +62,6 @@ namespace Sannel.House.Controller.ViewModels
 			set
 			{
 				Set(ref username, value);
-				settings.Username = value;
 			}
 		}
 
@@ -81,14 +81,13 @@ namespace Sannel.House.Controller.ViewModels
 			set
 			{
 				Set(ref password, value);
-				settings.Password = value;
 			}
 		}
 
 		/// <summary>
 		/// Verifies this instance.
 		/// </summary>
-		public void Verify()
+		public async void Verify()
 		{
 			IsBusy = true;
 			Errors.Clear();
@@ -108,7 +107,21 @@ namespace Sannel.House.Controller.ViewModels
 
 			if(!HasErrors)
 			{
-
+				if (!tmanager.IsConnected)
+				{
+					if(!await tmanager.ConnectAsync())
+					{
+						Errors.Add("ErrorConnectingToThermostatManager");
+					}
+				}
+				if (tmanager.IsConnected)
+				{
+					var result = await tmanager.SetConfigurationAsync(i, Username, Password);
+					if (!result)
+					{
+						Errors.Add("ErrorSettingThermostatManager");
+					}
+				}
 			}
 			IsBusy = false;
 		}

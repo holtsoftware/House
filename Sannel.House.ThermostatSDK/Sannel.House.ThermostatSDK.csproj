@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0EA05BDF-99A0-41A0-84F3-1E7E3FD2D422}</ProjectGuid>
+    <ProjectGuid>{99A59479-FB0D-4605-8AD7-603759166598}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sannel.House.Controller</RootNamespace>
-    <AssemblyName>Sannel.House.Controller.Base</AssemblyName>
+    <RootNamespace>Sannel.House.ThermostatSDK</RootNamespace>
+    <AssemblyName>Sannel.House.ThermostatSDK</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
@@ -107,21 +107,9 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Sannel.House.Client\Sannel.House.Client.Base\Constants.cs">
-      <Link>Constants.cs</Link>
-    </Compile>
-    <Compile Include="Attributes\SingletonAttribute.cs" />
-    <Compile Include="Interfaces\IAppSettings.cs" />
-    <Compile Include="LoggingExtensions.cs" />
-    <Compile Include="Messages\TimerMessages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Sannel.House.Controller.Base.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sannel.House.LoggingSDK\Sannel.House.LoggingSDK.csproj">
-      <Project>{94500030-10f8-4cb1-81a4-a33097d00eca}</Project>
-      <Name>Sannel.House.LoggingSDK</Name>
-    </ProjectReference>
+    <Compile Include="ThermostatManager.cs" />
+    <EmbeddedResource Include="Properties\Sannel.House.ThermostatSDK.rd.xml" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
