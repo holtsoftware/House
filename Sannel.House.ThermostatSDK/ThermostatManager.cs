@@ -17,7 +17,6 @@ namespace Sannel.House.ThermostatSDK
 		{
 			connection = new AppServiceConnection();
 			connection.AppServiceName = "Sannel.House.Thermostat";
-			connection.PackageFamilyName = "Sannel.House.Thermostat_";
 			connection.ServiceClosed += connectionClosed;
 		}
 
@@ -36,6 +35,19 @@ namespace Sannel.House.ThermostatSDK
 
 		public async Task<bool> ConnectAsync()
 		{
+			if (String.IsNullOrWhiteSpace(connection.PackageFamilyName))
+			{
+				var asp = await Windows.ApplicationModel.AppService.AppServiceCatalog.FindAppServiceProvidersAsync(connection.AppServiceName);
+				var first = asp.FirstOrDefault(i => i.PackageFamilyName.StartsWith("Sannel.House"));
+				if (first != null)
+				{
+					connection.PackageFamilyName = first.PackageFamilyName;
+				}
+				else
+				{
+					connection.PackageFamilyName = "Unknown";
+				}
+			}
 			var result = await connection.OpenAsync();
 			if(result == AppServiceConnectionStatus.Success)
 			{

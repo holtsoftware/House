@@ -48,6 +48,7 @@ namespace Sannel.House.Controller
 	{
 		public static bool HasBooted = false;
 		private WinRTContainer container;
+		private static LoggingManager logginManager;
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
@@ -74,13 +75,12 @@ namespace Sannel.House.Controller
 #endif
 		}
 
-		protected override void Configure()
+		protected override async void Configure()
 		{
 			container = new WinRTContainer();
 			container.RegisterWinRTServices();
-
-			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.Singleton<LoggingManager>();
+			container.Singleton<IAppSettings, ApplicationSettings>();
 			container.Singleton<TimerService>();
 			container.Singleton<ThermostatManager>();
 
@@ -119,8 +119,8 @@ namespace Sannel.House.Controller
 #endif
 			DisplayRootView<ShellView>();
 
-			container.GetInstance<TimerService>();
 			var lm = container.GetInstance<LoggingManager>();
+			container.GetInstance<TimerService>();
 			await lm.ConnectAsync();
 			await lm.LogMessageAsync("Controller Launched.");
 		}

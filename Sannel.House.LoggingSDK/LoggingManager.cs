@@ -19,9 +19,9 @@ namespace Sannel.House.LoggingSDK
 		{
 			connection = new AppServiceConnection();
 			connection.AppServiceName = "Sannel.House.Logging";
-			connection.PackageFamilyName = "Sannel.House.Logging.LocalTest_pjznk8rch33nj";
 			connection.ServiceClosed += connectionServiceClosed;
 		}
+
 
 		private void connectionServiceClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
 		{
@@ -38,7 +38,20 @@ namespace Sannel.House.LoggingSDK
 
 		public async Task<bool> ConnectAsync()
 		{
-			if(await connection.OpenAsync() == AppServiceConnectionStatus.Success)
+			if (String.IsNullOrWhiteSpace(connection.PackageFamilyName))
+			{
+				var asp = await Windows.ApplicationModel.AppService.AppServiceCatalog.FindAppServiceProvidersAsync(connection.AppServiceName);
+				var first = asp.FirstOrDefault(i => i.PackageFamilyName.StartsWith("Sannel.House"));
+				if (first != null)
+				{
+					connection.PackageFamilyName = first.PackageFamilyName;
+				}
+				else
+				{
+					connection.PackageFamilyName = "Unknown";
+				}
+			}
+			if (await connection.OpenAsync() == AppServiceConnectionStatus.Success)
 			{
 				isConnected = true;
 				return true;
@@ -49,7 +62,7 @@ namespace Sannel.House.LoggingSDK
 
 		public async Task<bool> LogApplicationEntry(ApplicationLogEntry entry)
 		{
-			if(entry == null)
+			if (entry == null)
 			{
 				throw new ArgumentNullException(nameof(entry));
 			}
@@ -58,7 +71,7 @@ namespace Sannel.House.LoggingSDK
 			vs["MessageType"] = nameof(ApplicationLogEntry);
 			vs["Message"] = JsonConvert.SerializeObject(entry);
 			var result = await connection.SendMessageAsync(vs);
-			if(result.Status == AppServiceResponseStatus.Success)
+			if (result.Status == AppServiceResponseStatus.Success)
 			{
 				bool? v = result.Message["result"] as bool?;
 				if (v.HasValue)
