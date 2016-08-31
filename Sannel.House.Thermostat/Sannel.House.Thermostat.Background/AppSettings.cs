@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
 
-namespace Sannel.House.Thermostat.Background
+namespace Sannel.House.Thermostat
 {
-	internal class AppSettings
+	internal class AppSettings : IAppSettings
 	{
 		private readonly ApplicationDataContainer settings;
 
@@ -60,11 +60,11 @@ namespace Sannel.House.Thermostat.Background
 		/// <value>
 		/// The server URL.
 		/// </value>
-		public string ServerUrl
+		public Uri ServerUri
 		{
 			get
 			{
-				return get<String>();
+				return get<Uri>();
 			}
 
 			set
