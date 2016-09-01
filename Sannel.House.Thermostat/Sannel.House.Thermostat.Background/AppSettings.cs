@@ -64,12 +64,17 @@ namespace Sannel.House.Thermostat
 		{
 			get
 			{
-				return get<Uri>();
+				Uri i;
+				if(Uri.TryCreate(get<String>(), UriKind.Absolute, out i))
+				{
+					return i;
+				}
+				return null;
 			}
 
 			set
 			{
-				set(value);
+				set(value?.ToString());
 			}
 		}
 

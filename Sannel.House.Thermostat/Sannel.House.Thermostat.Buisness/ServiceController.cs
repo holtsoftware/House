@@ -54,5 +54,15 @@ namespace Sannel.House.Thermostat.Buisness
 				return new Tuple<bool, string>(false, "Error verifying with server");
 			}
 		}
+
+		/// <summary>
+		/// Gets the configuration asynchronous.
+		/// Does not include password that can only be set not retreaved
+		/// </summary>
+		/// <returns></returns>
+		public Task<Tuple<Uri, String>> GetConfigurationAsync()
+		{
+			return Task.Run(() => new Tuple<Uri, String>(settings.ServerUri, settings.Username));
+		}
 	}
 }

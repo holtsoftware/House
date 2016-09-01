@@ -131,17 +131,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sannel.House.Logging.Background\Sannel.House.Logging.Background.csproj">
-      <Project>{29dcdff1-5bcc-4bd9-821a-b609e7ed2ed2}</Project>
-      <Name>Sannel.House.Logging.Background</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sannel.House.Logging.Base\Sannel.House.Logging.Base.csproj">
-      <Project>{64097789-00de-4df2-a621-bcc18866d2e3}</Project>
-      <Name>Sannel.House.Logging.Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sannel.House.Logging.Data\Sannel.House.Logging.Data.csproj">
-      <Project>{91d227dc-b240-4c90-ae49-a9dc9a62c856}</Project>
-      <Name>Sannel.House.Logging.Data</Name>
+    <ProjectReference Include="..\Sannel.House.Thermostat.Background\Sannel.House.Thermostat.Background.csproj">
+      <Project>{13d0f780-8823-4458-9af7-07026e113a75}</Project>
+      <Name>Sannel.House.Thermostat.Background</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

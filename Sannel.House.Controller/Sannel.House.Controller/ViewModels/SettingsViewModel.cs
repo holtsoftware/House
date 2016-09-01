@@ -84,6 +84,22 @@ namespace Sannel.House.Controller.ViewModels
 			}
 		}
 
+		protected override async void OnViewLoaded(object view)
+		{
+			base.OnViewLoaded(view);
+			IsBusy = true;
+			if (!tmanager.IsConnected)
+			{
+				if (await tmanager.ConnectAsync())
+				{
+					var result = await tmanager.GetConfigurationAsync();
+					ServerUrl = result.Item1?.ToString();
+					Username = result.Item2;
+				}
+			}
+			IsBusy = false;
+		}
+
 		/// <summary>
 		/// Verifies this instance.
 		/// </summary>
@@ -92,11 +108,11 @@ namespace Sannel.House.Controller.ViewModels
 			IsBusy = true;
 			Errors.Clear();
 			Uri i;
-			if(!Uri.TryCreate(serverUrl, UriKind.RelativeOrAbsolute, out i))
+			if (!Uri.TryCreate(serverUrl, UriKind.RelativeOrAbsolute, out i))
 			{
 				Errors.Add("InvalidServerUrl");
 			}
-			if(!Constants.EmailAddress.IsMatch(Username ?? ""))
+			if (!Constants.EmailAddress.IsMatch(Username ?? ""))
 			{
 				Errors.Add("InvalidEmailAddress");
 			}
@@ -105,11 +121,11 @@ namespace Sannel.House.Controller.ViewModels
 				Errors.Add("PasswordIsRequired");
 			}
 
-			if(!HasErrors)
+			if (!HasErrors)
 			{
 				if (!tmanager.IsConnected)
 				{
-					if(!await tmanager.ConnectAsync())
+					if (!await tmanager.ConnectAsync())
 					{
 						Errors.Add("ErrorConnectingToThermostatManager");
 					}

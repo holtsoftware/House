@@ -6,18 +6,27 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat", "Sannel.House.Thermostat\Sannel.House.Thermostat.csproj", "{056CB2A5-4146-477A-8EBB-ABB7388DE9BF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.Background", "Sannel.House.Thermostat.Background\Sannel.House.Thermostat.Background.csproj", "{13D0F780-8823-4458-9AF7-07026E113A75}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4C01DC01-51C8-440E-BB29-9FB0F597EF24} = {4C01DC01-51C8-440E-BB29-9FB0F597EF24}
+		{CA023529-CD75-4B60-ABCC-B184F33D5451} = {CA023529-CD75-4B60-ABCC-B184F33D5451}
+		{9E27DB65-C401-4D76-826F-792121AE2C01} = {9E27DB65-C401-4D76-826F-792121AE2C01}
+		{FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8} = {FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.LocalTest", "Sannel.House.Thermostat.LocalTest\Sannel.House.Thermostat.LocalTest.csproj", "{47D918C0-EE7A-4BBA-9882-A89E8C286B76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.Base", "Sannel.House.Thermostat.Base\Sannel.House.Thermostat.Base.csproj", "{4C01DC01-51C8-440E-BB29-9FB0F597EF24}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA023529-CD75-4B60-ABCC-B184F33D5451} = {CA023529-CD75-4B60-ABCC-B184F33D5451}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.Data", "Sannel.House.Thermostat.Data\Sannel.House.Thermostat.Data.csproj", "{9E27DB65-C401-4D76-826F-792121AE2C01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.Buisness", "Sannel.House.Thermostat.Buisness\Sannel.House.Thermostat.Buisness.csproj", "{FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.Tests", "Sannel.House.Thermostat.Tests\Sannel.House.Thermostat.Tests.csproj", "{5C533350-469B-45D4-9B1F-3688C7A9C69F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.ServerSDK", "..\Sannel.House.ServerSDK\Sannel.House.ServerSDK\Sannel.House.ServerSDK.csproj", "{CA023529-CD75-4B60-ABCC-B184F33D5451}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sannel.House.Thermostat.Tests", "Sannel.House.Thermostat.Tests\Sannel.House.Thermostat.Tests.csproj", "{F85FB72D-3B95-4014-BEA4-1102F9031290}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,26 +144,6 @@ Global
 		{FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8}.Release|x64.Build.0 = Release|x64
 		{FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8}.Release|x86.ActiveCfg = Release|x86
 		{FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8}.Release|x86.Build.0 = Release|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|ARM.ActiveCfg = Debug|ARM
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|ARM.Build.0 = Debug|ARM
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|ARM.Deploy.0 = Debug|ARM
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|x64.ActiveCfg = Debug|x64
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|x64.Build.0 = Debug|x64
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|x64.Deploy.0 = Debug|x64
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|x86.ActiveCfg = Debug|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|x86.Build.0 = Debug|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Debug|x86.Deploy.0 = Debug|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|Any CPU.ActiveCfg = Release|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|ARM.ActiveCfg = Release|ARM
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|ARM.Build.0 = Release|ARM
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|ARM.Deploy.0 = Release|ARM
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|x64.ActiveCfg = Release|x64
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|x64.Build.0 = Release|x64
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|x64.Deploy.0 = Release|x64
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|x86.ActiveCfg = Release|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|x86.Build.0 = Release|x86
-		{5C533350-469B-45D4-9B1F-3688C7A9C69F}.Release|x86.Deploy.0 = Release|x86
 		{CA023529-CD75-4B60-ABCC-B184F33D5451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA023529-CD75-4B60-ABCC-B184F33D5451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA023529-CD75-4B60-ABCC-B184F33D5451}.Debug|ARM.ActiveCfg = Debug|ARM
@@ -171,6 +160,26 @@ Global
 		{CA023529-CD75-4B60-ABCC-B184F33D5451}.Release|x64.Build.0 = Release|x64
 		{CA023529-CD75-4B60-ABCC-B184F33D5451}.Release|x86.ActiveCfg = Release|x86
 		{CA023529-CD75-4B60-ABCC-B184F33D5451}.Release|x86.Build.0 = Release|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|ARM.Build.0 = Debug|ARM
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|ARM.Deploy.0 = Debug|ARM
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|x64.ActiveCfg = Debug|x64
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|x64.Build.0 = Debug|x64
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|x64.Deploy.0 = Debug|x64
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|x86.ActiveCfg = Debug|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|x86.Build.0 = Debug|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Debug|x86.Deploy.0 = Debug|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|Any CPU.ActiveCfg = Release|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|ARM.ActiveCfg = Release|ARM
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|ARM.Build.0 = Release|ARM
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|ARM.Deploy.0 = Release|ARM
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|x64.ActiveCfg = Release|x64
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|x64.Build.0 = Release|x64
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|x64.Deploy.0 = Release|x64
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|x86.ActiveCfg = Release|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|x86.Build.0 = Release|x86
+		{F85FB72D-3B95-4014-BEA4-1102F9031290}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

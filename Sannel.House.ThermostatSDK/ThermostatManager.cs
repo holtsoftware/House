@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.AppService;
 using Windows.Foundation.Collections;
@@ -12,8 +13,15 @@ namespace Sannel.House.ThermostatSDK
 	{
 		private AppServiceConnection connection;
 		private bool isConnected;
+		private SemaphoreSlim semaphoreSlim;
 
 		public ThermostatManager()
+		{
+			semaphoreSlim = new SemaphoreSlim(1);
+			setupConnection();
+		}
+
+		private void setupConnection()
 		{
 			connection = new AppServiceConnection();
 			connection.AppServiceName = "Sannel.House.Thermostat";
@@ -22,7 +30,11 @@ namespace Sannel.House.ThermostatSDK
 
 		private void connectionClosed(AppServiceConnection sender, AppServiceClosedEventArgs args)
 		{
+			semaphoreSlim.Wait();
 			isConnected = false;
+			connection?.Dispose();
+			setupConnection();
+			semaphoreSlim.Release();
 		}
 
 		public bool IsConnected
@@ -35,27 +47,39 @@ namespace Sannel.House.ThermostatSDK
 
 		public async Task<bool> ConnectAsync()
 		{
-			if (String.IsNullOrWhiteSpace(connection.PackageFamilyName))
+			await semaphoreSlim.WaitAsync();
+			try
 			{
-				var asp = await Windows.ApplicationModel.AppService.AppServiceCatalog.FindAppServiceProvidersAsync(connection.AppServiceName);
-				var first = asp.FirstOrDefault(i => i.PackageFamilyName.StartsWith("Sannel.House"));
-				if (first != null)
+				if (isConnected)
 				{
-					connection.PackageFamilyName = first.PackageFamilyName;
+					return true;
 				}
-				else
+				if (String.IsNullOrWhiteSpace(connection.PackageFamilyName))
 				{
-					connection.PackageFamilyName = "Unknown";
+					var asp = await Windows.ApplicationModel.AppService.AppServiceCatalog.FindAppServiceProvidersAsync(connection.AppServiceName);
+					var first = asp.FirstOrDefault(i => i.PackageFamilyName.StartsWith("Sannel.House"));
+					if (first != null)
+					{
+						connection.PackageFamilyName = first.PackageFamilyName;
+					}
+					else
+					{
+						connection.PackageFamilyName = "Unknown";
+					}
 				}
+				var result = await connection.OpenAsync();
+				if (result == AppServiceConnectionStatus.Success)
+				{
+					isConnected = true;
+					return true;
+				}
+				isConnected = false;
+				return false;
 			}
-			var result = await connection.OpenAsync();
-			if(result == AppServiceConnectionStatus.Success)
+			finally
 			{
-				isConnected = true;
-				return true;
+				semaphoreSlim.Release();
 			}
-			isConnected = false;
-			return false;
 		}
 
 		/// <summary>
@@ -86,14 +110,15 @@ namespace Sannel.House.ThermostatSDK
 
 			var valueSet = new ValueSet();
 			valueSet["Action"] = "SetConfiguration";
-			valueSet["ServerUri"] = serverUri;
+			valueSet["ServerUri"] = serverUri?.ToString();
 			valueSet["Username"] = username;
 			valueSet["Password"] = password;
 
 			var result = await connection.SendMessageAsync(valueSet);
 			if(result.Status == AppServiceResponseStatus.Success)
 			{
-				if(String.Compare(result.Message["result"] as String, "success", true) == 0)
+				var status = result.Message.GetValue<bool?>("Status");
+				if(status == true)
 				{
 					return true;
 				}
@@ -103,6 +128,28 @@ namespace Sannel.House.ThermostatSDK
 			{
 				return false;
 			}
+		}
+
+		/// <summary>
+		/// Gets the configuration asynchronous.
+		/// Retreaves the url and the Username from the AppService
+		/// </summary>
+		/// <returns></returns>
+		public async Task<Tuple<Uri, String>> GetConfigurationAsync()
+		{
+			var request = new ValueSet();
+			request["Action"] = "GetConfiguration";
+
+			var result = await connection.SendMessageAsync(request);
+			if(result.Status == AppServiceResponseStatus.Success)
+			{
+				var message = result.Message;
+				Uri i = null;
+				Uri.TryCreate(message.GetValue<String>("ServerUri"), UriKind.Absolute, out i);
+				return new Tuple<Uri, string>(i, message.GetValue<String>("Username"));
+			}
+
+			return new Tuple<Uri, string>(null, null);
 		}
 
 		public void Dispose()

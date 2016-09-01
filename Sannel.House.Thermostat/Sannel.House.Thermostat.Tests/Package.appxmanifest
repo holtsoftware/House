@@ -5,15 +5,15 @@
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   IgnorableNamespaces="uap mp">
 
-  <Identity Name="df4d8a03-6ea0-4aa9-a8aa-9a539365b427"
-            Publisher="CN=AdamHolt"
+  <Identity Name="892bfa34-e504-42e5-b751-abbc40cdf01d"
+            Publisher="CN=holts"
             Version="1.0.0.0" />
 
-  <mp:PhoneIdentity PhoneProductId="df4d8a03-6ea0-4aa9-a8aa-9a539365b427" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="892bfa34-e504-42e5-b751-abbc40cdf01d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>Sannel.House.Thermostat.Tests</DisplayName>
-    <PublisherDisplayName>AdamHolt</PublisherDisplayName>
+    <PublisherDisplayName>holts</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   
