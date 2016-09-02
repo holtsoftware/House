@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sannel.House.Thermostat
+namespace Sannel.House.Thermostat.Interfaces
 {
 	/// <summary>
 	/// Represents the settings for this app.

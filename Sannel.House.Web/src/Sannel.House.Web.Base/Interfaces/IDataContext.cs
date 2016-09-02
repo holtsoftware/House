@@ -1,20 +1,12 @@
-﻿#if !THERMOSTAT
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Sannel.House.Web.Base.Models;
-#else
-using Sannel.House.Thermostat.Base.Models;
-#endif
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-#if THERMOSTAT
-namespace Sannel.House.Thermostat.Base.Interfaces
-#else
 namespace Sannel.House.Web.Base.Interfaces
-#endif
 {
 	public interface IDataContext : IDisposable
 	{
@@ -27,7 +19,6 @@ namespace Sannel.House.Web.Base.Interfaces
 		DbSet<Device> Devices { get; set; }
 
 
-#if !THERMOSTAT
 		/// <summary>
 		/// Gets or sets the temperature settings.
 		/// </summary>
@@ -39,7 +30,8 @@ namespace Sannel.House.Web.Base.Interfaces
 		DbSet<ApplicationUser> Users { get; set; }
 
 		DbSet<IdentityRole> Roles { get; set; }
-#endif
+
+		DbSet<TemperatureEntry> TemperatureEntries { get; set; }
 
 		int SaveChanges();
 

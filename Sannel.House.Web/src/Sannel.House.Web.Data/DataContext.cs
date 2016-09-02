@@ -47,9 +47,14 @@ namespace Sannel.House.Web.Data
 			set;
 		}
 
+		public DbSet<TemperatureEntry> TemperatureEntries
+		{
+			get;
+			set;
+		}
+
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
-
 		}
 	}
 }
