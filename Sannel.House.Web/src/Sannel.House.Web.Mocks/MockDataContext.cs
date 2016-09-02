@@ -22,6 +22,12 @@ namespace Sannel.House.Web.Mocks
 			get; set;
 		}
 
+		public DbSet<TemperatureEntry> TemperatureEntries
+		{
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Gets or sets the temperature settings.
 		/// </summary>

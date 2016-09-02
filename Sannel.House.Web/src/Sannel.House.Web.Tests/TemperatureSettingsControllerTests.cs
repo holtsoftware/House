@@ -19,8 +19,8 @@ namespace Sannel.House.Web.Tests
 			Assert.AreEqual(expected.HeatTemperatureC, actual.HeatTemperatureC, $"HeatTemperatureC of {name} does not match");
 			Assert.AreEqual(expected.CoolTemperatureC, actual.CoolTemperatureC, $"CoolTemperatureC of {name} does not match");
 			Assert.AreEqual(expected.DayOfWeek, actual.DayOfWeek, $"DayOfWeek of {name} does not match");
-			Assert.AreEqual(expected.StartDate, actual.StartDate, $"StartDate of {name} does not match");
-			Assert.AreEqual(expected.EndDate, actual.EndDate, $"EndDate of {name} does not match");
+			Assert.AreEqual(expected.StartTime, actual.StartTime, $"StartTime of {name} does not match");
+			Assert.AreEqual(expected.EndTime, actual.EndTime, $"EndTime of {name} does not match");
 			Assert.AreEqual(expected.StartTime, actual.StartTime, $"StartTime of {name} does not match");
 			Assert.AreEqual(expected.EndTime, actual.EndTime, $"EndTime of {name} does not match");
 		}
@@ -64,8 +64,8 @@ namespace Sannel.House.Web.Tests
 				ts_4.HeatTemperatureC = temp++;
 				ts_4.CoolTemperatureC = temp++;
 				ts_4.DayOfWeek = previous.DayOfWeek;
-				ts_4.StartTime = new Time(12, 0);
-				ts_4.EndTime = new Time(12, 10);
+				ts_4.StartTime = new DateTime(1, 1, 1, 12, 0, 0);
+				ts_4.EndTime = new DateTime(1, 1, 1, 12, 10, 0);
 				context.TemperatureSettings.Add(ts_4);
 
 				var ts_5 = new TemperatureSetting();
@@ -78,7 +78,7 @@ namespace Sannel.House.Web.Tests
 				ts_6.HeatTemperatureC = temp++;
 				ts_6.CoolTemperatureC = temp++;
 				ts_6.DayOfWeek = previous.DayOfWeek;
-				ts_6.StartTime = new Time(0, 0);
+				ts_6.StartTime = new DateTime(1, 1, 1, 0, 0, 0);
 				context.TemperatureSettings.Add(ts_6);
 				// today
 				var ts_7 = new TemperatureSetting();
@@ -91,28 +91,28 @@ namespace Sannel.House.Web.Tests
 				ts_8.HeatTemperatureC = temp++;
 				ts_8.CoolTemperatureC = temp++;
 				ts_8.DayOfWeek = today.DayOfWeek;
-				ts_8.StartTime = new Time(8, 45);
+				ts_8.StartTime = new DateTime(1, 1, 1, 8, 45, 0);
 				context.TemperatureSettings.Add(ts_8);
 
 				var ts_9 = new TemperatureSetting();
 				ts_9.HeatTemperatureC = temp++;
 				ts_9.CoolTemperatureC = temp++;
 				ts_9.DayOfWeek = today.DayOfWeek;
-				ts_9.StartTime = new Time(8, 46);
+				ts_9.StartTime = new DateTime(1, 1, 1, 8, 46, 0);
 				context.TemperatureSettings.Add(ts_9);
 				// tomorrow
 				var ts_10 = new TemperatureSetting();
 				ts_10.HeatTemperatureC = temp++;
 				ts_10.CoolTemperatureC = temp++;
 				ts_10.DayOfWeek = tomorrow.DayOfWeek;
-				ts_10.StartTime = new Time(13, 13);
+				ts_10.StartTime = new DateTime(1, 1, 1, 13, 13, 0);
 				context.TemperatureSettings.Add(ts_10);
 
 				var ts_11 = new TemperatureSetting();
 				ts_11.HeatTemperatureC = temp++;
 				ts_11.CoolTemperatureC = temp++;
 				ts_11.DayOfWeek = tomorrow.DayOfWeek;
-				ts_11.StartTime = new Time(13, 12);
+				ts_11.StartTime = new DateTime(1, 1, 1, 13, 12, 0);
 				context.TemperatureSettings.Add(ts_11);
 
 				var ts_12 = new TemperatureSetting();
@@ -141,6 +141,7 @@ namespace Sannel.House.Web.Tests
 				context.SaveChanges();
 
 				#endregion
+
 				using (var controller = new TemperatureSettingsController(context))
 				{
 					var results = controller.Get(today).ToList();
