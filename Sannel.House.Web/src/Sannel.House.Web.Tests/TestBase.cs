@@ -13,17 +13,19 @@ namespace Sannel.House.Web.Tests
 		[TearDown]
 		public void CleanUp()
 		{
-			using(IDataContext context = new MockDataContext())
+			using (IDataContext context = new MockDataContext())
 			{
-				foreach(var d in context.Devices)
+				foreach (var d in context.Devices)
 				{
 					context.Devices.Remove(d);
 				}
 
-				foreach(var s in context.TemperatureSettings)
+				foreach (var s in context.TemperatureSettings)
 				{
 					context.TemperatureSettings.Remove(s);
 				}
+
+				context.TemperatureEntries.RemoveRange(context.TemperatureEntries);
 
 				context.SaveChanges();
 			}
