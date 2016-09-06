@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Sannel.House.Thermostat.Buisness;
+using Sannel.House.Thermostat.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

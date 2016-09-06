@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Sannel.House.Thermostat.Data;
+﻿using Sannel.House.Thermostat.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sannel.House.Thermostat.LocalTest
 {
@@ -32,6 +32,11 @@ namespace Sannel.House.Thermostat.LocalTest
 		{
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
+
+			using (DataContext context = new DataContext())
+			{
+				context.Database.Migrate();
+			}
 		}
 
 		/// <summary>

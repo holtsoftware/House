@@ -113,6 +113,10 @@
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Background.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Sannel.House.Common\Sannel.House.Common\Sannel.House.Common.csproj">
+      <Project>{974f5eeb-673a-463a-b674-4341412c5157}</Project>
+      <Name>Sannel.House.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Sannel.House.ServerSDK\Sannel.House.ServerSDK\Sannel.House.ServerSDK.csproj">
       <Project>{ca023529-cd75-4b60-abcc-b184f33d5451}</Project>
       <Name>Sannel.House.ServerSDK</Name>
@@ -124,10 +128,6 @@
     <ProjectReference Include="..\Sannel.House.Thermostat.Buisness\Sannel.House.Thermostat.Buisness.csproj">
       <Project>{fea8e1dc-bc4b-4cbd-ae80-134e01c8ece8}</Project>
       <Name>Sannel.House.Thermostat.Buisness</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sannel.House.Thermostat.Data\Sannel.House.Thermostat.Data.csproj">
-      <Project>{9e27db65-c401-4d76-826f-792121ae2c01}</Project>
-      <Name>Sannel.House.Thermostat.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

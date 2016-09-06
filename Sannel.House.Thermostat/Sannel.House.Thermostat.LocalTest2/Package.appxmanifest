@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp">
   <Identity Name="Sannel.House.Thermostat.LocalTest" Publisher="CN=AdamHolt" Version="0.1.0.0" />
-  <mp:PhoneIdentity PhoneProductId="63c8e941-4c33-4372-a4a0-6bf1372f2d84" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <mp:PhoneIdentity PhoneProductId="419d532a-b92b-41f8-8b81-54c5c61ca84f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Sannel House Thermostat LocalTest</DisplayName>
-    <PublisherDisplayName>Adam Holt</PublisherDisplayName>
+    <PublisherDisplayName>AdamHolt</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -20,9 +20,16 @@
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+		<Extensions>
+			<uap:Extension EntryPoint="Sannel.House.Thermostat.Background.ThermostatAppService" Category="windows.appService">
+				<uap3:AppService Name="Sannel.House.Thermostat"/>
+			</uap:Extension>
+		</Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="internetClientServer" />
+    <Capability Name="privateNetworkClientServer" />
   </Capabilities>
 </Package>

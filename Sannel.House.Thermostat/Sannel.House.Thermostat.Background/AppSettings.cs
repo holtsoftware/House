@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sannel.House.Thermostat.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -97,5 +98,23 @@ namespace Sannel.House.Thermostat
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the device identifier.
+		/// </summary>
+		/// <value>
+		/// The device identifier.
+		/// </value>
+		public int DeviceId
+		{
+			get
+			{
+				return get<int>(def: 1);
+			}
+
+			set
+			{
+				set(value);
+			}
+		}
 	}
 }

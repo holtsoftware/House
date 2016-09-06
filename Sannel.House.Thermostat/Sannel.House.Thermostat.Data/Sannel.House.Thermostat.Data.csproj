@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E27DB65-C401-4D76-826F-792121AE2C01}</ProjectGuid>
+    <ProjectGuid>{0A4573C3-4F6F-434D-80B6-4444A6D9275F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sannel.House.Thermostat.Data</RootNamespace>
@@ -107,10 +107,24 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContext.cs" />
+    <Compile Include="Migrations\20160904195204_InitalMigration.cs" />
+    <Compile Include="Migrations\20160904195204_InitalMigration.designer.cs">
+      <DependentUpon>20160904195204_InitalMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20160906053543_FixedSpellingError.cs" />
+    <Compile Include="Migrations\20160906053543_FixedSpellingError.designer.cs">
+      <DependentUpon>20160906053543_FixedSpellingError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Data.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Sannel.House.Common\Sannel.House.Common\Sannel.House.Common.csproj">
+      <Project>{974f5eeb-673a-463a-b674-4341412c5157}</Project>
+      <Name>Sannel.House.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Sannel.House.ServerSDK\Sannel.House.ServerSDK\Sannel.House.ServerSDK.csproj">
       <Project>{ca023529-cd75-4b60-abcc-b184f33d5451}</Project>
       <Name>Sannel.House.ServerSDK</Name>

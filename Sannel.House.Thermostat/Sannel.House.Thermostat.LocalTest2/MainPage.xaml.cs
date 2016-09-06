@@ -1,5 +1,4 @@
-﻿using Sannel.House.Thermostat.Buisness;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,19 +17,14 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Sannel.House.Thermostat.LocalTest
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
-	public sealed partial class MainPage : Page
-	{
-		
-		public MainPage()
-		{
-			this.InitializeComponent();
-		}
-
-		private async void Tick_Click(object sender, RoutedEventArgs e)
-		{
-		}
-	}
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class MainPage : Page
+    {
+        public MainPage()
+        {
+            this.InitializeComponent();
+        }
+    }
 }

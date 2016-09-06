@@ -19,6 +19,9 @@ namespace Sannel.House.Web.Base.Models
 		: ITemperatureEntry
 #endif
 	{
+		public TemperatureEntry()
+		{
+		}
 		[Key]
 		[JsonProperty(nameof(Id))]
 		public Guid Id { get; set; }

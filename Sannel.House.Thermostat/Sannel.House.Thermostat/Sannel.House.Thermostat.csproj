@@ -131,9 +131,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Sannel.House.Common\Sannel.House.Common\Sannel.House.Common.csproj">
+      <Project>{974F5EEB-673A-463A-B674-4341412C5157}</Project>
+      <Name>Sannel.House.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sannel.House.Thermostat.Background\Sannel.House.Thermostat.Background.csproj">
       <Project>{13d0f780-8823-4458-9af7-07026e113a75}</Project>
       <Name>Sannel.House.Thermostat.Background</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sannel.House.Thermostat.Buisness\Sannel.House.Thermostat.Buisness.csproj">
+      <Project>{FEA8E1DC-BC4B-4CBD-AE80-134E01C8ECE8}</Project>
+      <Name>Sannel.House.Thermostat.Buisness</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

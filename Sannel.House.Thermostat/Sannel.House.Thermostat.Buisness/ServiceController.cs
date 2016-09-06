@@ -1,4 +1,5 @@
 ﻿using Sannel.House.ServerSDK;
+using Sannel.House.Thermostat.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Sannel.House.Thermostat.Buisness
 
 			var serverContext = new ServerContext(settings);
 			var result = await serverContext.LoginAsync(settings.Username, settings.Password);
-			if (result.Key)
+			if (result.Status == LoginStatus.Success)
 			{
 				return new Tuple<bool, string>(true, "Success");
 			}
