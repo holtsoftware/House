@@ -5,13 +5,19 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+
 #if THERMOSTAT
+using Sannel.House.ServerSDK;
+
 namespace Sannel.House.Thermostat.Models
 #else
 namespace Sannel.House.Web.Base.Models
 #endif
 {
 	public class TemperatureEntry
+#if THERMOSTAT
+		: ITemperatureEntry
+#endif
 	{
 		[Key]
 		[JsonProperty(nameof(Id))]
@@ -31,8 +37,8 @@ namespace Sannel.House.Web.Base.Models
 		[JsonProperty(nameof(Humidity))]
 		public double Humidity { get; set; }
 
-		[JsonProperty(nameof(Presure))]
-		public double Presure { get; set; }
+		[JsonProperty(nameof(Pressure))]
+		public double Pressure { get; set; }
 
 #if THERMOSTAT
 		[JsonProperty(nameof(Synced))]
