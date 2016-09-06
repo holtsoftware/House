@@ -20,7 +20,7 @@ namespace Sannel.House
 		/// </summary>
 		public SimpleContainer()
 		{
-
+			Instance(this);
 		}
 
 		/// <summary>
