@@ -10,7 +10,7 @@ using Windows.UI;
 
 namespace Sannel.House.Thermostat
 {
-	internal class AppSettings : IAppSettings
+	public class AppSettings : IAppSettings
 	{
 		private readonly ApplicationDataContainer settings;
 

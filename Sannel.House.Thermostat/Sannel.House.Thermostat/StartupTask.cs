@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Sannel.House.Thermostat.Buisness;
 using Sannel.House;
+using Sannel.House.Thermostat.Interfaces;
+using Sannel.House.ServerSDK;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -33,6 +35,8 @@ namespace Sannel.House.Thermostat
 			deferral = taskInstance.GetDeferral();
 			container = new SimpleContainer();
 			container.Singleton<ThermostatController>();
+			container.Singleton<IAppSettings, AppSettings>();
+			container.Singleton<IServerContext, ServerContext>();
 
 			controller = container.GetInstance<ThermostatController>();
 

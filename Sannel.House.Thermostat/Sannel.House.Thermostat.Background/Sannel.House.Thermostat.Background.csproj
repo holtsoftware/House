@@ -107,7 +107,6 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThermostatAppService.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Background.rd.xml" />

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sannel.House.Thermostat.Buisness;
 using Sannel.House.Thermostat.Data;
+using Sannel.House.Thermostat.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +26,11 @@ namespace Sannel.House.Thermostat.LocalTest
 	/// </summary>
 	sealed partial class App : Application
 	{
+		public static SimpleContainer Container
+		{
+			get;
+		} = new SimpleContainer();
+
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
@@ -32,6 +39,14 @@ namespace Sannel.House.Thermostat.LocalTest
 		{
 			this.InitializeComponent();
 			this.Suspending += OnSuspending;
+			Container.Singleton<IAppSettings, AppSettings>();
+			Container.Singleton<IDataContext, DataContext>();
+			Container.Singleton<ITemperatureSensor, TemperatureSensor>();
+			Container.Singleton<ThermostatController>();
+			using (var context = new DataContext())
+			{
+				context.Database.Migrate();
+			}
 		}
 
 		/// <summary>

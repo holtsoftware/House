@@ -112,10 +112,6 @@
     <Compile Include="Migrations\20160904195204_InitalMigration.designer.cs">
       <DependentUpon>20160904195204_InitalMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20160906053543_FixedSpellingError.cs" />
-    <Compile Include="Migrations\20160906053543_FixedSpellingError.designer.cs">
-      <DependentUpon>20160906053543_FixedSpellingError.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\DataContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Data.rd.xml" />

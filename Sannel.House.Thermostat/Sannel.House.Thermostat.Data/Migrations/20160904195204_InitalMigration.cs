@@ -16,7 +16,7 @@ namespace Sannel.House.Thermostat.Data.Migrations
                     CreatedDateTime = table.Column<DateTime>(nullable: false),
                     DeviceId = table.Column<int>(nullable: false),
                     Humidity = table.Column<double>(nullable: false),
-                    Presure = table.Column<double>(nullable: false),
+                    Pressure = table.Column<double>(nullable: false),
                     Synced = table.Column<bool>(nullable: false),
                     TemperatureCelsius = table.Column<double>(nullable: false)
                 },

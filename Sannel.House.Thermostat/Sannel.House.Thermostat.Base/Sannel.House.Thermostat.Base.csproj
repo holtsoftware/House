@@ -110,6 +110,7 @@
     <Compile Include="..\..\Sannel.House.Web\src\Sannel.House.Web.Base\Models\TemperatureEntry.cs">
       <Link>Models\TemperatureEntry.cs</Link>
     </Compile>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IDataContext.cs" />
     <Compile Include="Interfaces\ITemperatureSensor.cs" />
@@ -117,6 +118,10 @@
     <EmbeddedResource Include="Properties\Sannel.House.Thermostat.Base.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Sannel.House.Common\Sannel.House.Common\Sannel.House.Common.csproj">
+      <Project>{974f5eeb-673a-463a-b674-4341412c5157}</Project>
+      <Name>Sannel.House.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Sannel.House.ServerSDK\Sannel.House.ServerSDK\Sannel.House.ServerSDK.csproj">
       <Project>{ca023529-cd75-4b60-abcc-b184f33d5451}</Project>
       <Name>Sannel.House.ServerSDK</Name>

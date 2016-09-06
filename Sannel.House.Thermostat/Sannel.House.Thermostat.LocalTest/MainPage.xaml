@@ -10,6 +10,39 @@
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 		<StackPanel>
 			<Button x:Name="Tick" Click="Tick_Click">Tick</Button>
+			<TextBlock>Temperature</TextBlock>
+			<TextBlock Text="{x:Bind Sensor.TemperatureCelsius, Mode=OneWay}" />
+			<Slider Minimum="0" Maximum="75" Value="{x:Bind Sensor.TemperatureCelsius, Mode=TwoWay}" />
+			<TextBlock>Humidity</TextBlock>
+			<TextBlock Text="{x:Bind Sensor.Humidity, Mode=OneWay}" />
+			<Slider Minimum="1000" Maximum="4000" Value="{x:Bind Sensor.Humidity, Mode=TwoWay}" />
+			<TextBlock>Pressure</TextBlock>
+			<TextBlock Text="{x:Bind Sensor.Pressure, Mode=OneWay}" />
+			<Slider Minimum="1000" Maximum="4000" Value="{x:Bind Sensor.Pressure, Mode=TwoWay}" />
+			<TextBlock>Fan</TextBlock>
+			<ToggleSwitch IsEnabled="False" />
+			<TextBlock>Heat</TextBlock>
+			<ToggleSwitch IsEnabled="False" />
+			<TextBlock>Cool</TextBlock>
+			<ToggleSwitch IsEnabled="False" />
+			<ListView ItemsSource="{x:Bind Entries}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding CreatedDateTime}" />
+							<TextBlock Text="DeviceId:" Margin="6,0,0,0" />
+							<TextBlock Text="{Binding DeviceId}" />
+							<TextBlock Text="TempC:" Margin="6,0,0,0" />
+							<TextBlock Text="{Binding TemperatureCelsius}" />
+							<TextBlock Text="Humidity:" Margin="6,0,0,0" />
+							<TextBlock Text="{Binding Humidity}" />
+							<TextBlock Text="Pressure:" Margin="6,0,0,0" />
+							<TextBlock Text="{Binding Pressure}" />
+							<ToggleSwitch IsEnabled="False" IsOn="{Binding Synced}" />
+						</StackPanel>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
 		</StackPanel>
 	</Grid>
 </Page>

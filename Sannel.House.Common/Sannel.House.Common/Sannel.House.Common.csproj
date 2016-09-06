@@ -41,6 +41,7 @@
     <Compile Include="CreateType.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyChangeBase.cs" />
     <Compile Include="SimpleContainer.cs" />
     <Compile Include="TypeEntry.cs" />
   </ItemGroup>

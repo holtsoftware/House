@@ -31,9 +31,9 @@ namespace Sannel.House.Thermostat.Tests
 				IAppSettings aSett = appSetting;
 
 				var controller = new ThermostatController(context, sensor, appSetting);
-				DateTime before = DateTime.Now;
+				DateTimeOffset before = DateTimeOffset.Now;
 				controller.ProcessSensors();
-				DateTime after = DateTime.Now;
+				DateTimeOffset after = DateTimeOffset.Now;
 
 				Assert.AreEqual(1, context.TemperatureEntries.Count());
 
