@@ -34,7 +34,12 @@ namespace Sannel.House.Web.Base.Models
 		[JsonProperty(nameof(Presure))]
 		public double Presure { get; set; }
 
+#if THERMOSTAT
+		[JsonProperty(nameof(Synced))]
+		public bool Synced { get; set; }
+#endif
+
 		[JsonProperty(nameof(CreatedDateTime))]
-		public DateTime CreatedDateTime { get; set; }
+		public DateTimeOffset CreatedDateTime { get; set; }
 	}
 }
