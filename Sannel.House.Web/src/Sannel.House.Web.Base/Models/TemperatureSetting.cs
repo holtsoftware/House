@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Sannel.House.Web.Base.Converters;
 #if CLIENT
 
 namespace Sannel.House.Client.Models
@@ -103,7 +104,7 @@ namespace Sannel.House.Web.Base.Models
 		}
 
 
-		private DateTime? startTime;
+		private DateTimeOffset? startTime;
 		/// <summary>
 		/// Gets or sets the Start
 		/// </summary>
@@ -111,7 +112,8 @@ namespace Sannel.House.Web.Base.Models
 		/// The Start
 		/// </value>
 		[JsonProperty(nameof(StartTime))]
-		public DateTime? StartTime
+		[JsonConverter(typeof(UtcDateTimeOffsetConverter))]
+		public DateTimeOffset? StartTime
 		{
 			get
 			{
@@ -123,7 +125,7 @@ namespace Sannel.House.Web.Base.Models
 			}
 		}
 
-		private DateTime? endTime;
+		private DateTimeOffset? endTime;
 		/// <summary>
 		/// Gets or sets the End
 		/// </summary>
@@ -131,7 +133,8 @@ namespace Sannel.House.Web.Base.Models
 		/// The End
 		/// </value>
 		[JsonProperty(nameof(EndTime))]
-		public DateTime? EndTime
+		[JsonConverter(typeof(UtcDateTimeOffsetConverter))]
+		public DateTimeOffset? EndTime
 		{
 			get
 			{
@@ -217,6 +220,7 @@ namespace Sannel.House.Web.Base.Models
 		/// The DateCreated
 		/// </value>
 		[JsonProperty(nameof(DateCreated))]
+		[JsonConverter(typeof(UtcDateTimeOffsetConverter))]
 		public DateTime DateCreated
 		{
 			get
@@ -238,6 +242,7 @@ namespace Sannel.House.Web.Base.Models
 		/// The DateModified
 		/// </value>
 		[JsonProperty(nameof(DateModified))]
+		[JsonConverter(typeof(UtcDateTimeOffsetConverter))]
 		public DateTime DateModified
 		{
 			get
@@ -269,7 +274,6 @@ namespace Sannel.House.Web.Base.Models
 #else
 		protected void Set<T>(ref T dest, T source, [CallerMemberName]String propName = null)
 		{
-
 			if (!Object.Equals(dest, source))
 			{
 				dest = source;

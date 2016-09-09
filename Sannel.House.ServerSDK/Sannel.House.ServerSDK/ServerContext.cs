@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -22,11 +23,13 @@ namespace Sannel.House.ServerSDK
 		private String authCookieName;
 		private HttpCookie cookie;
 		private IServerSettings settings;
+		private ICreateHelper helper;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ServerContext"/> class.
 		/// </summary>
 		/// <param name="settings">The settings.</param>
-		public ServerContext(IServerSettings settings)
+		public ServerContext(IServerSettings settings, ICreateHelper helper)
 		{
 			if (settings == null)
 			{
@@ -34,6 +37,7 @@ namespace Sannel.House.ServerSDK
 			}
 			this.settings = settings;
 			authCookieName = "Authz";
+			this.helper = helper;
 		}
 
 		/// <summary>
@@ -213,33 +217,104 @@ namespace Sannel.House.ServerSDK
 			}).AsAsyncOperation();
 		}
 
-		/*public IAsyncOperation<Results<bool, string, Guid>> PostTemperatureEntryAsync(ITemperatureEntry entry)
+		public IAsyncOperation<TemperatureSettingResults> GetTemperatureSettingsAsync()
 		{
 			return Task.Run(async () =>
 			{
-				if (settings.ServerUri == null)
+				if(settings.ServerUri == null)
 				{
-					return new Results<bool, String, Guid>(false, "Server Uri is not set", Guid.Empty);
+					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriNotSet, null);
 				}
 
-				if (String.IsNullOrWhiteSpace(authCookieValue))
+				if (!IsAuthenticated)
 				{
-					return new Results<bool, String, Guid>(false, "Not Authenticated", Guid.Empty);
+					return new TemperatureSettingResults(TemperatureSettingStatus.NotLoggedIn, null);
 				}
-				UriBuilder builder = new UriBuilder(settings.ServerUri);
-				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
-				httpFilter.CookieManager.SetCookie(new HttpCookie(authCookieName, $"{builder.Scheme}://{builder.Host}:{builder.Port}", "/")
+
+				UriBuilder builder;
+				try
 				{
-					Value = authCookieValue
-				});
+					builder = new UriBuilder(settings.ServerUri);
+				}
+				catch (UriFormatException)
+				{
+					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriInvalid, null);
+				}
+
+				builder.Path = "/api/TemperatureSettings";
+
+				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
+				httpFilter.CookieManager.SetCookie(cookie);
 
 				using (var client = new HttpClient(httpFilter))
 				{
-					
-					await client.GetAsync(builder.Uri);
+					HttpResponseMessage result = null;
+					try
+					{
+						result = await client.GetAsync(builder.Uri);
+					}
+					catch (COMException ce)
+					{
+						if (ce.HResult == -2147012867)
+						{
+							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null);
+						}
+
+						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null);
+					}
+
+					if(result.StatusCode == HttpStatusCode.Ok)
+					{
+						var res = await result.Content.ReadAsStringAsync();
+						try
+						{
+							JToken token = JToken.Parse(res);
+							if(token.Type == JTokenType.Array)
+							{
+								JArray array = token as JArray;
+								List<ITemperatureSetting> settings = new List<ITemperatureSetting>();
+								foreach(JObject obj in array.Children<JObject>())
+								{
+									var setting = helper.CreateTemperatureSetting();
+									var prop = obj.Property("Id");
+									setting.Id = prop.Value.Value<long>();
+									prop = obj.Property("DayOfWeek");
+									setting.DayOfWeek = prop?.Value?.Value<short?>();
+									prop = obj.Property("Month");
+									setting.Month = prop?.Value?.Value<int?>();
+									prop = obj.Property("StartTime");
+									setting.StartTime = prop?.Value?.Value<DateTimeOffset?>();
+									prop = obj.Property("EndTime");
+									setting.EndTime = prop?.Value?.Value<DateTimeOffset?>();
+									prop = obj.Property("HeatTemperatureCelsius");
+									setting.HeatTemperatureCelsius = prop?.Value?.Value<double?>() ?? 70;
+									prop = obj.Property("CoolTemperatureCelsius");
+									setting.CoolTemperatureCelsius = prop?.Value?.Value<double?>() ?? 80;
+									prop = obj.Property("DateCreated");
+									setting.DateCreated = DateTimeOffset.ParseExact(prop.Value.Value<String>(), "yyyy-MM-ddTHH:mm:ss.ffff z", CultureInfo.InvariantCulture);
+									var dt = (prop?.Value?.Value<DateTime?>() ?? DateTime.Now);
+									setting.DateCreated = dt.ToLocalTime();
+									prop = obj.Property("DateModified");
+									dt = (prop?.Value?.Value<DateTime?>() ?? DateTime.Now);
+									setting.DateModified = dt.ToLocalTime();
+									settings.Add(setting);
+								}
+								return new TemperatureSettingResults(TemperatureSettingStatus.Success, settings);
+							}
+						}
+						catch (Exception ex)
+						{
+							return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null);
+						}
+					}
+					else
+					{
+						return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
+					}
 				}
-				return new Results<bool, String, Guid>(false, "", Guid.Empty);
+				
+				return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
 			}).AsAsyncOperation();
-		}*/
+		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Sannel.House.Web.Tests
 				te.DeviceId = device.Id;
 				te.CreatedDateTime = DateTime.MinValue;
 				te.Humidity = 20;
-				te.Presure = 22;
+				te.Pressure = 22;
 				te.TemperatureCelsius = 0;
 				te.Id = Guid.Empty;
 				controller.Post(te);
@@ -40,14 +40,14 @@ namespace Sannel.House.Web.Tests
 				Assert.AreEqual(te.DeviceId, first.DeviceId);
 				Assert.AreEqual(te.CreatedDateTime, first.CreatedDateTime);
 				Assert.AreEqual(te.Humidity, first.Humidity);
-				Assert.AreEqual(te.Presure, first.Presure);
+				Assert.AreEqual(te.Pressure, first.Pressure);
 				Assert.AreEqual(te.TemperatureCelsius, first.TemperatureCelsius);
 
 				var te2 = new TemperatureEntry();
 				te2.DeviceId = device.Id;
 				te2.CreatedDateTime = DateTime.Now;
 				te2.Humidity = 22;
-				te2.Presure = 321;
+				te2.Pressure = 321;
 				te2.TemperatureCelsius = 32;
 				te2.Id = Guid.NewGuid();
 				controller.Post(te2);
@@ -60,7 +60,7 @@ namespace Sannel.House.Web.Tests
 				Assert.AreEqual(te2.DeviceId, second.DeviceId);
 				Assert.AreEqual(te2.CreatedDateTime, second.CreatedDateTime);
 				Assert.AreEqual(te2.Humidity, second.Humidity);
-				Assert.AreEqual(te2.Presure, second.Presure);
+				Assert.AreEqual(te2.Pressure, second.Pressure);
 				Assert.AreEqual(te2.TemperatureCelsius, second.TemperatureCelsius);
 				
 			}

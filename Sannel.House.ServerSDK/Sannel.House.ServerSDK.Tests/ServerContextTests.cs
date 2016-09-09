@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Sannel.House.ServerSDK;
+using Sannel.House.ServerSDK.Tests.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,8 @@ namespace Sannel.House.ServerSDK.Tests
 		{
 			var sett = new StubIServerSettings();
 			sett.ServerUri_Get(() => null);
-			var serverContext = new ServerContext(sett);
+			var create = new StubICreateHelper();
+			var serverContext = new ServerContext(sett, create);
 			var result = await serverContext.LoginAsync(null, null);
 			Assert.IsNotNull(result);
 			Assert.AreEqual(LoginStatus.ServerUriNotSet, result.Status);
@@ -56,14 +58,15 @@ namespace Sannel.House.ServerSDK.Tests
 		{
 			var sett = new StubIServerSettings();
 			sett.ServerUri_Get(() => null);
-			var serverContext = new ServerContext(sett);
+			var create = new StubICreateHelper();
+			var serverContext = new ServerContext(sett, create);
 			var entry = new StubITemperatureEntry();
 			var result = await serverContext.PostTemperatureEntryAsync(entry);
 			Assert.AreEqual(TemperatureEntryStatus.ServerUriNotSet, result.Status);
 			Assert.AreEqual(Guid.Empty, result.Id);
 			Assert.AreEqual(entry, result.Entry);
 
-			sett.ServerUri_Get(() => new Uri("http://localtest.me:5000/"));
+			sett.ServerUri_Get(() => new Uri("http://localhost:5000/"));
 
 			result = await serverContext.PostTemperatureEntryAsync(entry);
 			Assert.AreEqual(TemperatureEntryStatus.NotLoggedIn, result.Status);
@@ -72,7 +75,7 @@ namespace Sannel.House.ServerSDK.Tests
 
 			await serverContext.LoginAsync("test@test.com", "testtest");
 
-			sett.ServerUri_Get(() => new Uri("http://localtest.me:5020"));
+			sett.ServerUri_Get(() => new Uri("http://localhost:5020"));
 
 			Guid id = Guid.Empty;
 			entry.Id_Get(() => id);
@@ -88,7 +91,7 @@ namespace Sannel.House.ServerSDK.Tests
 			Assert.AreEqual(Guid.Empty, result.Id);
 			Assert.AreEqual(entry, result.Entry);
 
-			sett.ServerUri_Get(() => new Uri("http://localtest.me:5000"));
+			sett.ServerUri_Get(() => new Uri("http://localhost:5000"));
 
 
 			result = await serverContext.PostTemperatureEntryAsync(entry);
@@ -103,6 +106,40 @@ namespace Sannel.House.ServerSDK.Tests
 			Assert.AreEqual(entry, result.Entry);
 
 
+		}
+
+		[TestMethod]
+		public async Task GetTemperatureSettingsAsyncTest()
+		{
+			var sett = new StubIServerSettings();
+			sett.ServerUri_Get(() => null);
+			var create = new StubICreateHelper();
+			create.CreateTemperatureSetting(() => new MockTemperatureSetting());
+			var serverContext = new ServerContext(sett, create);
+
+			var results = await serverContext.GetTemperatureSettingsAsync();
+			Assert.AreEqual(TemperatureSettingStatus.ServerUriNotSet, results.Status);
+			Assert.AreEqual(null, results.Settings);
+
+			sett.ServerUri_Get(() => new Uri("http://localhost:5000/"));
+			results = await serverContext.GetTemperatureSettingsAsync();
+			Assert.AreEqual(TemperatureSettingStatus.NotLoggedIn, results.Status);
+			Assert.IsNull(results.Settings);
+
+			await serverContext.LoginAsync("test@test.com", "testtest");
+
+			sett.ServerUri_Get(() => new Uri("http://localhost:5020"));
+
+			results = await serverContext.GetTemperatureSettingsAsync();
+			Assert.AreEqual(TemperatureSettingStatus.UnableToConnectToServer, results.Status);
+			Assert.IsNull(results.Settings);
+
+			sett.ServerUri_Get(() => new Uri("http://localhost:5000"));
+
+			results = await serverContext.GetTemperatureSettingsAsync();
+			Assert.AreEqual(TemperatureSettingStatus.Success, results.Status);
+			Assert.IsNotNull(results.Settings);
+			var list = results.Settings;
 		}
 	}
 }

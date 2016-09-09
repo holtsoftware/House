@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sannel.House.Web.Base.Models;
 using Sannel.House.Web.Base.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,13 +23,13 @@ namespace Sannel.House.Web.Controllers.api
 			this.context = context;
 		}
 
-		public IEnumerable<TemperatureSetting> Get()
+		public JToken Get()
 		{
 			return Get(DateTime.Now);
 		}
 
 		[HttpGet("{dt}")]
-		public IEnumerable<TemperatureSetting> Get(DateTime dt)
+		public JToken Get(DateTime dt)
 		{
 			var daysOfWeek = (from f in context.TemperatureSettings
 							  where f.DayOfWeek != null
@@ -40,29 +43,34 @@ namespace Sannel.House.Web.Controllers.api
 							&& f.EndTime != null
 							&& f.IsTimeOnly
 						select f);
-
-			return daysOfWeek.Union(days);
-		}
-
-		private TemperatureSetting getDefault()
-		{
-			var first = (from f in context.TemperatureSettings
-						 where f.DayOfWeek == null
-							 && f.StartTime == null
-							 && f.EndTime == null
-						 orderby f.DateModified descending
-						 select f).FirstOrDefault();
-			if (first == null)
+			JArray array = new JArray();
+			foreach (var item in daysOfWeek.Union(days))
 			{
-				first = new TemperatureSetting();
-				first.HeatTemperatureC = 15.6;
-				first.CoolTemperatureC = 29.5;
-				context.TemperatureSettings.Add(first);
-				context.SaveChanges();
+				JObject obj = new JObject();
+				array.Add(obj);
+				obj.Add(new JProperty(nameof(item.Id), item.Id));
+				obj.Add(new JProperty(nameof(item.IsTimeOnly), item.IsTimeOnly));
+				obj.Add(new JProperty(nameof(item.CoolTemperatureC), item.CoolTemperatureC));
+				obj.Add(new JProperty(nameof(item.HeatTemperatureC), item.HeatTemperatureC));
+				if (item.Month.HasValue)
+				{
+					obj.Add(new JProperty(nameof(item.Month), item.Month));
+				}
+				if (item.StartTime.HasValue)
+				{
+					obj.Add(new JProperty(nameof(item.StartTime), item.StartTime.Value.ToString(Constants.DateTimeFormat)));
+				}
+				if (item.EndTime.HasValue)
+				{
+					obj.Add(new JProperty(nameof(item.EndTime), item.EndTime.Value.ToString(Constants.DateTimeFormat)));
+				}
+				obj.Add(new JProperty(nameof(item.DateCreated), item.DateCreated.ToString(Constants.DateTimeFormat)));
+				obj.Add(new JProperty(nameof(item.DateModified), item.DateModified.ToString(Constants.DateTimeFormat)));
 			}
 
-			return first;
+			return array;
 		}
+
 
 		// GET: api/values
 		/// <summary>
@@ -174,7 +182,7 @@ namespace Sannel.House.Web.Controllers.api
 		public void Delete(int id)
 		{
 			var current = context.TemperatureSettings.FirstOrDefault(i => i.Id == id);
-			if(current != null)
+			if (current != null)
 			{
 				context.TemperatureSettings.Remove(current);
 				context.SaveChanges();
