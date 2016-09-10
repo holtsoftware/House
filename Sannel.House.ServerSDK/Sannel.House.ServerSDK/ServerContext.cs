@@ -135,6 +135,10 @@ namespace Sannel.House.ServerSDK
 
 		public IAsyncOperation<TemperatureEntryResult> PostTemperatureEntryAsync(ITemperatureEntry entry)
 		{
+			if(entry == null)
+			{
+				throw new ArgumentNullException(nameof(entry));
+			}
 			return Task.Run(async () =>
 			{
 				if(settings.ServerUri == null)
@@ -236,9 +240,12 @@ namespace Sannel.House.ServerSDK
 				{
 					builder = new UriBuilder(settings.ServerUri);
 				}
-				catch (UriFormatException)
+				catch (UriFormatException ufe)
 				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriInvalid, null);
+					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriInvalid, null)
+					{
+						Exception = ufe
+					};
 				}
 
 				builder.Path = "/api/TemperatureSettings";
@@ -257,10 +264,16 @@ namespace Sannel.House.ServerSDK
 					{
 						if (ce.HResult == -2147012867)
 						{
-							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null);
+							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null)
+							{
+								Exception = ce
+							};
 						}
 
-						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null);
+						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
+						{
+							Exception = ce
+						};
 					}
 
 					if(result.StatusCode == HttpStatusCode.Ok)
@@ -282,21 +295,25 @@ namespace Sannel.House.ServerSDK
 									setting.DayOfWeek = prop?.Value?.Value<short?>();
 									prop = obj.Property("Month");
 									setting.Month = prop?.Value?.Value<int?>();
+
 									prop = obj.Property("StartTime");
-									setting.StartTime = prop?.Value?.Value<DateTimeOffset?>();
+									var dto = prop?.Value?.Value<String>().ToDateTimeOffset();
+									setting.StartTime = dto;
 									prop = obj.Property("EndTime");
-									setting.EndTime = prop?.Value?.Value<DateTimeOffset?>();
+									dto = prop?.Value?.Value<String>().ToDateTimeOffset();
+									setting.EndTime = dto;
+
 									prop = obj.Property("HeatTemperatureCelsius");
 									setting.HeatTemperatureCelsius = prop?.Value?.Value<double?>() ?? 70;
 									prop = obj.Property("CoolTemperatureCelsius");
 									setting.CoolTemperatureCelsius = prop?.Value?.Value<double?>() ?? 80;
+
 									prop = obj.Property("DateCreated");
-									setting.DateCreated = DateTimeOffset.ParseExact(prop.Value.Value<String>(), "yyyy-MM-ddTHH:mm:ss.ffff z", CultureInfo.InvariantCulture);
-									var dt = (prop?.Value?.Value<DateTime?>() ?? DateTime.Now);
-									setting.DateCreated = dt.ToLocalTime();
+									dto = prop?.Value?.Value<String>().ToDateTimeOffset();
+									setting.DateCreated = dto ?? DateTimeOffset.Now;
 									prop = obj.Property("DateModified");
-									dt = (prop?.Value?.Value<DateTime?>() ?? DateTime.Now);
-									setting.DateModified = dt.ToLocalTime();
+									dto = prop?.Value?.Value<String>().ToDateTimeOffset();
+									setting.DateModified = dto ?? DateTimeOffset.Now;
 									settings.Add(setting);
 								}
 								return new TemperatureSettingResults(TemperatureSettingStatus.Success, settings);
@@ -304,7 +321,10 @@ namespace Sannel.House.ServerSDK
 						}
 						catch (Exception ex)
 						{
-							return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null);
+							return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
+							{
+								Exception = ex
+							};
 						}
 					}
 					else
@@ -314,6 +334,74 @@ namespace Sannel.House.ServerSDK
 				}
 				
 				return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
+			}).AsAsyncOperation();
+		}
+
+		public IAsyncOperation<TemperatureSettingResult> PutTemperatureSettingAsync(ITemperatureSetting setting)
+		{
+			if(setting == null)
+			{
+				throw new ArgumentNullException(nameof(setting));
+			}
+			return Task.Run(async () =>
+			{
+				if(setting.Id == 0)
+				{
+					return new TemperatureSettingResult(TemperatureSettingStatus.IdCannotBeDefault, setting);
+				}
+
+				if(settings.ServerUri == null)
+				{
+					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriNotSet, null);
+				}
+
+				if (!IsAuthenticated)
+				{
+					return new TemperatureSettingResults(TemperatureSettingStatus.NotLoggedIn, null);
+				}
+
+				UriBuilder builder;
+				try
+				{
+					builder = new UriBuilder(settings.ServerUri);
+				}
+				catch (UriFormatException ufe)
+				{
+					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriInvalid, null)
+					{
+						Exception = ufe
+					};
+				}
+
+				builder.Path = "/api/TemperatureSettings";
+
+				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
+				httpFilter.CookieManager.SetCookie(cookie);
+
+				using (var client = new HttpClient(httpFilter))
+				{
+					HttpResponseMessage result = null;
+					try
+					{
+						result = await client.PutAsync(builder.Uri, new HttpStringContent("", Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
+					}
+					catch (COMException ce)
+					{
+						if (ce.HResult == -2147012867)
+						{
+							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null)
+							{
+								Exception = ce
+							};
+						}
+
+						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
+						{
+							Exception = ce
+						};
+					}
+				}
+				return new TemperatureSettingResult(TemperatureSettingStatus.Error, entry);
 			}).AsAsyncOperation();
 		}
 	}

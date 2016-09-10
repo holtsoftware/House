@@ -15,5 +15,6 @@ namespace Sannel.House.ServerSDK
 		}
 		public TemperatureSettingStatus Status { get; set; }
 		public IList<ITemperatureSetting> Settings { get; set; }
+		public Exception Exception { get; set; }
 	}
 }

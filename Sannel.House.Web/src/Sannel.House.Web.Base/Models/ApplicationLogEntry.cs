@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +14,6 @@ namespace Sannel.House.Web.Base.Models
 	{
 #if !LOGGING_SDK
 		[Key]
-		[JsonProperty(nameof(Id))]
 		public Guid Id
 		{
 			get;
@@ -23,7 +21,6 @@ namespace Sannel.House.Web.Base.Models
 		}
 #endif
 
-		[JsonProperty(nameof(DeviceId))]
 		public int? DeviceId
 		{
 			get;
@@ -32,7 +29,6 @@ namespace Sannel.House.Web.Base.Models
 
 		[Required]
 		[MaxLength(256)]
-		[JsonProperty(nameof(ApplicationId))]
 		public String ApplicationId
 		{
 			get;
@@ -40,14 +36,12 @@ namespace Sannel.House.Web.Base.Models
 		}
 
 		[Required]
-		[JsonProperty(nameof(Message))]
 		public String Message
 		{
 			get;
 			set;
 		}
 
-		[JsonProperty(nameof(Exception))]
 		public String Exception
 		{
 			get;
@@ -55,7 +49,6 @@ namespace Sannel.House.Web.Base.Models
 		}
 #if !LOGGING_SDK
 		[Required]
-		[JsonProperty(nameof(EntryDateTime))]
 		public DateTime EntryDateTime
 		{
 			get;

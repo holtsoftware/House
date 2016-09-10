@@ -8,6 +8,12 @@ namespace Sannel.House.ServerSDK
 {
 	public sealed class TemperatureSettingResult
 	{
+		public TemperatureSettingResult(TemperatureSettingStatus status, ITemperatureSetting setting)
+		{
+			Status = status;
+			Setting = setting;
+		}
+
 		public TemperatureSettingStatus Status { get; set; }
 
 		public ITemperatureSetting Setting { get; set; }

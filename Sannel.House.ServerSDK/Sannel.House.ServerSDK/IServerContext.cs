@@ -19,5 +19,6 @@ namespace Sannel.House.ServerSDK
 		IAsyncOperation<TemperatureEntryResult> PostTemperatureEntryAsync(ITemperatureEntry entry);
 
 		IAsyncOperation<TemperatureSettingResults> GetTemperatureSettingsAsync();
+		IAsyncOperation<TemperatureSettingResult> PutTemperatureEntryAsync(ITemperatureEntry entry);
 	}
 }

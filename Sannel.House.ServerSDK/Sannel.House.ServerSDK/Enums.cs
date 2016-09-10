@@ -40,6 +40,7 @@ namespace Sannel.House.ServerSDK
 		Exception,
 		ServerUriInvalid,
 		UnableToConnectToServer,
-		Success
+		Success,
+		IdCannotBeDefault
 	}
 }

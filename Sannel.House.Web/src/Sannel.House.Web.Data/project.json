@@ -19,11 +19,16 @@
 	},
 
 	"frameworks": {
-		"netcoreapp1.0": {
-			"imports": [
-				"dotnet5.6",
-				"portable-net45+win8"
-			]
-		}
+        "netcoreapp1.0": {
+            "imports": [
+                "dotnet5.6",
+                "portable-net45+win8"
+            ],
+            "dependencies": {
+                "Sannel.House.Web.Models": {
+                    "target": "project"
+                }
+            }
+        }
 	}
 }
