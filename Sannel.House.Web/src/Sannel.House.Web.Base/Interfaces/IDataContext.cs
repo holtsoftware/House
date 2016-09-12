@@ -27,6 +27,8 @@ namespace Sannel.House.Web.Base.Interfaces
 		/// </value>
 		DbSet<TemperatureSetting> TemperatureSettings { get; set; }
 
+		DbSet<ApplicationLogEntry> ApplicationLogEntries { get; set; }
+
 		DbSet<ApplicationUser> Users { get; set; }
 
 		DbSet<IdentityRole> Roles { get; set; }

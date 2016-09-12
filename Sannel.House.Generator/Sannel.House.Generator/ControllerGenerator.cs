@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Formatting;
 using System.IO;
+using System.Reflection;
 
 namespace Sannel.House.Generator
 {
@@ -19,62 +18,90 @@ namespace Sannel.House.Generator
 
 		}
 
-		private MethodDeclarationSyntax generateSeralizeMethod(Type t)
+		private ConstructorDeclarationSyntax generateConstructor(SyntaxToken name, Type t)
 		{
-			var identifier = SF.Identifier("item");
-			var parameter = SF.Parameter(identifier).WithType(SF.ParseTypeName(t.Name));
-			var pList = new SeparatedSyntaxList<ParameterSyntax>()
-				.Add(parameter);
+			var identifier = SF.Identifier("context");
+			var parameter = SF.Parameter(identifier).WithType(SF.ParseTypeName("IDataContext"));
 
-			var body = new List<StatementSyntax>();
-			var objIdentifer = SF.Identifier("obj");
+			var con = SF.ConstructorDeclaration(name);
+			con = con.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+			con = con.AddParameterListParameters(parameter);
+			var statment = SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+				SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, SF.ThisExpression(), SF.IdentifierName(identifier.Text)),
+				SF.IdentifierName(identifier.ValueText)));
+			con = con.AddBodyStatements(statment);
 
-			var vd = SF.VariableDeclaration(SF.ParseTypeName("JObject"), SF.SeparatedList(new[] {
-					SF.VariableDeclarator(
-						objIdentifer, 
-						null, 
-						SF.EqualsValueClause(
-							SF.ObjectCreationExpression(
-								SF.Token(SyntaxKind.NewKeyword),
-								SF.ParseTypeName("JObject"),
-								SF.ArgumentList(),
-								null)
-							))
-				}));
-			body.Add(SF.LocalDeclarationStatement(vd));
-			var props = t.GetProperties(System.Reflection.BindingFlags.Public);
-			foreach(var p in props)
-			{
-				SF.InvocationExpression(
-					SF.MemberAccessExpression(SyntaxKind.StringLiteralExpression, SF.IdentifierName(objIdentifer.ValueText), SF.IdentifierName("Add"))//,
-						//SF.SeparatedList(
-							//SF.ObjectCreationExpression(
-							//	SF.Token(SyntaxKind.NewKeyword),
-							//	SF.ParseTypeName("JParameter"),
-							//	SF.ArgumentList(),
-							//	null
-							//	)
-						//)
-					);
-			}
-
-			body.Add(SyntaxFactory.ReturnStatement(SyntaxFactory.LiteralExpression(SyntaxKind.NullLiteralExpression)));
-
-			var d = SF.MethodDeclaration(
-				SF.List<AttributeListSyntax>(), 
-				SF.TokenList(SF.Token(SyntaxKind.PrivateKeyword)),
-				SF.ParseTypeName("JObject"),
-				null,
-				SF.Identifier("serializeObject"),
-				null,
-				SF.ParameterList(pList),
-				SF.List<TypeParameterConstraintClauseSyntax>(),
-				SF.Block(body),
-				null);
-			return d;
+			return con;
 		}
 
-		public void Generate(Type t, String outputFile)
+		private MethodDeclarationSyntax generateGetMethod(String propertyName, Type t)
+		{
+			var method = SF.MethodDeclaration(SF.GenericName("IEnumerable").AddTypeArgumentListArguments(SF.ParseTypeName(t.Name)), "Get")
+				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+
+			var props = t.GetProperties();
+
+			var forward = true;
+
+			var dm = props.FirstOrDefault(i => String.Compare(i.Name, "DisplayOrder", true) == 0);
+			if(dm == null)
+			{
+				dm = props.FirstOrDefault(i => String.Compare(i.Name, "Order", true) == 0);
+			}
+
+			if (dm == null)
+			{
+				dm = props.FirstOrDefault(i => String.Compare(i.Name, "DateCreated") == 0);
+				forward = false;
+			}
+
+			if (dm == null)
+			{
+				dm = props.FirstOrDefault(i => String.Compare(i.Name, "CreatedDate") == 0);
+				forward = false;
+			}
+
+			if(dm == null)
+			{
+				dm = props.FirstOrDefault(i => String.Compare(i.Name, "CreatedDateTime") == 0);
+				forward = false;
+			}
+
+			if (dm != null)
+			{
+				var rStatement = SF.ReturnStatement(
+					SF.InvocationExpression(
+						SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+								SF.IdentifierName("context"),
+								SF.IdentifierName(propertyName)
+							),
+							SF.IdentifierName((forward)?"OrderBy":"OrderByDescending")))
+						.AddArgumentListArguments(
+							SF.Argument(
+								SF.SimpleLambdaExpression(
+									SF.Parameter(SF.Identifier("i")),
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName("i"),
+										SF.IdentifierName(dm.Name)
+										)
+									)
+								)
+						));
+				method = method.AddBodyStatements(rStatement);
+			}
+			else
+			{
+				var rStatement = SF.ReturnStatement(SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+					SF.IdentifierName("context"),
+					SF.IdentifierName(propertyName)));
+				method = method.AddBodyStatements(rStatement);
+			}
+
+			return method;
+		}
+
+		public void Generate(String propertyName, Type t, String saveFolder)
 		{
 			var comment = SF.Comment($@"/* Copyright {DateTime.Now.Year} Sannel Software, L.L.C.
 
@@ -82,7 +109,7 @@ namespace Sannel.House.Generator
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+	   http://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an ""AS IS"" BASIS,
@@ -95,17 +122,29 @@ namespace Sannel.House.Generator
 			unit.GetLeadingTrivia().Add(comment);
 			var @class = SF.ClassDeclaration($"{t.Name}Controller").AddModifiers(SF.Token(SyntaxKind.PublicKeyword)).AddBaseListTypes(SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName("Controller")));
 
-			@class = @class.AddMembers(generateSeralizeMethod(t));
+			@class = @class.AddMembers(SyntaxFactory.FieldDeclaration(
+				new SyntaxList<AttributeListSyntax>(),
+				SF.TokenList(SF.Token(SyntaxKind.PrivateKeyword)),
+				SF.VariableDeclaration(
+					SF.ParseTypeName("IDataContext"),
+					SF.SeparatedList(new[] {
+						SF.VariableDeclarator(SF.Identifier("context"))
+					}))));
+			@class = @class.AddMembers(generateConstructor(@class.Identifier, t));
+			@class = @class.AddMembers(generateGetMethod(propertyName, t));
 
-			var syntax = unit.AddMembers(@class);
+			//@class = @class.AddMembers(generateSeralizeMethod(t));
 
-			var formattedNode = Formatter.Format(syntax, new AdhocWorkspace()
+			var syntax = unit.AddMembers(@class).NormalizeWhitespace("\t", true);
+
+			//var formattedNode = Formatter.Format(syntax, new AdhocWorkspace()
+			//{
+
+			//});
+			using(StreamWriter writer = new StreamWriter(File.OpenWrite($"{saveFolder}\\{t.Name}Controller.cs")))
 			{
-
-			});
-			using(StreamWriter writer = new StreamWriter(outputFile))
-			{
-				formattedNode.WriteTo(writer);
+				syntax.WriteTo(writer);
+				//formattedNode.WriteTo(writer);
 			}
 		}
 	}

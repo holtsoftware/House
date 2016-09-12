@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sannel.House.Web.Base.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace Sannel.House.Logging.Models
 namespace Sannel.House.Web.Base.Models
 #endif
 {
+	[Generation(nameof(IDataContext.ApplicationLogEntries))]
 	public class ApplicationLogEntry
 	{
 #if !LOGGING_SDK
@@ -49,7 +51,7 @@ namespace Sannel.House.Web.Base.Models
 		}
 #if !LOGGING_SDK
 		[Required]
-		public DateTime EntryDateTime
+		public DateTime CreatedDate
 		{
 			get;
 			set;

@@ -13,12 +13,10 @@
         "netstandard1.6": {
             "imports": "dnxcore50"
         },
-        "uap10.0": {
-            "dependencies": {
-                "Sannel.House.Web.Models": {
-                    "target": "project"
-                }
-            }
-        }
+					"uap10.0": {
+					},
+					"net46": {
+
+					}
     }
 }

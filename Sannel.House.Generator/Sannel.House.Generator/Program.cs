@@ -1,39 +1,33 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Formatting;
-using Sannel.House.Generator.Data;
+﻿using Sannel.House.Web.Base.Interfaces;
 using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
+using System.IO;
 
 namespace Sannel.House.Generator
 {
-	class Program
+	public class Program
 	{
-
-		static void Main(string[] args)
+		public static void Main(string[] args)
 		{
-			Directory.CreateDirectory("Generated");
-			Type t = typeof(TypeHelper);
-			foreach(var type in t.Assembly.GetTypes())
+			Directory.CreateDirectory("bin\\Generated");
+			var cont = new ControllerGenerator();
+			var t = typeof(IDataContext);
+			var ti = t.GetTypeInfo();
+			var props = ti.GetProperties();
+			foreach(var prop in props)
 			{
-				if (!type.IsAbstract)
+				if(String.Compare(prop.PropertyType.Name, "DbSet`1") == 0)
 				{
-					generateController(type);
+					var first = prop.PropertyType.GenericTypeArguments.FirstOrDefault();
+					if (first.Namespace.StartsWith("Sannel"))
+					{
+						cont.Generate(prop.Name, first, "bin\\Generated");
+					}
 				}
 			}
-		}
-
-		private static void generateController(Type t)
-		{
-			ControllerGenerator cg = new ControllerGenerator();
-			cg.Generate(t, $"Generated\\{t.Name}Controller.cs");
 		}
 	}
 }
