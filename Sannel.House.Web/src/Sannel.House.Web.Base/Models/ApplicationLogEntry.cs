@@ -11,7 +11,6 @@ namespace Sannel.House.Logging.Models
 namespace Sannel.House.Web.Base.Models
 #endif
 {
-	[Generation(nameof(IDataContext.ApplicationLogEntries))]
 	public class ApplicationLogEntry
 	{
 #if !LOGGING_SDK

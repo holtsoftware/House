@@ -7,10 +7,10 @@ namespace Sannel.House.Web.Base
 {
 	public class GenerationAttribute : Attribute
 	{
-		public GenerationAttribute(String contextName)
+		public GenerationAttribute()
 		{
-			ContextName = contextName;
 		}
-		public String ContextName { get; set; }
+
+		public bool Ignore { get; set; }
 	}
 }

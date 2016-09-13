@@ -11,11 +11,29 @@ using System.Reflection;
 
 namespace Sannel.House.Generator
 {
-	public class ControllerGenerator
+	public class ControllerGenerator : GeneratorBase
 	{
 		public ControllerGenerator()
 		{
 
+		}
+
+		public override string DirectoryName
+		{
+			get
+			{
+				return "Controllers";
+			}
+		}
+
+		private String fileName;
+
+		public override string FileName
+		{
+			get
+			{
+				return fileName;
+			}
 		}
 
 		private ConstructorDeclarationSyntax generateConstructor(SyntaxToken name, Type t)
@@ -43,29 +61,7 @@ namespace Sannel.House.Generator
 
 			var forward = true;
 
-			var dm = props.FirstOrDefault(i => String.Compare(i.Name, "DisplayOrder", true) == 0);
-			if(dm == null)
-			{
-				dm = props.FirstOrDefault(i => String.Compare(i.Name, "Order", true) == 0);
-			}
-
-			if (dm == null)
-			{
-				dm = props.FirstOrDefault(i => String.Compare(i.Name, "DateCreated") == 0);
-				forward = false;
-			}
-
-			if (dm == null)
-			{
-				dm = props.FirstOrDefault(i => String.Compare(i.Name, "CreatedDate") == 0);
-				forward = false;
-			}
-
-			if(dm == null)
-			{
-				dm = props.FirstOrDefault(i => String.Compare(i.Name, "CreatedDateTime") == 0);
-				forward = false;
-			}
+			var dm = props.GetSortProperty(out forward);
 
 			if (dm != null)
 			{
@@ -76,7 +72,7 @@ namespace Sannel.House.Generator
 								SF.IdentifierName("context"),
 								SF.IdentifierName(propertyName)
 							),
-							SF.IdentifierName((forward)?"OrderBy":"OrderByDescending")))
+							SF.IdentifierName((forward) ? "OrderBy" : "OrderByDescending")))
 						.AddArgumentListArguments(
 							SF.Argument(
 								SF.SimpleLambdaExpression(
@@ -101,26 +97,84 @@ namespace Sannel.House.Generator
 			return method;
 		}
 
-		public void Generate(String propertyName, Type t, String saveFolder)
+		private MethodDeclarationSyntax generateGetWithIdMethod(String propertyName, Type t)
 		{
-			var comment = SF.Comment($@"/* Copyright {DateTime.Now.Year} Sannel Software, L.L.C.
+			var props = t.GetProperties();
 
-   Licensed under the Apache License, Version 2.0 (the ""License"");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+			var key = props.GetKeyProperty();
+			if (key == null)
+			{
+				return null;
+			}
 
-	   http://www.apache.org/licenses/LICENSE-2.0
+			var method = SF.MethodDeclaration(SF.ParseTypeName(t.Name), "Get")
+				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
+				.AddParameterListParameters(
+					SF.Parameter(SF.Identifier("id")).WithType(SF.ParseTypeName(key.PropertyType.Name))
+				)
+				.WithAttributeLists(
+					new SyntaxList<AttributeListSyntax>().Add(
+						SF.AttributeList().AddAttributes(
+							SF.Attribute(SF.IdentifierName("HttpGet"))
+							.AddArgumentListArguments(
+								SF.AttributeArgument(SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal("{id}")))
+							)
+						)
+					)
+				);
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an ""AS IS"" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.*/
-");
+			var rStatement = SF.ReturnStatement(
+				SF.InvocationExpression(
+					SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							SF.IdentifierName("context"),
+							SF.IdentifierName(propertyName)
+						),
+						SF.IdentifierName("FirstOrDefault")))
+					.AddArgumentListArguments(
+						SF.Argument(
+							SF.SimpleLambdaExpression(
+								SF.Parameter(SF.Identifier("i")),
+								SF.BinaryExpression(SyntaxKind.EqualsExpression,
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName("i"),
+										SF.IdentifierName(key.Name)
+										),
+									SF.IdentifierName("id")
+									)
+								)
+							)
+					));
+			method = method.AddBodyStatements(rStatement);
 
-			var unit = SF.NamespaceDeclaration(SF.ParseName("Sannel.House.Web.Controllers.api")).WithLeadingTrivia(comment);
-			unit.GetLeadingTrivia().Add(comment);
-			var @class = SF.ClassDeclaration($"{t.Name}Controller").AddModifiers(SF.Token(SyntaxKind.PublicKeyword)).AddBaseListTypes(SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName("Controller")));
+
+			return method;
+
+		}
+
+		protected override CompilationUnitSyntax internalGenerate(string propertyName, Type t)
+		{
+			fileName = $"{t.Name}Controller";
+			var unit = SF.CompilationUnit();
+
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System"))).WithLeadingTrivia(getLicenseComment());
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System.Collections.Generic")));
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System.Linq")));
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System.Threading.Tasks")));
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("Microsoft.AspNetCore.Mvc")));
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("Sannel.House.Web.Base.Models")));
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("Sannel.House.Web.Base.Interfaces")));
+
+			var @class = SF.ClassDeclaration(fileName).AddModifiers(SF.Token(SyntaxKind.PublicKeyword)).AddBaseListTypes(SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName("Controller")));
+
+			@class = @class.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(
+					SF.IdentifierName("Route")
+				).AddArgumentListArguments(
+					SF.AttributeArgument(
+						SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal("api/[controller]"))
+					)
+				)));
+
 
 			@class = @class.AddMembers(SyntaxFactory.FieldDeclaration(
 				new SyntaxList<AttributeListSyntax>(),
@@ -132,20 +186,17 @@ namespace Sannel.House.Generator
 					}))));
 			@class = @class.AddMembers(generateConstructor(@class.Identifier, t));
 			@class = @class.AddMembers(generateGetMethod(propertyName, t));
-
-			//@class = @class.AddMembers(generateSeralizeMethod(t));
-
-			var syntax = unit.AddMembers(@class).NormalizeWhitespace("\t", true);
-
-			//var formattedNode = Formatter.Format(syntax, new AdhocWorkspace()
-			//{
-
-			//});
-			using(StreamWriter writer = new StreamWriter(File.OpenWrite($"{saveFolder}\\{t.Name}Controller.cs")))
+			var get2 = generateGetWithIdMethod(propertyName, t);
+			if (get2 != null)
 			{
-				syntax.WriteTo(writer);
-				//formattedNode.WriteTo(writer);
+				@class = @class.AddMembers(get2);
 			}
+
+
+			var namesp = SF.NamespaceDeclaration(SF.ParseName("Sannel.House.Web.Controllers.api"));
+			namesp = namesp.AddMembers(@class);
+			var syntax = unit.AddMembers(namesp);
+			return syntax;
 		}
 	}
 }

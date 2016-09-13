@@ -31,6 +31,7 @@ namespace Sannel.House.Web.Base.Models
 
 #if !THERMOSTAT
 		[JsonIgnore]
+		[Generation(Ignore = true)]
 		public Device Device { get; set; }
 #endif
 
