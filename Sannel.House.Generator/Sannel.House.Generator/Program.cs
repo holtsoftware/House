@@ -13,26 +13,33 @@ namespace Sannel.House.Generator
 	{
 		public static void Main(string[] args)
 		{
-			Directory.CreateDirectory("bin\\Generated");
-			var cont = new ControllerGenerator();
-			var test = new ControllerTestsGenerator();
-			var t = typeof(IDataContext);
-			var ti = t.GetTypeInfo();
-			var props = ti.GetProperties();
-			foreach(var prop in props)
+			var path = "bin\\Generated";
+			Directory.CreateDirectory(path);
+			using (var serverSDKMethods = new ServerSDKMethodsGenerator(path))
 			{
-				if(String.Compare(prop.PropertyType.Name, "DbSet`1") == 0)
+				var cont = new ControllerGenerator();
+				var test = new ControllerTestsGenerator();
+				var inter = new InterfaceGenerator();
+				var t = typeof(IDataContext);
+				var ti = t.GetTypeInfo();
+				var props = ti.GetProperties();
+				foreach (var prop in props)
 				{
-					var first = prop.PropertyType.GenericTypeArguments.FirstOrDefault();
-					if (first.Namespace.StartsWith("Sannel"))
+					if (String.Compare(prop.PropertyType.Name, "DbSet`1") == 0)
 					{
-						var gen = prop.GetCustomAttribute<GenerationAttribute>();
-						if(gen != null && gen.Ignore)
+						var first = prop.PropertyType.GenericTypeArguments.FirstOrDefault();
+						if (first.Namespace.StartsWith("Sannel"))
 						{
-							continue;
+							var gen = prop.GetCustomAttribute<GenerationAttribute>();
+							if (gen != null && gen.Ignore)
+							{
+								continue;
+							}
+							cont.Generate(prop.Name, first, "bin\\Generated");
+							test.Generate(prop.Name, first, "bin\\Generated");
+							inter.Generate(prop.Name, first, "bin\\Generated");
+							serverSDKMethods.AddType(prop.Name, first);
 						}
-						cont.Generate(prop.Name, first, "bin\\Generated");
-						test.Generate(prop.Name, first, "bin\\Generated");
 					}
 				}
 			}

@@ -31,16 +31,43 @@ namespace Sannel.House.Generator
 			}
 		}
 
-		private MethodDeclarationSyntax generateGetTest(String controllerName, String propertyName, Type t)
+		private StatementSyntax[] generateCompare(SyntaxToken expected, SyntaxToken actual, PropertyInfo[] props)
 		{
-			var context = SF.Identifier("context");
-			var controller = SF.Identifier("controller");
-			var var1 = SF.Identifier("var1");
-			var var2 = SF.Identifier("var2");
-			var var3 = SF.Identifier("var3");
-			var method = SF.MethodDeclaration(SF.ParseTypeName("void"), "GetTest")
-				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("Test"))))
-				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+			List<StatementSyntax> statements = new List<StatementSyntax>();
+			var isfirst = true;
+			foreach (var prop in props)
+			{
+				if (!prop.ShouldIgnore())
+				{
+					var exp = SF.ExpressionStatement(
+						SF.InvocationExpression(
+							Extensions.MemberAccess("Assert", "AreEqual")
+							).WithArgumentList(
+								SF.ArgumentList()
+									.AddArguments(
+										SF.Argument(Extensions.MemberAccess(expected.Text, prop.Name)),
+										SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
+							)
+						);
+					if (isfirst)
+					{
+						exp = exp.WithLeadingTrivia(SF.Comment($"// {expected.Text} -> {actual.Text}"));
+						isfirst = false;
+					}
+
+					statements.Add(exp);
+				}
+			}
+
+			return statements.ToArray();
+		}
+
+		private BlockSyntax generateSeeds(Type t, SyntaxToken context, String propertyName, out SyntaxToken var1, out SyntaxToken var2, out SyntaxToken var3, out PropertyInfo[] props)
+		{
+			var1 = SF.Identifier("var1");
+			var2 = SF.Identifier("var2");
+			var3 = SF.Identifier("var3");
+			props = t.GetProperties();
 
 			var blocks = SF.Block();
 
@@ -56,8 +83,7 @@ namespace Sannel.House.Generator
 			List<ExpressionStatementSyntax> var2Sets = new List<ExpressionStatementSyntax>();
 			List<ExpressionStatementSyntax> var3Sets = new List<ExpressionStatementSyntax>();
 
-			var props = t.GetProperties();
-			foreach(var p in props)
+			foreach (var p in props)
 			{
 				if (!p.ShouldIgnore())
 				{
@@ -76,7 +102,7 @@ namespace Sannel.House.Generator
 
 			bool isForward = false;
 			var prop = props.GetSortProperty(out isForward);
-			if(prop != null)
+			if (prop != null)
 			{
 				if (isForward)
 				{
@@ -90,8 +116,13 @@ namespace Sannel.House.Generator
 				}
 				else
 				{
+					String dtType = "DateTimeOffset";
+					if(prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+					{
+						dtType = "DateTime";
+					}
 					var order = SF.Identifier("order");
-					blocks = blocks.AddStatements(SF.LocalDeclarationStatement(Extensions.VariableDeclaration(order.Text, SF.EqualsValueClause(Extensions.MemberAccess("DateTimeOffset", "Now"))))
+					blocks = blocks.AddStatements(SF.LocalDeclarationStatement(Extensions.VariableDeclaration(order.Text, SF.EqualsValueClause(Extensions.MemberAccess(dtType, "Now"))))
 						.WithLeadingTrivia(SF.Comment("//Fix Order")));
 
 					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var3), prop.Name, SF.IdentifierName(order))));
@@ -151,9 +182,236 @@ namespace Sannel.House.Generator
 				)
 					);
 
+			return blocks;
+		}
+
+		private MethodDeclarationSyntax generateGetTest(String controllerName, String propertyName, Type t)
+		{
+			var context = SF.Identifier("context");
+			var controller = SF.Identifier("controller");
+			var method = SF.MethodDeclaration(SF.ParseTypeName("void"), "GetTest")
+				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("Test"))))
+				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+
+			SyntaxToken var1, var2, var3;
+			PropertyInfo[] props;
+			var blocks = generateSeeds(t, context, propertyName, out var1, out var2, out var3, out props);
+
+			var results = SF.Identifier("results");
+			var list = SF.Identifier("list");
+			blocks = blocks.AddStatements(SF.LocalDeclarationStatement(
+				Extensions.VariableDeclaration(
+					results.Text,
+					SF.EqualsValueClause(
+						SF.InvocationExpression(
+							Extensions.MemberAccess(
+								SF.IdentifierName(controller),
+								SF.IdentifierName("Get")
+							)
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("//call get method"))
+				),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess("Assert", "IsNotNull")
+					).WithArgumentList(
+						SF.ArgumentList()
+							.AddArguments(SF.Argument(SF.IdentifierName(results)))
+					)
+				),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(
+						list.Text,
+						SF.EqualsValueClause(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									SF.IdentifierName(results),
+									SF.IdentifierName("ToList")
+								)
+							)
+						)
+					)
+				)
+				);
+
+
+			blocks = blocks.AddStatements(SF.ExpressionStatement(
+				SF.InvocationExpression(
+					Extensions.MemberAccess("Assert", "AreEqual")
+					).WithArgumentList(
+						SF.ArgumentList()
+							.AddArguments(
+								SF.Argument(3.ToExpression()),
+								SF.Argument(Extensions.MemberAccess(list.Text, "Count")))
+					)
+				));
+
+			var one = SF.Identifier("one");
+			blocks = blocks.AddStatements(SF.LocalDeclarationStatement(
+				Extensions.VariableDeclaration(one.Text,
+					SF.EqualsValueClause(
+						SF.ElementAccessExpression(SF.IdentifierName(list))
+						.WithArgumentList(SF.BracketedArgumentList()
+							.AddArguments(
+								SF.Argument(0.ToExpression())
+							)
+						)
+					)
+				)
+			));
+			blocks = blocks.AddStatements(generateCompare(var3, one, props));
+
+			var two = SF.Identifier("two");
+			blocks = blocks.AddStatements(SF.LocalDeclarationStatement(
+				Extensions.VariableDeclaration(two.Text,
+					SF.EqualsValueClause(
+						SF.ElementAccessExpression(SF.IdentifierName(list))
+						.WithArgumentList(SF.BracketedArgumentList()
+							.AddArguments(
+								SF.Argument(1.ToExpression())
+							)
+						)
+					)
+				)
+			));
+			blocks = blocks.AddStatements(generateCompare(var2, two, props));
+			var three = SF.Identifier("three");
+			blocks = blocks.AddStatements(SF.LocalDeclarationStatement(
+				Extensions.VariableDeclaration(three.Text,
+					SF.EqualsValueClause(
+						SF.ElementAccessExpression(SF.IdentifierName(list))
+						.WithArgumentList(SF.BracketedArgumentList()
+							.AddArguments(
+								SF.Argument(2.ToExpression())
+							)
+						)
+					)
+				)
+			));
+			blocks = blocks.AddStatements(generateCompare(var1, three, props));
+
 			var @using2 = SF.UsingStatement(blocks)
-				.WithDeclaration(Extensions.VariableDeclaration(controller.Text, 
-					controllerName, 
+				.WithDeclaration(Extensions.VariableDeclaration(controller.Text,
+					controllerName,
+					SF.ArgumentList().AddArgument(context.Text)));
+
+			var @using = SF.UsingStatement(SF.Block(@using2))
+				.WithDeclaration(Extensions.VariableDeclaration(context.Text, "MockDataContext", SF.ArgumentList(), "IDataContext"));
+
+			method = method.AddBodyStatements(@using);
+
+			return method;
+		}
+
+		private MethodDeclarationSyntax generateGetByIdTest(String controllerName, String propertyName, Type t)
+		{
+			var context = SF.Identifier("context");
+			var controller = SF.Identifier("controller");
+			var method = SF.MethodDeclaration(SF.ParseTypeName("void"), "GetWithIdTest")
+				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("Test"))))
+				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+
+			SyntaxToken var1, var2, var3;
+			PropertyInfo[] props;
+			var blocks = generateSeeds(t, context, propertyName, out var1, out var2, out var3, out props);
+
+			var prop = props.GetKeyProperty();
+			var actual = SF.Identifier("actual");
+			blocks = blocks.AddStatements(
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(
+						actual.Text,
+						SF.EqualsValueClause(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									controller.Text,
+									"Get"
+								)
+							).WithArgumentList(
+								SF.ArgumentList().AddArguments(
+									SF.Argument(Extensions.MemberAccess(var1.Text, prop.Name))
+								)
+							)
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("// verify"))
+			);
+
+			blocks = blocks.AddStatements(SF.ExpressionStatement(
+				SF.InvocationExpression(
+					Extensions.MemberAccess("Assert", "IsNotNull")
+					).WithArgumentList(
+						SF.ArgumentList()
+							.AddArguments(
+								SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
+					)
+				));
+			blocks = blocks.AddStatements(generateCompare(var1, actual, props));
+
+			blocks = blocks.AddStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(actual),
+						SF.InvocationExpression(
+							Extensions.MemberAccess(
+								controller.Text,
+								"Get"
+							)
+						).WithArgumentList(
+							SF.ArgumentList()
+							.AddArguments(
+									SF.Argument(Extensions.MemberAccess(var2.Text, prop.Name))
+							)
+						)
+					)
+				).WithLeadingTrivia(SF.Comment($"// Verify {var2.Text}"))
+			);
+
+			blocks = blocks.AddStatements(SF.ExpressionStatement(
+				SF.InvocationExpression(
+					Extensions.MemberAccess("Assert", "IsNotNull")
+					).WithArgumentList(
+						SF.ArgumentList()
+							.AddArguments(
+								SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
+					)
+				));
+			blocks = blocks.AddStatements(generateCompare(var2, actual, props));
+
+			blocks = blocks.AddStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(actual),
+						SF.InvocationExpression(
+							Extensions.MemberAccess(
+								controller.Text,
+								"Get"
+							)
+						).WithArgumentList(
+							SF.ArgumentList()
+							.AddArguments(
+									SF.Argument(Extensions.MemberAccess(var3.Text, prop.Name))
+							)
+						)
+					)
+				).WithLeadingTrivia(SF.Comment($"// Verify {var3.Text}"))
+			);
+
+			blocks = blocks.AddStatements(SF.ExpressionStatement(
+				SF.InvocationExpression(
+					Extensions.MemberAccess("Assert", "IsNotNull")
+					).WithArgumentList(
+						SF.ArgumentList()
+							.AddArguments(
+								SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
+					)
+				));
+			blocks = blocks.AddStatements(generateCompare(var3, actual, props));
+
+			var @using2 = SF.UsingStatement(blocks)
+				.WithDeclaration(Extensions.VariableDeclaration(controller.Text,
+					controllerName,
 					SF.ArgumentList().AddArgument(context.Text)));
 
 			var @using = SF.UsingStatement(SF.Block(@using2))
@@ -187,7 +445,8 @@ namespace Sannel.House.Generator
 				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("TestFixture"))));
 
 			@class = @class.AddMembers(generateGetTest(controllerName, propertyName, t));
-			
+			@class = @class.AddMembers(generateGetByIdTest(controllerName, propertyName, t));
+
 			return unit.AddMembers(SF.NamespaceDeclaration(SF.IdentifierName("Sannel.House.Web.Tests")).AddMembers(@class));
 		}
 	}

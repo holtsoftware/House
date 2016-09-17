@@ -11,6 +11,12 @@ namespace Sannel.House.Web.Mocks
 {
 	public class MockDataContext : IdentityDbContext<ApplicationUser>, IDataContext
 	{
+		public DbSet<ApplicationLogEntry> ApplicationLogEntries
+		{
+			get;
+			set;
+		}
+
 		/// <summary>
 		/// Gets or sets the devices.
 		/// </summary>

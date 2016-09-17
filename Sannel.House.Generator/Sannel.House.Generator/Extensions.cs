@@ -68,6 +68,30 @@ namespace Sannel.House.Generator
 			return null;
 		}
 
+		public static TypeSyntax GetTypeSyntax(this PropertyInfo info)
+		{
+			if(info == null)
+			{
+				throw new ArgumentNullException(nameof(info));
+			}
+
+			Type t = info.PropertyType;
+
+			if (t.GenericTypeArguments != null && t.GenericTypeArguments.Length > 0)
+			{
+				if(String.Compare(t.Name, "Nullable`1") == 0)
+				{
+					return SF.ParseTypeName($"{t.GenericTypeArguments.First().Name}?");
+				}
+
+				throw new Exception($"Type {t.FullName} is not supported right now.");
+			}
+			else
+			{
+				return SF.ParseTypeName(t.Name);
+			}
+		}
+
 		public static CompilationUnitSyntax AddUsing(this CompilationUnitSyntax unit, String namesp)
 		{
 			return unit.AddUsings(SF.UsingDirective(SF.IdentifierName(namesp)));

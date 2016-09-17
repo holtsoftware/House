@@ -4,24 +4,26 @@
     "emitEntryPoint": true
   },
 
-  "dependencies": {
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.0"
+    "dependencies": {
+        "NUnit": "3.4.1",
+        "NUnit.Runners": "3.4.1",
+        "NUnitLite": "3.4.1",
+        "Sannel.House.Web.Base": "0.1.0-*",
+        "Sannel.House.Web.Mocks": "0.1.0-*",
+        "Newtonsoft.Json": "9.0.1",
+        "Sannel.House.Web": "1.0.0-*",
+        "Sannel.House.Web.Data": "0.1.0-*",
+		"Microsoft.NETCore.App": {
+			"type": "platform",
+			"version": "1.0.1"
+		}
     },
-			"NUnit": "3.4.1",
-			"NUnit.Runners": "3.4.1",
-			"NUnitLite": "3.4.1",
-			"Sannel.House.Web": "1.0.0-*",
-			"Sannel.House.Web.Data": "0.1.0-*",
-    "Sannel.House.Web.Base": "0.1.0-*",
-    "Sannel.House.Web.Mocks": "0.1.0-*",
-    "Newtonsoft.Json": "9.0.1"
-  },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "imports": "dnxcore50"
-    }
+		"netcoreapp1.0": {
+			"imports": [
+				"dnxcore50"
+			]
+		}
   }
 }

@@ -15,17 +15,10 @@ namespace Sannel.House.Web.Tests
 		{
 			using (IDataContext context = new MockDataContext())
 			{
-				foreach (var d in context.Devices)
-				{
-					context.Devices.Remove(d);
-				}
-
-				foreach (var s in context.TemperatureSettings)
-				{
-					context.TemperatureSettings.Remove(s);
-				}
-
+				context.Devices.RemoveRange(context.Devices);
+				context.TemperatureSettings.RemoveRange(context.TemperatureSettings);
 				context.TemperatureEntries.RemoveRange(context.TemperatureEntries);
+				context.ApplicationLogEntries.RemoveRange(context.ApplicationLogEntries);
 
 				context.SaveChanges();
 			}
