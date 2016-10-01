@@ -44,7 +44,7 @@ namespace Sannel.House.Generator
 		}
 
 
-		protected SyntaxTrivia getLicenseComment()
+		public static SyntaxTrivia GetLicenseComment()
 		{
 			var comment = SF.Comment($@"/* Copyright {DateTime.Now.Year} Sannel Software, L.L.C.
 

@@ -24,6 +24,8 @@ namespace Sannel.House.ServerSDK
 		private HttpCookie cookie;
 		private IServerSettings settings;
 		private ICreateHelper helper;
+		private HttpClient client;
+		private HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ServerContext"/> class.
@@ -38,6 +40,12 @@ namespace Sannel.House.ServerSDK
 			this.settings = settings;
 			authCookieName = "Authz";
 			this.helper = helper;
+			client = new HttpClient(httpFilter);
+		}
+
+		public void Dispose()
+		{
+			client?.Dispose();
 		}
 
 		/// <summary>
@@ -90,58 +98,53 @@ namespace Sannel.House.ServerSDK
 
 				builder.Path = "/Account/LoginFromDevice";
 
-				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
-
-				using (var client = new HttpClient(httpFilter))
+				var content = new Windows.Web.Http.HttpFormUrlEncodedContent(new KeyValuePair<String, String>[]
 				{
-					var content = new Windows.Web.Http.HttpFormUrlEncodedContent(new KeyValuePair<String, String>[]
-					{
 					new KeyValuePair<string, string>("Email", username),
 					new KeyValuePair<string, string>("Password", password),
 					new KeyValuePair<string, string>("RememberMe", "true")
-					});
-					HttpResponseMessage result = null;
-					try
-					{
-						result = await client.PostAsync(builder.Uri, content);
-					}
-					catch (COMException ce)
-					{
-						if (ce.HResult == -2147012867)
-						{
-							return new LoginResult(LoginStatus.UnableToConnectToServer, "Unable to connect to server");
-						}
-
-						return new LoginResult(LoginStatus.Exception, ce.ToString());
-					}
-					if (result.StatusCode == HttpStatusCode.Ok)
-					{
-						var cookies = httpFilter.CookieManager.GetCookies(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"));
-						var authz = cookies.FirstOrDefault(i => String.Compare(i.Name, authCookieName) == 0);
-						if (authz != null)
-						{
-							cookie = authz;
-							return new LoginResult(LoginStatus.Success, authz.Value);
-						}
-						else
-						{
-							return new LoginResult(LoginStatus.Error, "Error Authenticating");
-						}
-					}
-					return new LoginResult(LoginStatus.Error, "Request Error");
+				});
+				HttpResponseMessage result = null;
+				try
+				{
+					result = await client.PostAsync(builder.Uri, content);
 				}
+				catch (COMException ce)
+				{
+					if (ce.HResult == -2147012867)
+					{
+						return new LoginResult(LoginStatus.UnableToConnectToServer, "Unable to connect to server");
+					}
+
+					return new LoginResult(LoginStatus.Exception, ce.ToString());
+				}
+				if (result.StatusCode == HttpStatusCode.Ok)
+				{
+					var cookies = httpFilter.CookieManager.GetCookies(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"));
+					var authz = cookies.FirstOrDefault(i => String.Compare(i.Name, authCookieName) == 0);
+					if (authz != null)
+					{
+						cookie = authz;
+						return new LoginResult(LoginStatus.Success, authz.Value);
+					}
+					else
+					{
+						return new LoginResult(LoginStatus.Error, "Error Authenticating");
+					}
+				}
+				return new LoginResult(LoginStatus.Error, "Request Error");
 			}).AsAsyncOperation();
 		}
 
 		public IAsyncOperation<TemperatureEntryResult> PostTemperatureEntryAsync(ITemperatureEntry entry)
 		{
-			if(entry == null)
+			if (entry == null)
 			{
 				throw new ArgumentNullException(nameof(entry));
 			}
 			return Task.Run(async () =>
 			{
-				if(settings.ServerUri == null)
+				if (settings.ServerUri == null)
 				{
 					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriNotSet, entry, Guid.Empty);
 				}
@@ -191,7 +194,7 @@ namespace Sannel.House.ServerSDK
 						return new TemperatureEntryResult(TemperatureEntryStatus.Exception, entry, Guid.Empty);
 					}
 
-					if(result.StatusCode == HttpStatusCode.Ok)
+					if (result.StatusCode == HttpStatusCode.Ok)
 					{
 						var res = await result.Content.ReadAsStringAsync();
 						try
@@ -225,7 +228,7 @@ namespace Sannel.House.ServerSDK
 		{
 			return Task.Run(async () =>
 			{
-				if(settings.ServerUri == null)
+				if (settings.ServerUri == null)
 				{
 					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriNotSet, null);
 				}
@@ -276,17 +279,17 @@ namespace Sannel.House.ServerSDK
 						};
 					}
 
-					if(result.StatusCode == HttpStatusCode.Ok)
+					if (result.StatusCode == HttpStatusCode.Ok)
 					{
 						var res = await result.Content.ReadAsStringAsync();
 						try
 						{
 							JToken token = JToken.Parse(res);
-							if(token.Type == JTokenType.Array)
+							if (token.Type == JTokenType.Array)
 							{
 								JArray array = token as JArray;
 								List<ITemperatureSetting> settings = new List<ITemperatureSetting>();
-								foreach(JObject obj in array.Children<JObject>())
+								foreach (JObject obj in array.Children<JObject>())
 								{
 									var setting = helper.CreateTemperatureSetting();
 									var prop = obj.Property("Id");
@@ -332,25 +335,25 @@ namespace Sannel.House.ServerSDK
 						return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
 					}
 				}
-				
+
 				return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
 			}).AsAsyncOperation();
 		}
 
 		public IAsyncOperation<TemperatureSettingResult> PutTemperatureSettingAsync(ITemperatureSetting setting)
 		{
-			if(setting == null)
+			if (setting == null)
 			{
 				throw new ArgumentNullException(nameof(setting));
 			}
 			return Task.Run(async () =>
 			{
-				if(setting.Id == 0)
+				if (setting.Id == 0)
 				{
 					return new TemperatureSettingResult(TemperatureSettingStatus.IdCannotBeDefault, setting);
 				}
 
-				if(settings.ServerUri == null)
+				if (settings.ServerUri == null)
 				{
 					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriNotSet, null);
 				}
@@ -403,6 +406,11 @@ namespace Sannel.House.ServerSDK
 				}
 				return new TemperatureSettingResult(TemperatureSettingStatus.Error, entry);
 			}).AsAsyncOperation();
+		}
+
+		public IAsyncOperation<TemperatureSettingResult> PutTemperatureEntryAsync(ITemperatureEntry entry)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

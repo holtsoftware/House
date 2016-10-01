@@ -36,7 +36,7 @@ namespace Sannel.House.Generator
 			fileName = $"I{t.Name}";
 			var unit = SF.CompilationUnit();
 
-			unit = unit.AddUsing("System").WithLeadingTrivia(getLicenseComment());
+			unit = unit.AddUsing("System").WithLeadingTrivia(GetLicenseComment());
 			unit = unit.AddUsings(
 				"Newtonsoft.Json",
 				"System");

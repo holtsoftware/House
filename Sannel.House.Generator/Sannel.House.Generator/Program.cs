@@ -15,11 +15,16 @@ namespace Sannel.House.Generator
 		{
 			var path = "bin\\Generated";
 			Directory.CreateDirectory(path);
+
+			var generatorList = new List<GeneratorBase>();
 			using (var serverSDKMethods = new ServerSDKMethodsGenerator(path))
 			{
-				var cont = new ControllerGenerator();
-				var test = new ControllerTestsGenerator();
-				var inter = new InterfaceGenerator();
+				generatorList.Add(new ControllerGenerator());
+				generatorList.Add(new ControllerTestsGenerator());
+				generatorList.Add(new InterfaceGenerator());
+				generatorList.Add(new StatusGenerator());
+				generatorList.Add(new ResultGenerator());
+				generatorList.Add(new ResultsGenerator());
 				var t = typeof(IDataContext);
 				var ti = t.GetTypeInfo();
 				var props = ti.GetProperties();
@@ -35,9 +40,10 @@ namespace Sannel.House.Generator
 							{
 								continue;
 							}
-							cont.Generate(prop.Name, first, "bin\\Generated");
-							test.Generate(prop.Name, first, "bin\\Generated");
-							inter.Generate(prop.Name, first, "bin\\Generated");
+							foreach(var generator in generatorList)
+							{
+								generator.Generate(prop.Name, first, path);
+							}
 							serverSDKMethods.AddType(prop.Name, first);
 						}
 					}

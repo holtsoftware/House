@@ -7,7 +7,7 @@ using Windows.Foundation;
 
 namespace Sannel.House.ServerSDK
 {
-	public interface IServerContext
+	public interface IServerContext : IDisposable
 	{
 		IAsyncOperation<LoginResult> LoginAsync(String username, String password);
 

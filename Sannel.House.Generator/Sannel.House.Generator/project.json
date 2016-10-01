@@ -9,7 +9,7 @@
     "Microsoft.CodeAnalysis.CSharp": "1.3.2",
     "Microsoft.NETCore.App": {
         "type": "platform",
-        "version": "1.0.0"
+					"version": "1.0.1"
     },
     "Sannel.House.Web.Base": "0.1.0-*"
   },

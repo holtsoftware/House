@@ -428,7 +428,7 @@ namespace Sannel.House.Generator
 			filename = $"{controllerName}Tests";
 			var unit = SF.CompilationUnit();
 
-			unit = unit.AddUsing("System").WithLeadingTrivia(getLicenseComment());
+			unit = unit.AddUsing("System").WithLeadingTrivia(GetLicenseComment());
 			unit = unit.AddUsings(
 					"NUnit.Framework",
 					"Sannel.House.Web.Base.Interfaces",

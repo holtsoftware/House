@@ -157,7 +157,7 @@ namespace Sannel.House.Generator
 			fileName = $"{t.Name}Controller";
 			var unit = SF.CompilationUnit();
 
-			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System"))).WithLeadingTrivia(getLicenseComment());
+			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System"))).WithLeadingTrivia(GetLicenseComment());
 			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System.Collections.Generic")));
 			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System.Linq")));
 			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System.Threading.Tasks")));
