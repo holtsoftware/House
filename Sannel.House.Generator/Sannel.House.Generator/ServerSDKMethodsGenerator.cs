@@ -140,6 +140,43 @@ namespace Sannel.House.Generator
 			return list.ToArray();
 		}
 
+		private StatementSyntax[] createGetCall(Type t, PropertyInfo[] pi)
+		{
+			var result = SF.Identifier("result");
+			var list = new List<StatementSyntax>();
+			list.Add(SF.LocalDeclarationStatement(
+					SF.VariableDeclaration(SF.ParseTypeName("HttpResponseMessage"))
+						.AddVariables(
+							SF.VariableDeclarator(result)
+								.WithInitializer(
+									SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.NullLiteralExpression))
+								)
+						)
+				));
+
+			/*HttpResponseMessage result = null;
+					try
+					{
+						result = await client.GetAsync(builder.Uri);
+					}
+					catch (COMException ce)
+					{
+						if (ce.HResult == -2147012867)
+						{
+							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null)
+							{
+								Exception = ce
+							};
+						}
+
+						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
+						{
+							Exception = ce
+						};
+					}*/
+			return list.ToArray();
+		}
+
 		private MethodDeclarationSyntax createGetMethod(Type t, PropertyInfo[] pi)
 		{
 
@@ -160,6 +197,7 @@ namespace Sannel.House.Generator
 
 			var body = new List<StatementSyntax>();
 			body.AddRange(createCommonResultIfStatments(t, pi));
+			body.AddRange(createGetCall(t, pi));
 
 			var amethod = SF.ParenthesizedLambdaExpression(SF.Block(body.ToArray()))
 				.WithAsyncKeyword(SF.Token(SyntaxKind.AsyncKeyword));
