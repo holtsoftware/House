@@ -54,6 +54,14 @@ namespace Sannel.House.Generator
 			}
 		}
 
+		protected String ExceptionText
+		{
+			get
+			{
+				return "Exception";
+			}
+		}
+
 		protected virtual String GetClassName(Type t)
 		{
 			return $"{t.Name}Result";
@@ -104,6 +112,55 @@ namespace Sannel.House.Generator
 				);
 			return con;
 		}
+		protected virtual ConstructorDeclarationSyntax generateExceptionConstructor(Type t)
+		{
+			var pi = t.GetProperties();
+			var key = pi.GetKeyProperty();
+
+			var status = SF.Identifier(StatusText.ToLower());
+			var item = SF.Identifier(DataText.ToLower());
+			var keyName = SF.Identifier(KeyText.ToLower());
+			var exceptionName = SF.Identifier(ExceptionText.ToLower());
+			var cStatus = SF.Identifier(StatusText);
+			var cItem = SF.Identifier(DataText);
+			var cKeyName = SF.Identifier(KeyText);
+			var cExceptionName = SF.Identifier(ExceptionText);
+
+			var con = SF.ConstructorDeclaration(filename);
+			con = con.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
+				.AddParameterListParameters(
+					SF.Parameter(status).WithType(SF.ParseTypeName($"{t.Name}Status")),
+					SF.Parameter(item).WithType(getDataType(t)),
+					SF.Parameter(keyName).WithType(SF.ParseTypeName(key.PropertyType.Name)),
+					SF.Parameter(exceptionName).WithType(SF.ParseTypeName("Exception"))
+				);
+			con = con.AddBodyStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(cStatus),
+						SF.IdentifierName(status))
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(cItem),
+						SF.IdentifierName(item)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(cKeyName),
+						SF.IdentifierName(keyName)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(cExceptionName),
+						SF.IdentifierName(exceptionName)
+					)
+				)
+				);
+			return con;
+		}
 
 		protected virtual PropertyDeclarationSyntax createStatusProperty(Type t)
 		{
@@ -142,6 +199,17 @@ namespace Sannel.House.Generator
 			return prop;
 		}
 
+		protected virtual PropertyDeclarationSyntax createExceptionProperty()
+		{
+			var prop = SF.PropertyDeclaration(SF.ParseTypeName("Exception"), ExceptionText)
+				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
+				.AddAccessorListAccessors(
+					SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken)),
+					SF.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration).WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken))
+				);
+
+			return prop;
+		}
 
 		protected override CompilationUnitSyntax internalGenerate(string propertyName, Type t)
 		{
@@ -157,9 +225,11 @@ namespace Sannel.House.Generator
 			var @class = SF.ClassDeclaration(filename)
 				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword), SF.Token(SyntaxKind.SealedKeyword));
 			@class = @class.AddMembers(generateConstructor(t));
+			@class = @class.AddMembers(generateExceptionConstructor(t));
 			@class = @class.AddMembers(createStatusProperty(t));
 			@class = @class.AddMembers(createDataProperty(t));
 			@class = @class.AddMembers(createKeyProperty(t));
+			@class = @class.AddMembers(createExceptionProperty());
 			ns = ns.AddMembers(@class);
 			cu = cu.AddMembers(ns);
 			/*using System;

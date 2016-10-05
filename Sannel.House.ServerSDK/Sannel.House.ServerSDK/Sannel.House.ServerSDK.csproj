@@ -116,14 +116,13 @@
     <Compile Include="IServerContext.cs" />
     <Compile Include="IServerSettings.cs" />
     <Compile Include="ITemperatureEntry.cs" />
-    <Compile Include="ITemperatureSetting.cs" />
     <Compile Include="LocalExtensions.cs" />
     <Compile Include="LoginResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerContext.cs" />
     <Compile Include="TemperatureEntryResult.cs" />
-    <Compile Include="TemperatureSettingResult.cs" />
-    <Compile Include="TemperatureSettingResults.cs" />
+    <Compile Include="TemperatureEntryResults.cs" />
+    <Compile Include="TemperatureEntryStatus.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

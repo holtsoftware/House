@@ -81,5 +81,26 @@ namespace Sannel.House
 			}
 			return null;
 		}
+
+		public static T GetPropertyValue<T>(this JObject token, String name)
+		{
+			if(typeof(T) == typeof(DateTimeOffset))
+			{
+
+			}
+			var prop = token.Property(name);
+
+			if(prop == null)
+			{
+				return default(T);
+			}
+
+			if(prop.Value == null)
+			{
+				return default(T);
+			}
+
+			return prop.Value.Value<T>();
+		}
 	}
 }

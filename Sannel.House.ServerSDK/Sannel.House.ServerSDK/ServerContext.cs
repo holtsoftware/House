@@ -18,7 +18,7 @@ namespace Sannel.House.ServerSDK
 	/// <summary>
 	/// This class is used to connect and make calls to the server.
 	/// </summary>
-	public sealed class ServerContext : IServerContext
+	public sealed class ServerContext
 	{
 		private String authCookieName;
 		private HttpCookie cookie;
@@ -136,22 +136,19 @@ namespace Sannel.House.ServerSDK
 			}).AsAsyncOperation();
 		}
 
-		public IAsyncOperation<TemperatureEntryResult> PostTemperatureEntryAsync(ITemperatureEntry entry)
+		#region TemperatureEntry
+		public IAsyncOperation<ITemperatureEntry> GetTemperatureEntryAsync(Guid key)
 		{
-			if (entry == null)
-			{
-				throw new ArgumentNullException(nameof(entry));
-			}
 			return Task.Run(async () =>
 			{
 				if (settings.ServerUri == null)
 				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriNotSet, entry, Guid.Empty);
+					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriNotSet, null, default(Guid));
 				}
 
 				if (!IsAuthenticated)
 				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.NotLoggedIn, entry, Guid.Empty);
+					return new TemperatureEntryResult(TemperatureEntryStatus.NotLoggedIn, null, default(Guid));
 				}
 
 				UriBuilder builder;
@@ -161,256 +158,58 @@ namespace Sannel.House.ServerSDK
 				}
 				catch (UriFormatException)
 				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriIsNotValid, entry, Guid.Empty);
+					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriIsNotValid, null, default(Guid));
 				}
 
 				builder.Path = "/api/TemperatureEntry";
-
-				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
-				httpFilter.CookieManager.SetCookie(cookie);
-
-				using (var client = new HttpClient(httpFilter))
-				{
-					HttpResponseMessage result = null;
-					try
-					{
-						var obj = new JObject();
-						obj.Add(nameof(entry.Id), entry.Id);
-						obj.Add(nameof(entry.CreatedDateTime), entry.CreatedDateTime);
-						obj.Add(nameof(entry.DeviceId), entry.DeviceId);
-						obj.Add(nameof(entry.TemperatureCelsius), entry.TemperatureCelsius);
-						obj.Add(nameof(entry.Humidity), entry.Humidity);
-						obj.Add(nameof(entry.Pressure), entry.Pressure);
-
-						result = await client.PostAsync(builder.Uri, new HttpStringContent(obj.ToString(), Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
-					}
-					catch (COMException ce)
-					{
-						if (ce.HResult == -2147012867)
-						{
-							return new TemperatureEntryResult(TemperatureEntryStatus.UnableToConnectToServer, entry, Guid.Empty);
-						}
-
-						return new TemperatureEntryResult(TemperatureEntryStatus.Exception, entry, Guid.Empty);
-					}
-
-					if (result.StatusCode == HttpStatusCode.Ok)
-					{
-						var res = await result.Content.ReadAsStringAsync();
-						try
-						{
-							Guid g = JsonConvert.DeserializeObject<Guid>(res);
-							entry.Id = g;
-
-							if (g == Guid.Empty)
-							{
-								return new TemperatureEntryResult(TemperatureEntryStatus.Error, entry, Guid.Empty);
-							}
-							else
-							{
-								return new TemperatureEntryResult(TemperatureEntryStatus.Success, entry, g);
-							}
-						}
-						catch (Exception)
-						{
-							return new TemperatureEntryResult(TemperatureEntryStatus.Exception, entry, Guid.Empty);
-						}
-					}
-					else
-					{
-						return new TemperatureEntryResult(TemperatureEntryStatus.Error, entry, Guid.Empty);
-					}
-				}
-			}).AsAsyncOperation();
-		}
-
-		public IAsyncOperation<TemperatureSettingResults> GetTemperatureSettingsAsync()
-		{
-			return Task.Run(async () =>
-			{
-				if (settings.ServerUri == null)
-				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriNotSet, null);
-				}
-
-				if (!IsAuthenticated)
-				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.NotLoggedIn, null);
-				}
-
-				UriBuilder builder;
+				HttpResponseMessage result = null;
 				try
 				{
-					builder = new UriBuilder(settings.ServerUri);
+					result = await client.GetAsync(builder.Uri);
 				}
-				catch (UriFormatException ufe)
+				catch (COMException ce)
 				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriInvalid, null)
+					if (ce.HResult == -2147012867)
 					{
-						Exception = ufe
-					};
+						return new TemperatureEntryResult(TemperatureEntryStatus.UnableToConnectToServer, null, key, ce);
+					}
+
+					return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ce);
 				}
 
-				builder.Path = "/api/TemperatureSettings";
-
-				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
-				httpFilter.CookieManager.SetCookie(cookie);
-
-				using (var client = new HttpClient(httpFilter))
+				if (result.StatusCode == HttpStatusCode.Ok)
 				{
-					HttpResponseMessage result = null;
+					var res = await result.Content.ReadAsStringAsync();
 					try
 					{
-						result = await client.GetAsync(builder.Uri);
-					}
-					catch (COMException ce)
-					{
-						if (ce.HResult == -2147012867)
+						var token = JObject.Parse(res);
+						var item = helper.CreateTemperatureEntry();
+						if (token.Type == JTokenType.Object)
 						{
-							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null)
-							{
-								Exception = ce
-							};
+							item.Id = token.GetPropertyValue<Guid>(nameof(item.Id));
+							item.DeviceId = token.GetPropertyValue<Int32>(nameof(item.DeviceId));
+							item.TemperatureCelsius = token.GetPropertyValue<Double>(nameof(item.TemperatureCelsius));
+							item.Humidity = token.GetPropertyValue<Double>(nameof(item.Humidity));
+							item.Pressure = token.GetPropertyValue<Double>(nameof(item.Pressure));
+							item.CreatedDateTime = token.GetPropertyValue<DateTimeOffset>(nameof(item.CreatedDateTime));
 						}
 
-						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
-						{
-							Exception = ce
-						};
+						return new TemperatureEntryResult(TemperatureEntryStatus.Exception, item, item.Id);
 					}
-
-					if (result.StatusCode == HttpStatusCode.Ok)
+					catch (Exception ex)
 					{
-						var res = await result.Content.ReadAsStringAsync();
-						try
-						{
-							JToken token = JToken.Parse(res);
-							if (token.Type == JTokenType.Array)
-							{
-								JArray array = token as JArray;
-								List<ITemperatureSetting> settings = new List<ITemperatureSetting>();
-								foreach (JObject obj in array.Children<JObject>())
-								{
-									var setting = helper.CreateTemperatureSetting();
-									var prop = obj.Property("Id");
-									setting.Id = prop.Value.Value<long>();
-									prop = obj.Property("DayOfWeek");
-									setting.DayOfWeek = prop?.Value?.Value<short?>();
-									prop = obj.Property("Month");
-									setting.Month = prop?.Value?.Value<int?>();
-
-									prop = obj.Property("StartTime");
-									var dto = prop?.Value?.Value<String>().ToDateTimeOffset();
-									setting.StartTime = dto;
-									prop = obj.Property("EndTime");
-									dto = prop?.Value?.Value<String>().ToDateTimeOffset();
-									setting.EndTime = dto;
-
-									prop = obj.Property("HeatTemperatureCelsius");
-									setting.HeatTemperatureCelsius = prop?.Value?.Value<double?>() ?? 70;
-									prop = obj.Property("CoolTemperatureCelsius");
-									setting.CoolTemperatureCelsius = prop?.Value?.Value<double?>() ?? 80;
-
-									prop = obj.Property("DateCreated");
-									dto = prop?.Value?.Value<String>().ToDateTimeOffset();
-									setting.DateCreated = dto ?? DateTimeOffset.Now;
-									prop = obj.Property("DateModified");
-									dto = prop?.Value?.Value<String>().ToDateTimeOffset();
-									setting.DateModified = dto ?? DateTimeOffset.Now;
-									settings.Add(setting);
-								}
-								return new TemperatureSettingResults(TemperatureSettingStatus.Success, settings);
-							}
-						}
-						catch (Exception ex)
-						{
-							return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
-							{
-								Exception = ex
-							};
-						}
-					}
-					else
-					{
-						return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
+						return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ex);
 					}
 				}
-
-				return new TemperatureSettingResults(TemperatureSettingStatus.Error, null);
-			}).AsAsyncOperation();
-		}
-
-		public IAsyncOperation<TemperatureSettingResult> PutTemperatureSettingAsync(ITemperatureSetting setting)
-		{
-			if (setting == null)
-			{
-				throw new ArgumentNullException(nameof(setting));
+				else
+				{
+					return new TemperatureEntryResult(TemperatureEntryStatus.Error, null, key);
+				}
 			}
-			return Task.Run(async () =>
-			{
-				if (setting.Id == 0)
-				{
-					return new TemperatureSettingResult(TemperatureSettingStatus.IdCannotBeDefault, setting);
-				}
 
-				if (settings.ServerUri == null)
-				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriNotSet, null);
-				}
-
-				if (!IsAuthenticated)
-				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.NotLoggedIn, null);
-				}
-
-				UriBuilder builder;
-				try
-				{
-					builder = new UriBuilder(settings.ServerUri);
-				}
-				catch (UriFormatException ufe)
-				{
-					return new TemperatureSettingResults(TemperatureSettingStatus.ServerUriInvalid, null)
-					{
-						Exception = ufe
-					};
-				}
-
-				builder.Path = "/api/TemperatureSettings";
-
-				HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
-				httpFilter.CookieManager.SetCookie(cookie);
-
-				using (var client = new HttpClient(httpFilter))
-				{
-					HttpResponseMessage result = null;
-					try
-					{
-						result = await client.PutAsync(builder.Uri, new HttpStringContent("", Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/json"));
-					}
-					catch (COMException ce)
-					{
-						if (ce.HResult == -2147012867)
-						{
-							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null)
-							{
-								Exception = ce
-							};
-						}
-
-						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
-						{
-							Exception = ce
-						};
-					}
-				}
-				return new TemperatureSettingResult(TemperatureSettingStatus.Error, entry);
-			}).AsAsyncOperation();
+			).AsAsyncOperation();
 		}
+		#endregion
 
-		public IAsyncOperation<TemperatureSettingResult> PutTemperatureEntryAsync(ITemperatureEntry entry)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

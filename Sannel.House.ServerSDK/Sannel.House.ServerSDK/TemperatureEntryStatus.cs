@@ -12,48 +12,17 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 
-using System;
-using Newtonsoft.Json;
-using System;
-
 namespace Sannel.House.ServerSDK
 {
-	public interface ITemperatureEntry
+	public enum TemperatureEntryStatus
 	{
-		Guid Id
-		{
-			get;
-			set;
-		}
-
-		Int32 DeviceId
-		{
-			get;
-			set;
-		}
-
-		Double TemperatureCelsius
-		{
-			get;
-			set;
-		}
-
-		Double Humidity
-		{
-			get;
-			set;
-		}
-
-		Double Pressure
-		{
-			get;
-			set;
-		}
-
-		DateTimeOffset CreatedDateTime
-		{
-			get;
-			set;
-		}
+		Unknown,
+		ServerUriNotSet,
+		NotLoggedIn,
+		ServerUriIsNotValid,
+		UnableToConnectToServer,
+		Exception,
+		Error,
+		Success
 	}
 }

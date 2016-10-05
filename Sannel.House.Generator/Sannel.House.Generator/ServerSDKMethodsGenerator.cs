@@ -14,6 +14,8 @@ namespace Sannel.House.Generator
 	public class ServerSDKMethodsGenerator : IDisposable
 	{
 		private StreamWriter writer;
+		private SyntaxToken keyName = SF.Identifier("key");
+		private SyntaxToken helperName = SF.Identifier("helper");
 		public ServerSDKMethodsGenerator(String baseDirectory)
 		{
 			var path = Path.Combine(baseDirectory, "ServerSDK");
@@ -140,10 +142,51 @@ namespace Sannel.House.Generator
 			return list.ToArray();
 		}
 
+		private StatementSyntax getPropertyValue(SyntaxToken obj, SyntaxToken jObject, String propertyName, Type propertyType)
+		{
+			String typeName = propertyType.Name;
+			if(propertyType.GenericTypeArguments != null && propertyType.GenericTypeArguments.Length > 0)
+			{
+				if (propertyType.Name.StartsWith("Nullable"))
+				{
+					typeName = $"{propertyType.GenericTypeArguments[0]}?";
+				}
+			}
+			return SF.ExpressionStatement(SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+					SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName(obj),
+						SF.IdentifierName(propertyName)
+					),
+					SF.InvocationExpression(
+						SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							SF.IdentifierName(jObject),
+							SF.GenericName("GetPropertyValue")
+							.AddTypeArgumentListArguments(
+								SF.ParseTypeName(typeName)
+							)
+						)
+					).AddArgumentListArguments(
+						SF.Argument(
+							SF.InvocationExpression(
+								SF.IdentifierName("nameof")
+							).AddArgumentListArguments(
+								SF.Argument(
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName(obj),
+										SF.IdentifierName(propertyName)
+									)
+								)
+							)
+						)
+					)
+				));
+		}
+
 		private StatementSyntax[] createGetCall(Type t, PropertyInfo[] pi)
 		{
 			var result = SF.Identifier("result");
 			var list = new List<StatementSyntax>();
+			var key = pi.GetKeyProperty();
 			list.Add(SF.LocalDeclarationStatement(
 					SF.VariableDeclaration(SF.ParseTypeName("HttpResponseMessage"))
 						.AddVariables(
@@ -154,26 +197,271 @@ namespace Sannel.House.Generator
 						)
 				));
 
-			/*HttpResponseMessage result = null;
-					try
-					{
-						result = await client.GetAsync(builder.Uri);
-					}
-					catch (COMException ce)
-					{
-						if (ce.HResult == -2147012867)
-						{
-							return new TemperatureSettingResults(TemperatureSettingStatus.UnableToConnectToServer, null)
-							{
-								Exception = ce
-							};
-						}
+			var ce = SF.Identifier("ce");
 
-						return new TemperatureSettingResults(TemperatureSettingStatus.Exception, null)
-						{
-							Exception = ce
-						};
-					}*/
+			list.Add(SF.TryStatement()
+				.WithBlock(
+					SF.Block(
+					SF.ExpressionStatement(
+						SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+							SF.IdentifierName(result),
+							SF.AwaitExpression(
+								SF.InvocationExpression(
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName("client"),
+										SF.IdentifierName("GetAsync")
+									)
+								)
+								.AddArgumentListArguments(
+									SF.Argument(
+										SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+											SF.IdentifierName("builder"),
+											SF.IdentifierName("Uri")
+										)
+									)
+								)
+							)
+					)
+				)))
+				.AddCatches(
+					SF.CatchClause()
+					.WithDeclaration(
+						SF.CatchDeclaration(SF.IdentifierName("COMException"))
+						.WithIdentifier(ce)
+					)
+					.AddBlockStatements(
+						SF.IfStatement(
+							SF.BinaryExpression(SyntaxKind.EqualsExpression,
+								SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+									SF.IdentifierName(ce),
+									SF.IdentifierName("HResult")
+								),
+								SF.LiteralExpression(SyntaxKind.NumericLiteralExpression,
+									SF.Literal(-2147012867)
+								)
+							),
+							SF.Block()
+							.AddStatements(
+								SF.ReturnStatement(
+									SF.ObjectCreationExpression(SF.ParseTypeName($"{t.Name}Result"))
+									.AddArgumentListArguments(
+										SF.Argument(
+											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+												SF.IdentifierName($"{t.Name}Status"),
+												SF.IdentifierName("UnableToConnectToServer"))
+										),
+										SF.Argument(
+											SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
+										)
+										,
+										SF.Argument(
+											SF.IdentifierName(keyName)
+										),
+										SF.Argument(
+											SF.IdentifierName(ce)
+										)
+									)
+								)
+							)
+						),
+						SF.ReturnStatement(
+							SF.ObjectCreationExpression(SF.ParseTypeName($"{t.Name}Result"))
+							.AddArgumentListArguments(
+								SF.Argument(
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName($"{t.Name}Status"),
+										SF.IdentifierName("Exception"))
+								),
+								SF.Argument(
+									SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
+								)
+								,
+								SF.Argument(
+									SF.IdentifierName(keyName)
+								),
+								SF.Argument(
+									SF.IdentifierName(ce)
+								)
+							)
+						)
+					)
+				).WithTrailingTrivia(SF.Whitespace(Environment.NewLine + Environment.NewLine))
+			);
+
+			var res = SF.Identifier("res");
+			var token = SF.Identifier("token");
+			var item = SF.Identifier("item");
+
+			var setStatements = SF.Block();
+			foreach(var prop in pi)
+			{
+				if (!prop.ShouldIgnore())
+				{
+					setStatements = setStatements.AddStatements(getPropertyValue(item, token, prop.Name, prop.PropertyType));
+				}
+			}
+
+			var block = SF.Block()
+				.AddStatements(
+					SF.LocalDeclarationStatement(
+						SF.VariableDeclaration(SF.IdentifierName("var"))
+						.AddVariables(
+							SF.VariableDeclarator(res)
+							.WithInitializer(
+								SF.EqualsValueClause(
+									SF.AwaitExpression(
+										SF.InvocationExpression(
+											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+												SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+													SF.IdentifierName(result),
+													SF.IdentifierName("Content")
+												),
+												SF.IdentifierName("ReadAsStringAsync")
+											)
+										)
+									)
+								)
+							)
+						)
+					).WithTrailingTrivia(SF.Whitespace(Environment.NewLine + Environment.NewLine)),
+					SF.TryStatement()
+					.AddBlockStatements(
+						SF.LocalDeclarationStatement(
+							SF.VariableDeclaration(SF.IdentifierName("var"))
+							.AddVariables(
+								SF.VariableDeclarator(token)
+								.WithInitializer(
+									SF.EqualsValueClause(
+										SF.InvocationExpression(
+											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+												SF.IdentifierName("JObject"),
+												SF.IdentifierName("Parse")
+											)
+										).AddArgumentListArguments(
+											SF.Argument(SF.IdentifierName(res))
+										)
+									)
+								)
+							)
+						),
+						SF.LocalDeclarationStatement(
+							SF.VariableDeclaration(SF.IdentifierName("var"))
+							.AddVariables(
+								SF.VariableDeclarator(item)
+								.WithInitializer(
+									SF.EqualsValueClause(
+										SF.InvocationExpression(
+											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+												SF.IdentifierName(helperName),
+												SF.IdentifierName($"Create{t.Name}")
+											)
+										).AddArgumentListArguments()
+									)
+								)
+							)
+						),
+						SF.IfStatement(
+							SF.BinaryExpression(SyntaxKind.EqualsExpression,
+								SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+									SF.IdentifierName(token),
+									SF.IdentifierName("Type")
+								),
+								SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+									SF.IdentifierName("JTokenType"),
+									SF.IdentifierName("Object")
+								)
+							),
+							setStatements
+						),
+						SF.ReturnStatement(
+							SF.ObjectCreationExpression(SF.ParseTypeName($"{t.Name}Result"))
+							.AddArgumentListArguments(
+								SF.Argument(
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName($"{t.Name}Status"),
+										SF.IdentifierName("Exception"))
+								),
+								SF.Argument(
+									SF.IdentifierName(item)
+								)
+								,
+								SF.Argument(
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName(item),
+										SF.IdentifierName(key.Name)
+									)
+								)
+							)
+						)
+					)
+					.AddCatches(
+						SF.CatchClause()
+						.WithDeclaration(
+							SF.CatchDeclaration(SF.ParseTypeName("Exception"))
+							.WithIdentifier(SF.Identifier("ex"))
+						)
+						.WithBlock(
+							SF.Block(
+								SF.ReturnStatement(
+									SF.ObjectCreationExpression(SF.ParseTypeName($"{t.Name}Result"))
+									.AddArgumentListArguments(
+										SF.Argument(
+											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+												SF.IdentifierName($"{t.Name}Status"),
+												SF.IdentifierName("Exception"))
+										),
+										SF.Argument(
+											SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
+										)
+										,
+										SF.Argument(
+											SF.IdentifierName(keyName)
+										),
+										SF.Argument(
+											SF.IdentifierName("ex")
+										)
+									)
+								)
+							)
+						)
+					)
+				);
+
+			list.Add(SF.IfStatement(
+				SF.BinaryExpression(SyntaxKind.EqualsExpression,
+					SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName(result),
+						SF.IdentifierName("StatusCode")
+					),
+					SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName("HttpStatusCode"),
+						SF.IdentifierName("Ok")
+					)
+				),
+				block
+			)
+			.WithElse(SF.ElseClause(SF.Block()
+				.AddStatements(
+					SF.ReturnStatement(
+						SF.ObjectCreationExpression(SF.ParseTypeName($"{t.Name}Result"))
+						.AddArgumentListArguments(
+							SF.Argument(
+								SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+									SF.IdentifierName($"{t.Name}Status"),
+									SF.IdentifierName("Error"))
+							),
+							SF.Argument(
+								SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
+							)
+							,
+							SF.Argument(
+								SF.IdentifierName(keyName)
+							)
+						)
+					)
+				)
+			)));
+
 			return list.ToArray();
 		}
 
@@ -181,19 +469,36 @@ namespace Sannel.House.Generator
 		{
 
 			var key = pi.GetKeyProperty();
-			var keyName = SF.Identifier("key");
 			var method = SF.MethodDeclaration(
 				SF.GenericName(SF.Identifier("IAsyncOperation"),
 					SF.TypeArgumentList().AddArguments(
-						SF.ParseTypeName(t.Name)
+						SF.ParseTypeName($"I{t.Name}")
 						)
 				),
 				$"Get{t.Name}Async"
-			);
+			).WithModifiers(
+					SF.TokenList(
+						SF.Token(
+						SF.TriviaList(
+								SF.Trivia(
+									SF.DocumentationCommentTrivia(SyntaxKind.SingleLineDocumentationCommentTrivia)
+									.AddContent(SF.XmlElement(SF.XmlElementStartTag(SF.XmlName("summary")), SF.XmlElementEndTag(SF.XmlName("summary")))
+										.AddContent(
+											SF.XmlText($"Gets the I{t.Name} asynchronous.")
+										),
+										SF.XmlElement(SF.XmlElementStartTag(SF.XmlName("param")), SF.XmlElementEndTag(SF.XmlName("param")))
+											.AddStartTagAttributes(SF.XmlNameAttribute(keyName.Text)),
+										SF.XmlElement(SF.XmlElementStartTag(SF.XmlName("returns")), SF.XmlElementEndTag(SF.XmlName("returns"))),
+										SF.XmlText().AddTextTokens(SF.XmlTextNewLine(Environment.NewLine))
+									)
+								)
+						),
+						SyntaxKind.PublicKeyword,
+						SF.TriviaList())
+				));
 
 			method = method.AddParameterListParameters(
-				SF.Parameter(SF.Identifier("key")).WithType(SF.ParseTypeName(pi.GetKeyProperty().PropertyType.Name)))
-				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+				SF.Parameter(keyName).WithType(SF.ParseTypeName(pi.GetKeyProperty().PropertyType.Name)));
 
 			var body = new List<StatementSyntax>();
 			body.AddRange(createCommonResultIfStatments(t, pi));
@@ -224,7 +529,20 @@ namespace Sannel.House.Generator
 			var tn = SF.ParseTypeName(t.Name);
 			var pi = t.GetProperties();
 
-			cu = cu.AddMembers(createGetMethod(t, pi));
+			cu = cu.AddMembers(createGetMethod(t, pi))
+				.WithLeadingTrivia(SF.Trivia(SF.RegionDirectiveTrivia(true)
+					.WithEndOfDirectiveToken(
+						SF.Token(SF.TriviaList().Add(SF.PreprocessingMessage(t.Name)),
+							SyntaxKind.EndOfDirectiveToken,
+							SF.TriviaList())
+					)
+				));
+
+			cu = cu.WithTrailingTrivia(
+				SF.Trivia(
+					SF.EndRegionDirectiveTrivia(true)
+				)
+				);
 
 			cu.NormalizeWhitespace("\t", true).WriteTo(writer);
 			writer.WriteLine();

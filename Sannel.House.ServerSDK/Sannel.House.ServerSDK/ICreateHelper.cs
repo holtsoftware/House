@@ -8,8 +8,6 @@ namespace Sannel.House.ServerSDK
 {
 	public interface ICreateHelper
 	{
-		ITemperatureSetting CreateTemperatureSetting();
-
 		ITemperatureEntry CreateTemperatureEntry();
 	}
 }

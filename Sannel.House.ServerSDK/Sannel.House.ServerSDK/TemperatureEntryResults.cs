@@ -20,16 +20,16 @@ using System.Threading.Tasks;
 
 namespace Sannel.House.ServerSDK
 {
-	public sealed class TemperatureEntryResult
+	public sealed class TemperatureEntryResults
 	{
-		public TemperatureEntryResult(TemperatureEntryStatus status, ITemperatureEntry data, Guid key)
+		public TemperatureEntryResults(TemperatureEntryStatus status, IList<ITemperatureEntry> data, Guid key)
 		{
 			Status = status;
 			Data = data;
 			Key = key;
 		}
 
-		public TemperatureEntryResult(TemperatureEntryStatus status, ITemperatureEntry data, Guid key, Exception exception)
+		public TemperatureEntryResults(TemperatureEntryStatus status, IList<ITemperatureEntry> data, Guid key, Exception exception)
 		{
 			Status = status;
 			Data = data;
@@ -43,7 +43,7 @@ namespace Sannel.House.ServerSDK
 			set;
 		}
 
-		public ITemperatureEntry Data
+		public IList<ITemperatureEntry> Data
 		{
 			get;
 			set;
