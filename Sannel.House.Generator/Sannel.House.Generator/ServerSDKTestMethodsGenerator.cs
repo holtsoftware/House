@@ -46,9 +46,69 @@ namespace Sannel.House.Generator
 			writer = new StreamWriter(File.OpenWrite(serverContext));
 		}
 
+		private ExpressionSyntax getDefaultValue(TypeSyntax t)
+		{
+			String type = t.ToString();
+			if(t is NullableTypeSyntax)
+			{
+				var nt = (NullableTypeSyntax)t;
+				type = nt.ElementType.ToString();
+			}
+			switch (type)
+			{
+				case "Guid":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+					SF.IdentifierName("Guid"),
+					SF.IdentifierName("Empty"));
+
+				case "Int32":
+				case "Int16":
+				case "Int64":
+					return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(0));
+
+				case "Float":
+				case "Double":
+				case "Decimal":
+					return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(0));
+
+				case "DayOfWeek":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName("DayOfWeek"),
+						SF.IdentifierName("Monday"));
+
+				case "String":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName("String"),
+						SF.IdentifierName("Empty"));
+
+				case "Boolean":
+					return SF.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+			}
+
+
+			return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
+		}
+
 		public MemberDeclarationSyntax createGetMethod(Type t, PropertyInfo[] pi)
 		{
-			throw new NotImplementedException();
+			var method = SF.MethodDeclaration(SF.ParseTypeName("Task"), $"Get{t.Name}AsyncTest")
+				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword), SF.Token(SyntaxKind.AsyncKeyword));
+
+			foreach(var p in pi)
+			{
+				if (!p.ShouldIgnore())
+				{
+					var ts = Extensions.GetTypeSyntax(p);
+					method = method.AddBodyStatements(
+						SF.LocalDeclarationStatement(
+						Extensions.VariableDeclaration($"_{p.Name}",
+							SF.EqualsValueClause(getDefaultValue(ts)),
+							ts.ToString()
+						)));
+				}
+			}
+
+			return method;
 		}
 
 		public void AddType(String propertyName, Type t)
