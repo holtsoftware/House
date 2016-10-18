@@ -14,19 +14,6 @@ namespace Sannel.House.ServerSDK
     {
         private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
 
-        global::Sannel.House.ServerSDK.ITemperatureSetting global::Sannel.House.ServerSDK.ICreateHelper.CreateTemperatureSetting()
-        {
-            return ((CreateTemperatureSetting_Delegate)_stubs[nameof(CreateTemperatureSetting_Delegate)]).Invoke();
-        }
-
-        public delegate global::Sannel.House.ServerSDK.ITemperatureSetting CreateTemperatureSetting_Delegate();
-
-        public StubICreateHelper CreateTemperatureSetting(CreateTemperatureSetting_Delegate del)
-        {
-            _stubs[nameof(CreateTemperatureSetting_Delegate)] = del;
-            return this;
-        }
-
         global::Sannel.House.ServerSDK.ITemperatureEntry global::Sannel.House.ServerSDK.ICreateHelper.CreateTemperatureEntry()
         {
             return ((CreateTemperatureEntry_Delegate)_stubs[nameof(CreateTemperatureEntry_Delegate)]).Invoke();
@@ -37,6 +24,67 @@ namespace Sannel.House.ServerSDK
         public StubICreateHelper CreateTemperatureEntry(CreateTemperatureEntry_Delegate del)
         {
             _stubs[nameof(CreateTemperatureEntry_Delegate)] = del;
+            return this;
+        }
+    }
+}
+
+namespace Sannel.House.ServerSDK
+{
+    [CompilerGenerated]
+    public class StubIHttpClient : IHttpClient
+    {
+        private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
+
+        string global::Sannel.House.ServerSDK.IHttpClient.GetCookieValue(global::System.Uri uri, string cookieName)
+        {
+            return ((GetCookieValue_Uri_String_Delegate)_stubs[nameof(GetCookieValue_Uri_String_Delegate)]).Invoke(uri, cookieName);
+        }
+
+        public delegate string GetCookieValue_Uri_String_Delegate(global::System.Uri uri, string cookieName);
+
+        public StubIHttpClient GetCookieValue(GetCookieValue_Uri_String_Delegate del)
+        {
+            _stubs[nameof(GetCookieValue_Uri_String_Delegate)] = del;
+            return this;
+        }
+
+        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> global::Sannel.House.ServerSDK.IHttpClient.GetAsync(global::System.Uri requestUri)
+        {
+            return ((GetAsync_Uri_Delegate)_stubs[nameof(GetAsync_Uri_Delegate)]).Invoke(requestUri);
+        }
+
+        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> GetAsync_Uri_Delegate(global::System.Uri requestUri);
+
+        public StubIHttpClient GetAsync(GetAsync_Uri_Delegate del)
+        {
+            _stubs[nameof(GetAsync_Uri_Delegate)] = del;
+            return this;
+        }
+
+        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> global::Sannel.House.ServerSDK.IHttpClient.PostAsync(global::System.Uri requestUri, global::System.Collections.Generic.IDictionary<string, string> data)
+        {
+            return ((PostAsync_Uri_IDictionaryOfStringString_Delegate)_stubs[nameof(PostAsync_Uri_IDictionaryOfStringString_Delegate)]).Invoke(requestUri, data);
+        }
+
+        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> PostAsync_Uri_IDictionaryOfStringString_Delegate(global::System.Uri requestUri, global::System.Collections.Generic.IDictionary<string, string> data);
+
+        public StubIHttpClient PostAsync(PostAsync_Uri_IDictionaryOfStringString_Delegate del)
+        {
+            _stubs[nameof(PostAsync_Uri_IDictionaryOfStringString_Delegate)] = del;
+            return this;
+        }
+
+        void global::System.IDisposable.Dispose()
+        {
+            ((IDisposable_Dispose_Delegate)_stubs[nameof(IDisposable_Dispose_Delegate)]).Invoke();
+        }
+
+        public delegate void IDisposable_Dispose_Delegate();
+
+        public StubIHttpClient Dispose(IDisposable_Dispose_Delegate del)
+        {
+            _stubs[nameof(IDisposable_Dispose_Delegate)] = del;
             return this;
         }
     }
@@ -78,29 +126,16 @@ namespace Sannel.House.ServerSDK
             return this;
         }
 
-        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.TemperatureEntryResult> global::Sannel.House.ServerSDK.IServerContext.PostTemperatureEntryAsync(global::Sannel.House.ServerSDK.ITemperatureEntry entry)
+        void global::System.IDisposable.Dispose()
         {
-            return ((PostTemperatureEntryAsync_ITemperatureEntry_Delegate)_stubs[nameof(PostTemperatureEntryAsync_ITemperatureEntry_Delegate)]).Invoke(entry);
+            ((IDisposable_Dispose_Delegate)_stubs[nameof(IDisposable_Dispose_Delegate)]).Invoke();
         }
 
-        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.TemperatureEntryResult> PostTemperatureEntryAsync_ITemperatureEntry_Delegate(global::Sannel.House.ServerSDK.ITemperatureEntry entry);
+        public delegate void IDisposable_Dispose_Delegate();
 
-        public StubIServerContext PostTemperatureEntryAsync(PostTemperatureEntryAsync_ITemperatureEntry_Delegate del)
+        public StubIServerContext Dispose(IDisposable_Dispose_Delegate del)
         {
-            _stubs[nameof(PostTemperatureEntryAsync_ITemperatureEntry_Delegate)] = del;
-            return this;
-        }
-
-        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.TemperatureSettingResults> global::Sannel.House.ServerSDK.IServerContext.GetTemperatureSettingsAsync()
-        {
-            return ((GetTemperatureSettingsAsync_Delegate)_stubs[nameof(GetTemperatureSettingsAsync_Delegate)]).Invoke();
-        }
-
-        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.TemperatureSettingResults> GetTemperatureSettingsAsync_Delegate();
-
-        public StubIServerContext GetTemperatureSettingsAsync(GetTemperatureSettingsAsync_Delegate del)
-        {
-            _stubs[nameof(GetTemperatureSettingsAsync_Delegate)] = del;
+            _stubs[nameof(IDisposable_Dispose_Delegate)] = del;
             return this;
         }
     }
@@ -322,305 +357,6 @@ namespace Sannel.House.ServerSDK
         public StubITemperatureEntry CreatedDateTime_Set(CreatedDateTime_Set_Delegate del)
         {
             _stubs[nameof(CreatedDateTime_Set_Delegate)] = del;
-            return this;
-        }
-    }
-}
-
-namespace Sannel.House.ServerSDK
-{
-    [CompilerGenerated]
-    public class StubITemperatureSetting : ITemperatureSetting
-    {
-        private readonly Dictionary<string, object> _stubs = new Dictionary<string, object>();
-
-        long global::Sannel.House.ServerSDK.ITemperatureSetting.Id
-        {
-            get
-            {
-                return ((Id_Get_Delegate)_stubs[nameof(Id_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((Id_Set_Delegate)_stubs[nameof(Id_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate long Id_Get_Delegate();
-
-        public StubITemperatureSetting Id_Get(Id_Get_Delegate del)
-        {
-            _stubs[nameof(Id_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void Id_Set_Delegate(long value);
-
-        public StubITemperatureSetting Id_Set(Id_Set_Delegate del)
-        {
-            _stubs[nameof(Id_Set_Delegate)] = del;
-            return this;
-        }
-
-        short? global::Sannel.House.ServerSDK.ITemperatureSetting.DayOfWeek
-        {
-            get
-            {
-                return ((DayOfWeek_Get_Delegate)_stubs[nameof(DayOfWeek_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((DayOfWeek_Set_Delegate)_stubs[nameof(DayOfWeek_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate short? DayOfWeek_Get_Delegate();
-
-        public StubITemperatureSetting DayOfWeek_Get(DayOfWeek_Get_Delegate del)
-        {
-            _stubs[nameof(DayOfWeek_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void DayOfWeek_Set_Delegate(short? value);
-
-        public StubITemperatureSetting DayOfWeek_Set(DayOfWeek_Set_Delegate del)
-        {
-            _stubs[nameof(DayOfWeek_Set_Delegate)] = del;
-            return this;
-        }
-
-        int? global::Sannel.House.ServerSDK.ITemperatureSetting.Month
-        {
-            get
-            {
-                return ((Month_Get_Delegate)_stubs[nameof(Month_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((Month_Set_Delegate)_stubs[nameof(Month_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate int? Month_Get_Delegate();
-
-        public StubITemperatureSetting Month_Get(Month_Get_Delegate del)
-        {
-            _stubs[nameof(Month_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void Month_Set_Delegate(int? value);
-
-        public StubITemperatureSetting Month_Set(Month_Set_Delegate del)
-        {
-            _stubs[nameof(Month_Set_Delegate)] = del;
-            return this;
-        }
-
-        bool global::Sannel.House.ServerSDK.ITemperatureSetting.IsTimeOnly
-        {
-            get
-            {
-                return ((IsTimeOnly_Get_Delegate)_stubs[nameof(IsTimeOnly_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((IsTimeOnly_Set_Delegate)_stubs[nameof(IsTimeOnly_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate bool IsTimeOnly_Get_Delegate();
-
-        public StubITemperatureSetting IsTimeOnly_Get(IsTimeOnly_Get_Delegate del)
-        {
-            _stubs[nameof(IsTimeOnly_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void IsTimeOnly_Set_Delegate(bool value);
-
-        public StubITemperatureSetting IsTimeOnly_Set(IsTimeOnly_Set_Delegate del)
-        {
-            _stubs[nameof(IsTimeOnly_Set_Delegate)] = del;
-            return this;
-        }
-
-        global::System.DateTimeOffset? global::Sannel.House.ServerSDK.ITemperatureSetting.StartTime
-        {
-            get
-            {
-                return ((StartTime_Get_Delegate)_stubs[nameof(StartTime_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((StartTime_Set_Delegate)_stubs[nameof(StartTime_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate global::System.DateTimeOffset? StartTime_Get_Delegate();
-
-        public StubITemperatureSetting StartTime_Get(StartTime_Get_Delegate del)
-        {
-            _stubs[nameof(StartTime_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void StartTime_Set_Delegate(global::System.DateTimeOffset? value);
-
-        public StubITemperatureSetting StartTime_Set(StartTime_Set_Delegate del)
-        {
-            _stubs[nameof(StartTime_Set_Delegate)] = del;
-            return this;
-        }
-
-        global::System.DateTimeOffset? global::Sannel.House.ServerSDK.ITemperatureSetting.EndTime
-        {
-            get
-            {
-                return ((EndTime_Get_Delegate)_stubs[nameof(EndTime_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((EndTime_Set_Delegate)_stubs[nameof(EndTime_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate global::System.DateTimeOffset? EndTime_Get_Delegate();
-
-        public StubITemperatureSetting EndTime_Get(EndTime_Get_Delegate del)
-        {
-            _stubs[nameof(EndTime_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void EndTime_Set_Delegate(global::System.DateTimeOffset? value);
-
-        public StubITemperatureSetting EndTime_Set(EndTime_Set_Delegate del)
-        {
-            _stubs[nameof(EndTime_Set_Delegate)] = del;
-            return this;
-        }
-
-        double global::Sannel.House.ServerSDK.ITemperatureSetting.HeatTemperatureCelsius
-        {
-            get
-            {
-                return ((HeatTemperatureCelsius_Get_Delegate)_stubs[nameof(HeatTemperatureCelsius_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((HeatTemperatureCelsius_Set_Delegate)_stubs[nameof(HeatTemperatureCelsius_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate double HeatTemperatureCelsius_Get_Delegate();
-
-        public StubITemperatureSetting HeatTemperatureCelsius_Get(HeatTemperatureCelsius_Get_Delegate del)
-        {
-            _stubs[nameof(HeatTemperatureCelsius_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void HeatTemperatureCelsius_Set_Delegate(double value);
-
-        public StubITemperatureSetting HeatTemperatureCelsius_Set(HeatTemperatureCelsius_Set_Delegate del)
-        {
-            _stubs[nameof(HeatTemperatureCelsius_Set_Delegate)] = del;
-            return this;
-        }
-
-        double global::Sannel.House.ServerSDK.ITemperatureSetting.CoolTemperatureCelsius
-        {
-            get
-            {
-                return ((CoolTemperatureCelsius_Get_Delegate)_stubs[nameof(CoolTemperatureCelsius_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((CoolTemperatureCelsius_Set_Delegate)_stubs[nameof(CoolTemperatureCelsius_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate double CoolTemperatureCelsius_Get_Delegate();
-
-        public StubITemperatureSetting CoolTemperatureCelsius_Get(CoolTemperatureCelsius_Get_Delegate del)
-        {
-            _stubs[nameof(CoolTemperatureCelsius_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void CoolTemperatureCelsius_Set_Delegate(double value);
-
-        public StubITemperatureSetting CoolTemperatureCelsius_Set(CoolTemperatureCelsius_Set_Delegate del)
-        {
-            _stubs[nameof(CoolTemperatureCelsius_Set_Delegate)] = del;
-            return this;
-        }
-
-        global::System.DateTimeOffset global::Sannel.House.ServerSDK.ITemperatureSetting.DateCreated
-        {
-            get
-            {
-                return ((DateCreated_Get_Delegate)_stubs[nameof(DateCreated_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((DateCreated_Set_Delegate)_stubs[nameof(DateCreated_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate global::System.DateTimeOffset DateCreated_Get_Delegate();
-
-        public StubITemperatureSetting DateCreated_Get(DateCreated_Get_Delegate del)
-        {
-            _stubs[nameof(DateCreated_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void DateCreated_Set_Delegate(global::System.DateTimeOffset value);
-
-        public StubITemperatureSetting DateCreated_Set(DateCreated_Set_Delegate del)
-        {
-            _stubs[nameof(DateCreated_Set_Delegate)] = del;
-            return this;
-        }
-
-        global::System.DateTimeOffset global::Sannel.House.ServerSDK.ITemperatureSetting.DateModified
-        {
-            get
-            {
-                return ((DateModified_Get_Delegate)_stubs[nameof(DateModified_Get_Delegate)]).Invoke();
-            }
-
-            set
-            {
-                ((DateModified_Set_Delegate)_stubs[nameof(DateModified_Set_Delegate)]).Invoke(value);
-            }
-        }
-
-        public delegate global::System.DateTimeOffset DateModified_Get_Delegate();
-
-        public StubITemperatureSetting DateModified_Get(DateModified_Get_Delegate del)
-        {
-            _stubs[nameof(DateModified_Get_Delegate)] = del;
-            return this;
-        }
-
-        public delegate void DateModified_Set_Delegate(global::System.DateTimeOffset value);
-
-        public StubITemperatureSetting DateModified_Set(DateModified_Set_Delegate del)
-        {
-            _stubs[nameof(DateModified_Set_Delegate)] = del;
             return this;
         }
     }

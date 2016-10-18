@@ -84,10 +84,6 @@ namespace Sannel.House
 
 		public static T GetPropertyValue<T>(this JObject token, String name)
 		{
-			if(typeof(T) == typeof(DateTimeOffset))
-			{
-
-			}
 			var prop = token.Property(name);
 
 			if(prop == null)
@@ -99,6 +95,23 @@ namespace Sannel.House
 			{
 				return default(T);
 			}
+
+			if(typeof(T) == typeof(DateTimeOffset))
+			{
+				var d = prop.Value.Value<String>();
+				DateTimeOffset dto = DateTimeOffset.MinValue;
+				if(DateTimeOffset.TryParse(d, out dto))
+				{
+					return (T)(Object)dto; // This seams wrong 
+				}
+				return default(T);
+			}
+
+			if(typeof(T) == typeof(Guid))
+			{
+				return prop.Value.ToObject<T>();
+			}
+
 
 			return prop.Value.Value<T>();
 		}

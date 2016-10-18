@@ -18,29 +18,51 @@ namespace Sannel.House.ServerSDK
 	/// <summary>
 	/// This class is used to connect and make calls to the server.
 	/// </summary>
-	public sealed class ServerContext
+	public sealed class ServerContext : IDisposable
 	{
-		private String authCookieName;
-		private HttpCookie cookie;
+		private String cookieValue;
 		private IServerSettings settings;
 		private ICreateHelper helper;
-		private HttpClient client;
-		private HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
+		private IHttpClient client;
+		private String authzCookieName;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ServerContext"/> class.
+		/// Initializes a new instance of the <see cref="ServerContext" /> class.
 		/// </summary>
 		/// <param name="settings">The settings.</param>
-		public ServerContext(IServerSettings settings, ICreateHelper helper)
+		/// <param name="helper">The helper.</param>
+		/// <param name="client">The client.</param>
+		/// <exception cref="ArgumentNullException"></exception>
+		public ServerContext(IServerSettings settings, ICreateHelper helper, IHttpClient client)
 		{
 			if (settings == null)
 			{
 				throw new ArgumentNullException(nameof(settings));
 			}
+
+			if (helper == null)
+			{
+				throw new ArgumentNullException(nameof(helper));
+			}
+
+			if (client == null)
+			{
+				throw new ArgumentNullException(nameof(client));
+			}
+
+			this.authzCookieName = "authz";
 			this.settings = settings;
-			authCookieName = "Authz";
 			this.helper = helper;
-			client = new HttpClient(httpFilter);
+			this.client = client;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ServerContext"/> class.
+		/// </summary>
+		/// <param name="settings">The settings.</param>
+		/// <param name="helper">The helper.</param>
+		public ServerContext(IServerSettings settings, ICreateHelper helper) : this(settings, helper, new ServerHttpClient())
+		{
 		}
 
 		public void Dispose()
@@ -58,7 +80,7 @@ namespace Sannel.House.ServerSDK
 		{
 			get
 			{
-				return cookie != null;
+				return cookieValue != null;
 			}
 		}
 
@@ -100,14 +122,15 @@ namespace Sannel.House.ServerSDK
 
 				var content = new Windows.Web.Http.HttpFormUrlEncodedContent(new KeyValuePair<String, String>[]
 				{
-					new KeyValuePair<string, string>("Email", username),
-					new KeyValuePair<string, string>("Password", password),
-					new KeyValuePair<string, string>("RememberMe", "true")
 				});
-				HttpResponseMessage result = null;
+				HttpClientResult result = null;
 				try
 				{
-					result = await client.PostAsync(builder.Uri, content);
+					var dict = new Dictionary<String, String>();
+					dict.Add("Email", username);
+					dict.Add("Password", password);
+					dict.Add("RememberMe", "true");
+					result = await client.PostAsync(builder.Uri, dict);
 				}
 				catch (COMException ce)
 				{
@@ -120,12 +143,13 @@ namespace Sannel.House.ServerSDK
 				}
 				if (result.StatusCode == HttpStatusCode.Ok)
 				{
-					var cookies = httpFilter.CookieManager.GetCookies(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"));
-					var authz = cookies.FirstOrDefault(i => String.Compare(i.Name, authCookieName) == 0);
-					if (authz != null)
+					var value = client.GetCookieValue(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"), authzCookieName);
+
+					cookieValue = value;
+
+					if (value != null)
 					{
-						cookie = authz;
-						return new LoginResult(LoginStatus.Success, authz.Value);
+						return new LoginResult(LoginStatus.Success, cookieValue);
 					}
 					else
 					{
@@ -137,7 +161,12 @@ namespace Sannel.House.ServerSDK
 		}
 
 		#region TemperatureEntry
-		public IAsyncOperation<ITemperatureEntry> GetTemperatureEntryAsync(Guid key)
+		/// <summary>
+		/// Gets the temperature entry asynchronous.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		/// <returns></returns>
+		public IAsyncOperation<TemperatureEntryResult> GetTemperatureEntryAsync(Guid key)
 		{
 			return Task.Run(async () =>
 			{
@@ -156,13 +185,17 @@ namespace Sannel.House.ServerSDK
 				{
 					builder = new UriBuilder(settings.ServerUri);
 				}
+				catch (InvalidOperationException)
+				{
+					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriIsNotValid, null, default(Guid));
+				}
 				catch (UriFormatException)
 				{
 					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriIsNotValid, null, default(Guid));
 				}
 
-				builder.Path = "/api/TemperatureEntry";
-				HttpResponseMessage result = null;
+				builder.Path = $"/api/TemperatureEntry/{key}";
+				HttpClientResult result = null;
 				try
 				{
 					result = await client.GetAsync(builder.Uri);
@@ -176,10 +209,14 @@ namespace Sannel.House.ServerSDK
 
 					return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ce);
 				}
+				catch (Exception ce)
+				{
+					return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ce);
+				}
 
 				if (result.StatusCode == HttpStatusCode.Ok)
 				{
-					var res = await result.Content.ReadAsStringAsync();
+					var res = result.Content;
 					try
 					{
 						var token = JObject.Parse(res);
@@ -194,7 +231,7 @@ namespace Sannel.House.ServerSDK
 							item.CreatedDateTime = token.GetPropertyValue<DateTimeOffset>(nameof(item.CreatedDateTime));
 						}
 
-						return new TemperatureEntryResult(TemperatureEntryStatus.Exception, item, item.Id);
+						return new TemperatureEntryResult(TemperatureEntryStatus.Success, item, item.Id);
 					}
 					catch (Exception ex)
 					{
@@ -210,6 +247,7 @@ namespace Sannel.House.ServerSDK
 			).AsAsyncOperation();
 		}
 		#endregion
+
 
 	}
 }

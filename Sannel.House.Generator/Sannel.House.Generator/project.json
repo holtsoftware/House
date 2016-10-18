@@ -1,22 +1,22 @@
 {
   "version": "1.0.0-*",
   "buildOptions": {
-    "emitEntryPoint": true
+	"emitEntryPoint": true
   },
 
   "dependencies": {
-    "Microsoft.CodeAnalysis.Analyzers": "1.1.0",
-    "Microsoft.CodeAnalysis.CSharp": "1.3.2",
-    "Microsoft.NETCore.App": {
-        "type": "platform",
+	"Microsoft.CodeAnalysis.Analyzers": "1.1.0",
+	"Microsoft.CodeAnalysis.CSharp": "1.3.2",
+	"Microsoft.NETCore.App": {
+		"type": "platform",
 					"version": "1.0.1"
-    },
-    "Sannel.House.Web.Base": "0.1.0-*"
+	},
+	"Sannel.House.Web.Base": "0.1.0-*"
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "imports": "dnxcore50"
-    }
+	"netcoreapp1.0": {
+	  "imports": "dnxcore50"
+	}
   }
 }

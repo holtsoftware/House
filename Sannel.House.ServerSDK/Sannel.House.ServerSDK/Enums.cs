@@ -18,18 +18,6 @@ namespace Sannel.House.ServerSDK
 		Success,
 		Error
 	}
-	
-	public enum TemperatureEntryStatus
-	{
-		Unknown,
-		ServerUriNotSet,
-		NotLoggedIn,
-		ServerUriIsNotValid,
-		UnableToConnectToServer,
-		Exception,
-		Error,
-		Success
-	}
 
 	public enum TemperatureSettingStatus
 	{
