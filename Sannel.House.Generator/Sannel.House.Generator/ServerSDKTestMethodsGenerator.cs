@@ -46,48 +46,6 @@ namespace Sannel.House.Generator
 			writer = new StreamWriter(File.OpenWrite(serverContext));
 		}
 
-		private ExpressionSyntax getDefaultValue(TypeSyntax t)
-		{
-			String type = t.ToString();
-			if(t is NullableTypeSyntax)
-			{
-				var nt = (NullableTypeSyntax)t;
-				type = nt.ElementType.ToString();
-			}
-			switch (type)
-			{
-				case "Guid":
-					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-					SF.IdentifierName("Guid"),
-					SF.IdentifierName("Empty"));
-
-				case "Int32":
-				case "Int16":
-				case "Int64":
-					return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(0));
-
-				case "Float":
-				case "Double":
-				case "Decimal":
-					return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(0));
-
-				case "DayOfWeek":
-					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-						SF.IdentifierName("DayOfWeek"),
-						SF.IdentifierName("Monday"));
-
-				case "String":
-					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-						SF.IdentifierName("String"),
-						SF.IdentifierName("Empty"));
-
-				case "Boolean":
-					return SF.LiteralExpression(SyntaxKind.FalseLiteralExpression);
-			}
-
-
-			return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
-		}
 
 		public MemberDeclarationSyntax createGetMethod(Type t, PropertyInfo[] pi)
 		{
@@ -98,15 +56,148 @@ namespace Sannel.House.Generator
 			{
 				if (!p.ShouldIgnore())
 				{
-					var ts = Extensions.GetTypeSyntax(p);
+					var ts = p.GetTypeSyntax();
 					method = method.AddBodyStatements(
 						SF.LocalDeclarationStatement(
 						Extensions.VariableDeclaration($"_{p.Name}",
-							SF.EqualsValueClause(getDefaultValue(ts)),
+							SF.EqualsValueClause(Extensions.GetDefaultValue(ts)),
 							ts.ToString()
 						)));
 				}
 			}
+
+
+			var stub = SF.Identifier("stub");
+
+			method = method.AddBodyStatements(
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(stub.Text,
+						SF.EqualsValueClause(
+							SF.ObjectCreationExpression(SF.ParseTypeName($"StubI{t.Name}"))
+							.AddArgumentListArguments()
+						)
+					)).WithLeadingTrivia(SF.Comment("// Setup Stub"))
+				);
+
+			foreach(var p in pi)
+			{
+				if (!p.ShouldIgnore())
+				{
+					method = method.AddBodyStatements(
+						SF.ExpressionStatement(
+						SF.InvocationExpression(
+							SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+								SF.IdentifierName(stub),
+								SF.IdentifierName($"{p.Name}_Get")))
+							.AddArgumentListArguments(
+								SF.Argument(SF.ParenthesizedLambdaExpression(SF.IdentifierName($"_{p.Name}"	)))
+							)
+						),
+						SF.ExpressionStatement(
+							SF.InvocationExpression(
+								SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+									SF.IdentifierName(stub),
+									SF.IdentifierName($"{p.Name}_Set"))
+							).AddArgumentListArguments(
+								SF.Argument(
+									SF.ParenthesizedLambdaExpression(
+										SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+											SF.IdentifierName($"_{p.Name}"),
+											SF.IdentifierName("v"))
+									)
+									.AddParameterListParameters(
+										SF.Parameter(SF.Identifier("v"))
+									)
+								)
+							)
+						)
+					);
+				}
+			}
+
+			var create = SF.Identifier("create");
+
+			method = method.AddBodyStatements(
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(create.Text,
+						SF.EqualsValueClause(
+							SF.ObjectCreationExpression(SF.ParseTypeName("StubICreateHelper"))
+							.AddArgumentListArguments()
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("// create helper")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							SF.IdentifierName(create),
+							SF.IdentifierName($"Create{t.Name}"))
+					)
+					.AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.IdentifierName(stub)
+							)
+						)
+					)
+				)
+			);
+
+			var settings = SF.Identifier("settings");
+
+			method = method.AddBodyStatements(
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(settings.Text,
+						SF.EqualsValueClause(
+							SF.ObjectCreationExpression(SF.ParseTypeName("StubIServerSettings"))
+							.AddArgumentListArguments()
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("// settings ")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							SF.IdentifierName(settings),
+							SF.IdentifierName("ServerUri_Get"))
+					)
+					.AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
+							)
+						)
+					)
+				)
+			);
+
+			var httpClient = SF.Identifier("httpClient");
+
+			method = method.AddBodyStatements(
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(httpClient.Text,
+						SF.EqualsValueClause(
+							SF.ObjectCreationExpression(SF.ParseTypeName("StubIHttpClient"))
+							.AddArgumentListArguments()
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("// Http Client"))
+			);
+
+			var serverContext = SF.Identifier("serverContext");
+			method = method.AddBodyStatements(
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(serverContext.Text,
+						SF.EqualsValueClause(
+							SF.ObjectCreationExpression(SF.ParseTypeName("ServerContext"))
+							.AddArgumentListArguments(
+								SF.Argument(SF.IdentifierName(settings)),
+								SF.Argument(SF.IdentifierName(create)),
+								SF.Argument(SF.IdentifierName(httpClient))
+							)
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("// Server "))
+			);
+
 
 			return method;
 		}

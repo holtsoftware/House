@@ -111,6 +111,54 @@ namespace Sannel.House.Generator
 			return syntax.AddArguments(SF.Argument(SF.IdentifierName(name)));
 		}
 
+		public static ExpressionSyntax GetDefaultValue(TypeSyntax t)
+		{
+			String type = t.ToString();
+			if(t is NullableTypeSyntax)
+			{
+				var nt = (NullableTypeSyntax)t;
+				type = nt.ElementType.ToString();
+			}
+			switch (type)
+			{
+				case "Guid":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+					SF.IdentifierName("Guid"),
+					SF.IdentifierName("Empty"));
+
+				case "Int32":
+				case "Int16":
+				case "Int64":
+					return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(0));
+
+				case "Float":
+				case "Double":
+				case "Decimal":
+					return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(0));
+
+				case "DayOfWeek":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName("DayOfWeek"),
+						SF.IdentifierName("Monday"));
+
+				case "DateTimeOffset":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName("DateTimeOffset"),
+						SF.IdentifierName("MinValue"));
+
+				case "String":
+					return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						SF.IdentifierName("String"),
+						SF.IdentifierName("Empty"));
+
+				case "Boolean":
+					return SF.LiteralExpression(SyntaxKind.FalseLiteralExpression);
+			}
+
+
+			return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
+		}
+
 		public static ExpressionSyntax LiteralForProperty(this Random rand, Type t, String name)
 		{
 			if (t == typeof(bool))
