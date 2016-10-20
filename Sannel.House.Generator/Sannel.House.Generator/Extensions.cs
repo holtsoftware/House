@@ -111,7 +111,44 @@ namespace Sannel.House.Generator
 			return syntax.AddArguments(SF.Argument(SF.IdentifierName(name)));
 		}
 
-		public static ExpressionSyntax GetDefaultValue(TypeSyntax t)
+		public static ExpressionSyntax GetRandomValue(TypeSyntax t)
+		{
+			String type = t.ToString();
+			if(t is NullableTypeSyntax)
+			{
+				var nt = (NullableTypeSyntax)t;
+				type = nt.ElementType.ToString();
+			}
+
+			switch (type)
+			{
+				case "Guid":
+					return SF.InvocationExpression(
+							SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							SF.IdentifierName("Guid"),
+							SF.IdentifierName("NewGuid"))
+						).AddArgumentListArguments();
+			}
+
+			return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
+		}
+
+		public static String GetTypeString(this TypeSyntax t)
+		{
+			if(t == null)
+			{
+				return null;
+			}
+			if(t is NullableTypeSyntax)
+			{
+				var nt = (NullableTypeSyntax)t;
+				return $"{nt.ElementType}?";
+			}
+
+			return t.ToString();
+		}
+
+		public static ExpressionSyntax GetDefaultValue(this TypeSyntax t)
 		{
 			String type = t.ToString();
 			if(t is NullableTypeSyntax)

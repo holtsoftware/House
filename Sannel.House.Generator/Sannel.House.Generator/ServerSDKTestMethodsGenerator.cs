@@ -27,6 +27,7 @@ namespace Sannel.House.Generator
 	public class ServerSDKTestMethodsGenerator : IDisposable
 	{
 		private StreamWriter writer;
+		private readonly SyntaxToken key = SF.Identifier("key");
 
 		public ServerSDKTestMethodsGenerator(String baseDirectory)
 		{
@@ -46,6 +47,64 @@ namespace Sannel.House.Generator
 			writer = new StreamWriter(File.OpenWrite(serverContext));
 		}
 
+		private StatementSyntax assertStatment(ExpressionSyntax expected, ExpressionSyntax actual, String method="AreEqual")
+		{
+			return SF.ExpressionStatement( SF.InvocationExpression(
+				SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+					SF.IdentifierName("Assert"),
+					SF.IdentifierName(method)
+				)
+			)
+			.AddArgumentListArguments(
+				SF.Argument(expected),
+				SF.Argument(actual)
+			)
+			);
+		}
+
+		private StatementSyntax assertIsNull(ExpressionSyntax test, String message)
+		{
+			return SF.ExpressionStatement(
+				SF.InvocationExpression(
+					Extensions.MemberAccess(
+						SF.IdentifierName("Assert"),
+						SF.IdentifierName("IsNull")
+					)
+				)
+				.AddArgumentListArguments(
+					SF.Argument(test),
+					SF.Argument(SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(message)))
+				)
+			);
+		}
+
+		private StatementSyntax[] getStandardTests(Type t, SyntaxToken resultsVariable, String status, ExpressionSyntax defaultKey)
+		{
+			var items = new List<StatementSyntax>();
+			items.Add(
+				assertStatment(
+					Extensions.MemberAccess(
+						SF.IdentifierName($"{t.Name}Status"),
+						SF.IdentifierName(status)
+					)
+					,Extensions.MemberAccess(
+						SF.IdentifierName(resultsVariable),
+						SF.IdentifierName("Status")
+					)
+				)
+			);
+			items.Add(
+				assertIsNull(
+					Extensions.MemberAccess(
+						SF.IdentifierName(resultsVariable),
+						SF.IdentifierName("Data")
+					),
+					"Data should not be null"
+				)
+			);
+
+			return items.ToArray();
+		}
 
 		public MemberDeclarationSyntax createGetMethod(Type t, PropertyInfo[] pi)
 		{
@@ -182,7 +241,11 @@ namespace Sannel.House.Generator
 				).WithLeadingTrivia(SF.Comment("// Http Client"))
 			);
 
+			var k = pi.GetKeyProperty();
+			var keySy = SF.ParseTypeName(k.PropertyType.Name);
+
 			var serverContext = SF.Identifier("serverContext");
+			var results = SF.Identifier("results");
 			method = method.AddBodyStatements(
 				SF.LocalDeclarationStatement(
 					Extensions.VariableDeclaration(serverContext.Text,
@@ -195,7 +258,35 @@ namespace Sannel.House.Generator
 							)
 						)
 					)
-				).WithLeadingTrivia(SF.Comment("// Server "))
+				).WithLeadingTrivia(SF.Comment("// Server ")),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(key.Text,
+						SF.EqualsValueClause(Extensions.GetRandomValue(keySy))
+						, keySy.GetTypeString()
+					)
+				),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(
+						results.Text,
+						SF.EqualsValueClause(
+							SF.AwaitExpression(
+								SF.InvocationExpression(
+									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+										SF.IdentifierName(serverContext),
+										SF.IdentifierName($"Get{t.Name}Async")
+									)
+								)
+								.AddArgumentListArguments(
+									SF.Argument(SF.IdentifierName(key))
+								)
+							)
+						)
+					)
+				)
+			);
+
+			method = method.AddBodyStatements(
+				getStandardTests(t, results, "NotLoggedIn", keySy.GetDefaultValue())
 			);
 
 
