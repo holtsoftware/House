@@ -103,6 +103,16 @@ namespace Sannel.House.Generator
 				)
 			);
 
+			items.Add(
+				assertStatment(
+					defaultKey,
+					Extensions.MemberAccess(
+						SF.IdentifierName(resultsVariable),
+						SF.IdentifierName("Key")
+					)
+				)
+			);
+
 			return items.ToArray();
 		}
 
@@ -282,11 +292,11 @@ namespace Sannel.House.Generator
 							)
 						)
 					)
-				)
+				).WithLeadingTrivia(SF.Comment("// leading"))
 			);
 
 			method = method.AddBodyStatements(
-				getStandardTests(t, results, "NotLoggedIn", keySy.GetDefaultValue())
+				getStandardTests(t, results, "ServerUriNotSet", keySy.GetDefaultValue())
 			);
 
 

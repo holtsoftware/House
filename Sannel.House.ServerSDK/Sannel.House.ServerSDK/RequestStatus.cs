@@ -14,7 +14,7 @@
 
 namespace Sannel.House.ServerSDK
 {
-	public enum TemperatureEntryStatus
+	public enum RequestStatus
 	{
 		Unknown,
 		ServerUriNotSet,

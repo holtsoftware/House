@@ -66,8 +66,8 @@ namespace Sannel.House.Generator
 								SF.ArgumentList()
 								.AddArguments(
 									SF.Argument(SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("ServerUriNotSet"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.ServerUriNotSet))
 									),
 									SF.Argument(SF.LiteralExpression(SyntaxKind.NullLiteralExpression)),
 									SF.Argument(SF.DefaultExpression(SF.ParseTypeName(key.PropertyType.Name)))
@@ -86,8 +86,8 @@ namespace Sannel.House.Generator
 								SF.ArgumentList()
 								.AddArguments(
 									SF.Argument(SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("NotLoggedIn"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.NotLoggedIn))
 									),
 									SF.Argument(SF.LiteralExpression(SyntaxKind.NullLiteralExpression)),
 									SF.Argument(SF.DefaultExpression(SF.ParseTypeName(key.PropertyType.Name)))
@@ -127,8 +127,8 @@ namespace Sannel.House.Generator
 								SF.ArgumentList()
 								.AddArguments(
 									SF.Argument(SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("ServerUriIsNotValid"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.ServerUriIsNotValid))
 									),
 									SF.Argument(SF.LiteralExpression(SyntaxKind.NullLiteralExpression)),
 									SF.Argument(SF.DefaultExpression(SF.ParseTypeName(key.PropertyType.Name)))
@@ -145,8 +145,8 @@ namespace Sannel.House.Generator
 								SF.ArgumentList()
 								.AddArguments(
 									SF.Argument(SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("ServerUriIsNotValid"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.ServerUriIsNotValid))
 									),
 									SF.Argument(SF.LiteralExpression(SyntaxKind.NullLiteralExpression)),
 									SF.Argument(SF.DefaultExpression(SF.ParseTypeName(key.PropertyType.Name)))
@@ -290,8 +290,8 @@ namespace Sannel.House.Generator
 									.AddArgumentListArguments(
 										SF.Argument(
 											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-												SF.IdentifierName($"{t.Name}Status"),
-												SF.IdentifierName("UnableToConnectToServer"))
+												SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+												SF.IdentifierName(ServerSDKStatusConstants.UnableToConnectToServer))
 										),
 										SF.Argument(
 											SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
@@ -312,8 +312,8 @@ namespace Sannel.House.Generator
 							.AddArgumentListArguments(
 								SF.Argument(
 									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("Exception"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.Exception))
 								),
 								SF.Argument(
 									SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
@@ -339,8 +339,8 @@ namespace Sannel.House.Generator
 							.AddArgumentListArguments(
 								SF.Argument(
 									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("Exception"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.Exception))
 								),
 								SF.Argument(
 									SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
@@ -441,8 +441,8 @@ namespace Sannel.House.Generator
 							.AddArgumentListArguments(
 								SF.Argument(
 									SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-										SF.IdentifierName($"{t.Name}Status"),
-										SF.IdentifierName("Success"))
+										SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+										SF.IdentifierName(ServerSDKStatusConstants.Success))
 								),
 								SF.Argument(
 									SF.IdentifierName(item)
@@ -470,8 +470,8 @@ namespace Sannel.House.Generator
 									.AddArgumentListArguments(
 										SF.Argument(
 											SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-												SF.IdentifierName($"{t.Name}Status"),
-												SF.IdentifierName("Exception"))
+												SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+												SF.IdentifierName(ServerSDKStatusConstants.Exception))
 										),
 										SF.Argument(
 											SF.LiteralExpression(SyntaxKind.NullLiteralExpression)
@@ -510,8 +510,8 @@ namespace Sannel.House.Generator
 						.AddArgumentListArguments(
 							SF.Argument(
 								SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-									SF.IdentifierName($"{t.Name}Status"),
-									SF.IdentifierName("Error"))
+									SF.IdentifierName(ServerSDKStatusConstants.EnumName),
+									SF.IdentifierName(ServerSDKStatusConstants.Error))
 							),
 							SF.Argument(
 								SF.LiteralExpression(SyntaxKind.NullLiteralExpression)

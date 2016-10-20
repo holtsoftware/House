@@ -87,7 +87,7 @@ namespace Sannel.House.Generator
 			var con = SF.ConstructorDeclaration(filename);
 			con = con.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
 				.AddParameterListParameters(
-					SF.Parameter(status).WithType(SF.ParseTypeName($"{t.Name}Status")),
+					SF.Parameter(status).WithType(SF.ParseTypeName(ServerSDKStatusConstants.EnumName)),
 					SF.Parameter(item).WithType(getDataType(t)),
 					SF.Parameter(keyName).WithType(SF.ParseTypeName(key.PropertyType.Name))
 				);

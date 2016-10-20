@@ -24,7 +24,6 @@ namespace Sannel.House.Generator
 					generatorList.Add(new ControllerGenerator());
 					generatorList.Add(new ControllerTestsGenerator());
 					generatorList.Add(new InterfaceGenerator());
-					generatorList.Add(new StatusGenerator());
 					generatorList.Add(new ResultGenerator());
 					generatorList.Add(new ResultsGenerator());
 					var t = typeof(IDataContext);
