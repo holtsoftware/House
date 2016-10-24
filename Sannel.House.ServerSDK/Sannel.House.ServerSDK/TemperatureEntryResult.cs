@@ -22,14 +22,14 @@ namespace Sannel.House.ServerSDK
 {
 	public sealed class TemperatureEntryResult
 	{
-		public TemperatureEntryResult(TemperatureEntryStatus status, ITemperatureEntry data, Guid key)
+		public TemperatureEntryResult(RequestStatus status, ITemperatureEntry data, Guid key)
 		{
 			Status = status;
 			Data = data;
 			Key = key;
 		}
 
-		public TemperatureEntryResult(TemperatureEntryStatus status, ITemperatureEntry data, Guid key, Exception exception)
+		public TemperatureEntryResult(RequestStatus status, ITemperatureEntry data, Guid key, Exception exception)
 		{
 			Status = status;
 			Data = data;
@@ -37,7 +37,7 @@ namespace Sannel.House.ServerSDK
 			Exception = exception;
 		}
 
-		public TemperatureEntryStatus Status
+		public RequestStatus Status
 		{
 			get;
 			set;

@@ -321,5 +321,10 @@ namespace Sannel.House.Generator
 		{
 			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
 		}
+
+		public static LiteralExpressionSyntax ToLiteral(this String value)
+		{
+			return SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(value));
+		}
 	}
 }

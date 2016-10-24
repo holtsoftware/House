@@ -160,6 +160,35 @@ namespace Sannel.House.ServerSDK
 			}).AsAsyncOperation();
 		}
 
+		private Tuple<RequestStatus, UriBuilder> checkCommon()
+		{
+			if(settings.ServerUri == null)
+			{
+				return new Tuple<RequestStatus, UriBuilder>(RequestStatus.ServerUriNotSet, null);
+			}
+
+			if (!IsAuthenticated)
+			{
+				return new Tuple<RequestStatus, UriBuilder>(RequestStatus.NotLoggedIn, null);
+			}
+
+			UriBuilder builder;
+			try
+			{
+				builder = new UriBuilder(settings.ServerUri);
+			}
+			catch (InvalidOperationException)
+			{
+				return new Tuple<RequestStatus, UriBuilder>(RequestStatus.ServerUriIsNotValid, null);
+			}
+			catch (UriFormatException)
+			{
+				return new Tuple<RequestStatus, UriBuilder>(RequestStatus.ServerUriIsNotValid, null);
+			}
+
+			return new Tuple<RequestStatus, UriBuilder>(RequestStatus.Success, builder);
+		}
+
 		#region TemperatureEntry
 		/// <summary>
 		/// Gets the temperature entry asynchronous.
@@ -170,30 +199,13 @@ namespace Sannel.House.ServerSDK
 		{
 			return Task.Run(async () =>
 			{
-				if (settings.ServerUri == null)
-				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriNotSet, null, default(Guid));
-				}
 
-				if (!IsAuthenticated)
+				var check = checkCommon();
+				if(check.Item1 != RequestStatus.Success)
 				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.NotLoggedIn, null, default(Guid));
+					return new TemperatureEntryResult(check.Item1, null, default(Guid));
 				}
-
-				UriBuilder builder;
-				try
-				{
-					builder = new UriBuilder(settings.ServerUri);
-				}
-				catch (InvalidOperationException)
-				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriIsNotValid, null, default(Guid));
-				}
-				catch (UriFormatException)
-				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.ServerUriIsNotValid, null, default(Guid));
-				}
-
+				var builder = check.Item2;
 				builder.Path = $"/api/TemperatureEntry/{key}";
 				HttpClientResult result = null;
 				try
@@ -204,14 +216,14 @@ namespace Sannel.House.ServerSDK
 				{
 					if (ce.HResult == -2147012867)
 					{
-						return new TemperatureEntryResult(TemperatureEntryStatus.UnableToConnectToServer, null, key, ce);
+						return new TemperatureEntryResult(RequestStatus.UnableToConnectToServer, null, key, ce);
 					}
 
-					return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ce);
+					return new TemperatureEntryResult(RequestStatus.Exception, null, key, ce);
 				}
 				catch (Exception ce)
 				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ce);
+					return new TemperatureEntryResult(RequestStatus.Exception, null, key, ce);
 				}
 
 				if (result.StatusCode == HttpStatusCode.Ok)
@@ -231,16 +243,16 @@ namespace Sannel.House.ServerSDK
 							item.CreatedDateTime = token.GetPropertyValue<DateTimeOffset>(nameof(item.CreatedDateTime));
 						}
 
-						return new TemperatureEntryResult(TemperatureEntryStatus.Success, item, item.Id);
+						return new TemperatureEntryResult(RequestStatus.Success, item, item.Id);
 					}
 					catch (Exception ex)
 					{
-						return new TemperatureEntryResult(TemperatureEntryStatus.Exception, null, key, ex);
+						return new TemperatureEntryResult(RequestStatus.Exception, null, key, ex);
 					}
 				}
 				else
 				{
-					return new TemperatureEntryResult(TemperatureEntryStatus.Error, null, key);
+					return new TemperatureEntryResult(RequestStatus.Error, null, key);
 				}
 			}
 

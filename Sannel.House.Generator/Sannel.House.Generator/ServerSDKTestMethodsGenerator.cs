@@ -47,9 +47,9 @@ namespace Sannel.House.Generator
 			writer = new StreamWriter(File.OpenWrite(serverContext));
 		}
 
-		private StatementSyntax assertStatment(ExpressionSyntax expected, ExpressionSyntax actual, String method="AreEqual")
+		private StatementSyntax assertStatment(ExpressionSyntax expected, ExpressionSyntax actual, String method = "AreEqual")
 		{
-			return SF.ExpressionStatement( SF.InvocationExpression(
+			return SF.ExpressionStatement(SF.InvocationExpression(
 				SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
 					SF.IdentifierName("Assert"),
 					SF.IdentifierName(method)
@@ -78,16 +78,46 @@ namespace Sannel.House.Generator
 			);
 		}
 
+		private ArgumentSyntax generateRunTaskWrapper(BlockSyntax blocks)
+		{
+			return
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.Block(
+									SF.ReturnStatement(
+										SF.InvocationExpression(
+											Extensions.MemberAccess(
+												SF.InvocationExpression(
+													Extensions.MemberAccess(
+														SF.IdentifierName("Task"),
+														SF.IdentifierName("Run")
+													)
+												).AddArgumentListArguments(
+													SF.Argument(
+														SF.ParenthesizedLambdaExpression(
+															blocks
+														)
+													)
+												),
+												SF.IdentifierName("AsAsyncOperation")
+											)
+										).AddArgumentListArguments()
+									)
+								)
+							)
+				);
+		}
+
 		private StatementSyntax[] getStandardTests(Type t, SyntaxToken resultsVariable, String status, ExpressionSyntax defaultKey)
 		{
 			var items = new List<StatementSyntax>();
 			items.Add(
 				assertStatment(
 					Extensions.MemberAccess(
-						SF.IdentifierName($"{t.Name}Status"),
+						SF.IdentifierName("RequestStatus"),
 						SF.IdentifierName(status)
 					)
-					,Extensions.MemberAccess(
+					, Extensions.MemberAccess(
 						SF.IdentifierName(resultsVariable),
 						SF.IdentifierName("Status")
 					)
@@ -121,7 +151,7 @@ namespace Sannel.House.Generator
 			var method = SF.MethodDeclaration(SF.ParseTypeName("Task"), $"Get{t.Name}AsyncTest")
 				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword), SF.Token(SyntaxKind.AsyncKeyword));
 
-			foreach(var p in pi)
+			foreach (var p in pi)
 			{
 				if (!p.ShouldIgnore())
 				{
@@ -148,7 +178,7 @@ namespace Sannel.House.Generator
 					)).WithLeadingTrivia(SF.Comment("// Setup Stub"))
 				);
 
-			foreach(var p in pi)
+			foreach (var p in pi)
 			{
 				if (!p.ShouldIgnore())
 				{
@@ -159,7 +189,7 @@ namespace Sannel.House.Generator
 								SF.IdentifierName(stub),
 								SF.IdentifierName($"{p.Name}_Get")))
 							.AddArgumentListArguments(
-								SF.Argument(SF.ParenthesizedLambdaExpression(SF.IdentifierName($"_{p.Name}"	)))
+								SF.Argument(SF.ParenthesizedLambdaExpression(SF.IdentifierName($"_{p.Name}")))
 							)
 						),
 						SF.ExpressionStatement(
@@ -299,6 +329,128 @@ namespace Sannel.House.Generator
 				getStandardTests(t, results, "ServerUriNotSet", keySy.GetDefaultValue())
 			);
 
+			method = method.AddBodyStatements(
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(settings),
+							SF.IdentifierName("ServerUri_Get")
+						)
+					)
+					.AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.ObjectCreationExpression(SF.ParseTypeName("Uri"))
+								.AddArgumentListArguments(
+									SF.Argument(SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal("http://test")))
+								)
+							)
+						)
+					)
+				).WithLeadingTrivia(SF.Comment("// login exception")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("PostAsync")
+						)
+					).AddArgumentListArguments(
+						generateRunTaskWrapper(SF.Block(
+							SF.ReturnStatement(
+								SF.ObjectCreationExpression(SF.ParseTypeName("HttpClientResult"))
+								.WithInitializer(
+									SF.InitializerExpression(SyntaxKind.ObjectInitializerExpression)
+									.AddExpressions(
+										SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+											SF.IdentifierName("Status"),
+											Extensions.MemberAccess(
+												SF.IdentifierName("HttpStatusCode"),
+												SF.IdentifierName("Ok")
+											)
+										),
+										SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+											SF.IdentifierName("Conent"),
+											SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(""))
+										)
+									)
+								)
+						)))
+					)
+				),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("GetCookieValue")
+						)
+					).AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal("Value")))
+							.AddParameterListParameters(
+								SF.Parameter(SF.Identifier("u")),
+								SF.Parameter(SF.Identifier("name"))
+							)
+						)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AwaitExpression(
+						SF.InvocationExpression(
+							Extensions.MemberAccess(
+								SF.IdentifierName(serverContext),
+								SF.IdentifierName("LoginAsync")
+							)
+						).AddArgumentListArguments(
+							SF.Argument("user".ToLiteral()),
+							SF.Argument("pass".ToLiteral())
+						)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(settings),
+							SF.IdentifierName("ServerUri_Get")
+						)
+					).AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.ObjectCreationExpression(SF.ParseTypeName("Uri"))
+								.AddArgumentListArguments(
+									SF.Argument(
+										"/cheese".ToLiteral()
+									),
+									SF.Argument(
+										Extensions.MemberAccess(
+											SF.IdentifierName("UriKind"),
+											SF.IdentifierName("Relative")
+										)
+									)
+								)
+							)
+						)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(results),
+						SF.AwaitExpression(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									SF.IdentifierName(serverContext),
+									SF.IdentifierName("GetTemperatureEntryAsync")
+								)
+							).AddArgumentListArguments(
+								SF.Argument(SF.IdentifierName(key))
+							)
+						)
+					).WithLeadingTrivia(SF.Comment("// invalid uri"))
+				)
+			);
+
+			method = method.AddBodyStatements(
+				getStandardTests(t, results, "", keySy.GetDefaultValue())
+			);
 
 			return method;
 		}
