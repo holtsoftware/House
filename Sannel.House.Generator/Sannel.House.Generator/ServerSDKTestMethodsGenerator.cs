@@ -452,6 +452,20 @@ namespace Sannel.House.Generator
 				getStandardTests(t, results, "", keySy.GetDefaultValue())
 			);
 
+			method = method.AddBodyStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(key),
+						SF.InvocationExpression(
+							Extensions.MemberAccess(
+								SF.IdentifierName("Guid"),
+								SF.IdentifierName("NewGuid")
+							)
+						).AddArgumentListArguments()
+					)
+				)
+			);
+
 			return method;
 		}
 
