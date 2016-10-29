@@ -452,6 +452,8 @@ namespace Sannel.House.Generator
 				getStandardTests(t, results, "", keySy.GetDefaultValue())
 			);
 
+			var methodHit = SF.Identifier("methodHit");
+
 			method = method.AddBodyStatements(
 				SF.ExpressionStatement(
 					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
@@ -462,6 +464,57 @@ namespace Sannel.House.Generator
 								SF.IdentifierName("NewGuid")
 							)
 						).AddArgumentListArguments()
+					)
+				).WithLeadingTrivia(SF.Comment("// Unable to connect to server")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(serverContext),
+							SF.IdentifierName("ServerUri_Get")
+						)
+					).AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.ObjectCreationExpression(
+									SF.ParseTypeName("Uri")
+								).AddArgumentListArguments(
+									SF.Argument(
+										"http://test".ToLiteral()
+									)
+								)
+							)
+						)
+					)
+				),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration("exception",
+						SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.NullLiteralExpression)),
+						"Exception"
+					)
+				),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(methodHit.Text,
+						SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)),
+						"bool"
+					)
+				),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("GetAsync")
+						)
+					).AddArgumentListArguments(
+						generateRunTaskWrapper(
+							SF.Block(
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(methodHit),
+										SF.LiteralExpression(SyntaxKind.TrueLiteralExpression)
+									)
+								)
+							)
+						)
 					)
 				)
 			);
