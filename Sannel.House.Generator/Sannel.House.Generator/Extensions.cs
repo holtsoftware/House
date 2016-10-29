@@ -70,7 +70,7 @@ namespace Sannel.House.Generator
 
 		public static TypeSyntax GetTypeSyntax(this PropertyInfo info)
 		{
-			if(info == null)
+			if (info == null)
 			{
 				throw new ArgumentNullException(nameof(info));
 			}
@@ -79,7 +79,7 @@ namespace Sannel.House.Generator
 
 			if (t.GenericTypeArguments != null && t.GenericTypeArguments.Length > 0)
 			{
-				if(String.Compare(t.Name, "Nullable`1") == 0)
+				if (String.Compare(t.Name, "Nullable`1") == 0)
 				{
 					return SF.ParseTypeName($"{t.GenericTypeArguments.First().Name}?");
 				}
@@ -114,7 +114,7 @@ namespace Sannel.House.Generator
 		public static ExpressionSyntax GetRandomValue(TypeSyntax t)
 		{
 			String type = t.ToString();
-			if(t is NullableTypeSyntax)
+			if (t is NullableTypeSyntax)
 			{
 				var nt = (NullableTypeSyntax)t;
 				type = nt.ElementType.ToString();
@@ -135,11 +135,11 @@ namespace Sannel.House.Generator
 
 		public static String GetTypeString(this TypeSyntax t)
 		{
-			if(t == null)
+			if (t == null)
 			{
 				return null;
 			}
-			if(t is NullableTypeSyntax)
+			if (t is NullableTypeSyntax)
 			{
 				var nt = (NullableTypeSyntax)t;
 				return $"{nt.ElementType}?";
@@ -151,7 +151,7 @@ namespace Sannel.House.Generator
 		public static ExpressionSyntax GetDefaultValue(this TypeSyntax t)
 		{
 			String type = t.ToString();
-			if(t is NullableTypeSyntax)
+			if (t is NullableTypeSyntax)
 			{
 				var nt = (NullableTypeSyntax)t;
 				type = nt.ElementType.ToString();
@@ -253,12 +253,12 @@ namespace Sannel.House.Generator
 					SF.IdentifierName("DateTimeOffset"),
 					SF.IdentifierName("Min"));
 			}
-			
-			if(t == typeof(DayOfWeek?) || t == typeof(DayOfWeek))
+
+			if (t == typeof(DayOfWeek?) || t == typeof(DayOfWeek))
 			{
 				return SF.MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
 					SF.IdentifierName("DayOfWeek"),
-					SF.IdentifierName(Enum.GetName(typeof(DayOfWeek), rand.Next(1,7))));
+					SF.IdentifierName(Enum.GetName(typeof(DayOfWeek), rand.Next(1, 7))));
 			}
 
 			throw new Exception($"Unsupported type {t.Name}");
@@ -325,6 +325,55 @@ namespace Sannel.House.Generator
 		public static LiteralExpressionSyntax ToLiteral(this String value)
 		{
 			return SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(value));
+		}
+
+		public static StringToken ToStringToken(this SyntaxToken token)
+		{
+			return ((StringToken)token.Text).AsInterpolation();
+		}
+
+		public static InterpolatedStringExpressionSyntax ToInterpolatedString(this String value, params StringToken[] tokens)
+		{
+			var ise = SF.InterpolatedStringExpression(SF.Token(SyntaxKind.InterpolatedStringStartToken));
+			ise = ise.AddContents(
+					SF.InterpolatedStringText()
+					.WithTextToken(
+						SF.Token(
+							SF.TriviaList(),
+							SyntaxKind.InterpolatedStringTextToken,
+							value,
+							value,
+							SF.TriviaList()
+						)
+					)
+				);
+
+			foreach (var token in tokens)
+			{
+				if (token.IsInterpolation)
+				{
+					ise = ise.AddContents(
+						SF.Interpolation(SF.IdentifierName(token.Value))
+					);
+				}
+				else
+				{
+					ise = ise.AddContents(
+						SF.InterpolatedStringText()
+						.WithTextToken(
+							SF.Token(
+								SF.TriviaList(),
+								SyntaxKind.InterpolatedStringTextToken,
+								token.Value,
+								token.Value,
+								SF.TriviaList()
+							)
+						)
+					);
+				}
+			}
+
+			return ise;
 		}
 	}
 }

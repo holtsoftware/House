@@ -78,33 +78,34 @@ namespace Sannel.House.Generator
 			);
 		}
 
-		private ArgumentSyntax generateRunTaskWrapper(BlockSyntax blocks)
+		private ArgumentSyntax generateRunTaskWrapper(BlockSyntax blocks, params ParameterSyntax[] parameters)
 		{
-			return
-						SF.Argument(
-							SF.ParenthesizedLambdaExpression(
-								SF.Block(
-									SF.ReturnStatement(
+			return SF.Argument(
+					SF.ParenthesizedLambdaExpression(
+						SF.Block(
+							SF.ReturnStatement(
+								SF.InvocationExpression(
+									Extensions.MemberAccess(
 										SF.InvocationExpression(
 											Extensions.MemberAccess(
-												SF.InvocationExpression(
-													Extensions.MemberAccess(
-														SF.IdentifierName("Task"),
-														SF.IdentifierName("Run")
-													)
-												).AddArgumentListArguments(
-													SF.Argument(
-														SF.ParenthesizedLambdaExpression(
-															blocks
-														)
-													)
-												),
-												SF.IdentifierName("AsAsyncOperation")
+												SF.IdentifierName("Task"),
+												SF.IdentifierName("Run")
 											)
-										).AddArgumentListArguments()
+										).AddArgumentListArguments(
+											SF.Argument(
+												SF.ParenthesizedLambdaExpression(
+													blocks
+												)
+											)
+										),
+										SF.IdentifierName("AsAsyncOperation")
 									)
-								)
+								).AddArgumentListArguments()
 							)
+						)
+					).AddParameterListParameters(
+						parameters
+					)
 				);
 		}
 
@@ -452,6 +453,10 @@ namespace Sannel.House.Generator
 				getStandardTests(t, results, "", keySy.GetDefaultValue())
 			);
 
+			var methodHit = SF.Identifier("methodHit");
+			var expectedException = SF.Identifier("expectedException");
+			var uri = SF.Identifier("uri");
+
 			method = method.AddBodyStatements(
 				SF.ExpressionStatement(
 					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
@@ -463,8 +468,78 @@ namespace Sannel.House.Generator
 							)
 						).AddArgumentListArguments()
 					)
+				).WithLeadingTrivia(SF.Comment("// Unable to connect to server")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(serverContext),
+							SF.IdentifierName("ServerUri_Get")
+						)
+					).AddArgumentListArguments(
+						SF.Argument(
+							SF.ParenthesizedLambdaExpression(
+								SF.ObjectCreationExpression(
+									SF.ParseTypeName("Uri")
+								).AddArgumentListArguments(
+									SF.Argument(
+										"http://test".ToLiteral()
+									)
+								)
+							)
+						)
+					)
+				),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(expectedException.Text,
+						SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.NullLiteralExpression)),
+						"Exception"
+					)
+				),
+				SF.LocalDeclarationStatement(
+					Extensions.VariableDeclaration(methodHit.Text,
+						SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)),
+						"bool"
+					)
+				),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("GetAsync")
+						)
+					).AddArgumentListArguments(
+						generateRunTaskWrapper(
+							SF.Block(
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(methodHit),
+										SF.LiteralExpression(SyntaxKind.TrueLiteralExpression)
+									)
+								),
+								assertStatment(
+									SF.ObjectCreationExpression(
+										SF.IdentifierName("Uri")
+									).AddArgumentListArguments(
+										SF.Argument(
+											//$"http://test/api/{t.Name}/{{key}}".ToLiteral()
+											$"http://test/api/{t.Name}/".ToInterpolatedString(key.ToStringToken())
+										)
+									),
+									SF.IdentifierName(uri)
+								)
+							),
+							SF.Parameter(uri)
+						)
+					)
 				)
 			);
+
+			/*
+			Assert.AreEqual(new Uri($"http://test/api/TemperatureEntry/{key}"), uri);
+					expectedException = new COMException("Message1", -2147012867);
+					throw expectedException;
+					return new HttpClientResult()k
+			 */
 
 			return method;
 		}
