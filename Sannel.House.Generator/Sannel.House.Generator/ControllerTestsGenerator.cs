@@ -107,12 +107,12 @@ namespace Sannel.House.Generator
 				if (isForward)
 				{
 					int i = 1;
-					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var3), prop.Name, i.ToExpression()))
+					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var3), prop.Name, i.ToLiteral()))
 						.WithLeadingTrivia(SF.Comment("//Fix Order")));
 					i++;
-					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var2), prop.Name, i.ToExpression())));
+					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var2), prop.Name, i.ToLiteral())));
 					i++;
-					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var1), prop.Name, i.ToExpression())));
+					blocks = blocks.AddStatements(SF.ExpressionStatement(Extensions.SetPropertyValue(SF.IdentifierName(var1), prop.Name, i.ToLiteral())));
 				}
 				else
 				{
@@ -129,10 +129,10 @@ namespace Sannel.House.Generator
 
 					blocks = blocks.AddStatements(SF.ExpressionStatement(
 						Extensions.SetPropertyValue(SF.IdentifierName(var2), prop.Name, SF.InvocationExpression(Extensions.MemberAccess(order.Text, "AddDays"))
-							.AddArgumentListArguments(SF.Argument((-1).ToExpression())))));
+							.AddArgumentListArguments(SF.Argument((-1).ToLiteral())))));
 					blocks = blocks.AddStatements(SF.ExpressionStatement(
 						Extensions.SetPropertyValue(SF.IdentifierName(var1), prop.Name, SF.InvocationExpression(Extensions.MemberAccess(order.Text, "AddDays"))
-							.AddArgumentListArguments(SF.Argument((-2).ToExpression())))));
+							.AddArgumentListArguments(SF.Argument((-2).ToLiteral())))));
 				}
 			}
 
@@ -242,7 +242,7 @@ namespace Sannel.House.Generator
 					).WithArgumentList(
 						SF.ArgumentList()
 							.AddArguments(
-								SF.Argument(3.ToExpression()),
+								SF.Argument(3.ToLiteral()),
 								SF.Argument(Extensions.MemberAccess(list.Text, "Count")))
 					)
 				));
@@ -254,7 +254,7 @@ namespace Sannel.House.Generator
 						SF.ElementAccessExpression(SF.IdentifierName(list))
 						.WithArgumentList(SF.BracketedArgumentList()
 							.AddArguments(
-								SF.Argument(0.ToExpression())
+								SF.Argument(0.ToLiteral())
 							)
 						)
 					)
@@ -269,7 +269,7 @@ namespace Sannel.House.Generator
 						SF.ElementAccessExpression(SF.IdentifierName(list))
 						.WithArgumentList(SF.BracketedArgumentList()
 							.AddArguments(
-								SF.Argument(1.ToExpression())
+								SF.Argument(1.ToLiteral())
 							)
 						)
 					)
@@ -283,7 +283,7 @@ namespace Sannel.House.Generator
 						SF.ElementAccessExpression(SF.IdentifierName(list))
 						.WithArgumentList(SF.BracketedArgumentList()
 							.AddArguments(
-								SF.Argument(2.ToExpression())
+								SF.Argument(2.ToLiteral())
 							)
 						)
 					)

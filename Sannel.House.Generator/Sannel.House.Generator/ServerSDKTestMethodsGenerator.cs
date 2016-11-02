@@ -526,19 +526,51 @@ namespace Sannel.House.Generator
 										)
 									),
 									SF.IdentifierName(uri)
+								),
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(expectedException),
+										SF.ObjectCreationExpression(SF.ParseTypeName("COMException"))
+										.AddArgumentListArguments(
+											SF.Argument("Message1".ToLiteral()),
+											SF.Argument((-2147012867).ToLiteral())
+										)
+									)
+								),
+								SF.ThrowStatement(SF.IdentifierName(expectedException)),
+								SF.ReturnStatement(
+									SF.ObjectCreationExpression(SF.ParseTypeName("HttpClientResult"))
+									.AddArgumentListArguments()
 								)
 							),
 							SF.Parameter(uri)
+						)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(results),
+						SF.AwaitExpression(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									SF.IdentifierName(serverContext),
+									SF.IdentifierName($"Get{t.Name}Async")
+								)
+							).AddArgumentListArguments(
+								SF.Argument(SF.IdentifierName(key))
+							)
 						)
 					)
 				)
 			);
 
 			/*
-			Assert.AreEqual(new Uri($"http://test/api/TemperatureEntry/{key}"), uri);
-					expectedException = new COMException("Message1", -2147012867);
-					throw expectedException;
-					return new HttpClientResult()k
+			result = await serverContext.GetTemperatureEntryAsync(key);
+			Assert.IsTrue(methodHit, "Method not called");
+			Assert.AreEqual(TemperatureEntryStatus.UnableToConnectToServer, result.Status);
+			Assert.AreEqual(key, result.Key);
+			Assert.IsNull(result.Data, "Data should be null");
+			Assert.AreEqual(expectedException, result.Exception);
 			 */
 
 			return method;

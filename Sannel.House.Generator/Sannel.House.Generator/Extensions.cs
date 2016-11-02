@@ -317,7 +317,7 @@ namespace Sannel.House.Generator
 			return att != null && att.Ignore;
 		}
 
-		public static ExpressionSyntax ToExpression(this int number)
+		public static LiteralExpressionSyntax ToLiteral(this int number)
 		{
 			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
 		}
