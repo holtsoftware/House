@@ -450,7 +450,7 @@ namespace Sannel.House.Generator
 			);
 
 			method = method.AddBodyStatements(
-				getStandardTests(t, results, "", keySy.GetDefaultValue())
+				getStandardTests(t, results, "ServerUriIsNotValid", keySy.GetDefaultValue())
 			);
 
 			var methodHit = SF.Identifier("methodHit");
@@ -564,10 +564,74 @@ namespace Sannel.House.Generator
 				)
 			);
 
+			method = method.AddBodyStatements(
+				getStandardTests(t, results, "UnableToConnectToServer", SF.IdentifierName(key)));
+
+			method = method.AddBodyStatements(
+				assertStatment(SF.IdentifierName(expectedException),
+					Extensions.MemberAccess(SF.IdentifierName(results),
+						SF.IdentifierName("Exception"))
+			));
+
+			method = method.AddBodyStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(methodHit),
+						SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)
+					)
+				).WithLeadingTrivia(SF.Comment("// Exception ")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("GetAsync")
+						)
+					).AddArgumentListArguments(
+						generateRunTaskWrapper(
+							SF.Block(
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(methodHit),
+										SF.LiteralExpression(SyntaxKind.TrueLiteralExpression)
+									)
+								),
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(expectedException),
+										SF.ObjectCreationExpression(SF.ParseTypeName("COMException"))
+										.AddArgumentListArguments(
+											SF.Argument("Message2".ToLiteral())
+										)
+									)
+								),
+								SF.ThrowStatement(
+									SF.IdentifierName(expectedException)
+								),
+								SF.ReturnStatement(
+									SF.ObjectCreationExpression(SF.ParseTypeName("HttpClientResult"))
+									.AddArgumentListArguments()
+								)
+							),
+							SF.Parameter(uri)
+						)
+					)
+				)
+			);
 			/*
+			client.GetAsync((uri) =>
+			{
+				return Task.Run(() =>
+				{
+					methodHit = true;
+					expectedException = new COMException("Message2");
+					throw expectedException;
+					return new HttpClientResult();
+				}).AsAsyncOperation();
+			});
+
 			result = await serverContext.GetTemperatureEntryAsync(key);
 			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.UnableToConnectToServer, result.Status);
+			Assert.AreEqual(TemperatureEntryStatus.Exception, result.Status);
 			Assert.AreEqual(key, result.Key);
 			Assert.IsNull(result.Data, "Data should be null");
 			Assert.AreEqual(expectedException, result.Exception);
