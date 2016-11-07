@@ -77,6 +77,21 @@ namespace Sannel.House.Generator
 				)
 			);
 		}
+		private StatementSyntax assertIsTrue(ExpressionSyntax test, string v)
+		{
+			return SF.ExpressionStatement(
+				SF.InvocationExpression(
+					Extensions.MemberAccess(
+						SF.IdentifierName("Assert"),
+						SF.IdentifierName("IsTrue")
+					)
+				)
+				.AddArgumentListArguments(
+					SF.Argument(test),
+					SF.Argument(v.ToLiteral())
+				)
+			);
+		}
 
 		private ArgumentSyntax generateRunTaskWrapper(BlockSyntax blocks, params ParameterSyntax[] parameters)
 		{
@@ -137,6 +152,43 @@ namespace Sannel.House.Generator
 			items.Add(
 				assertStatment(
 					defaultKey,
+					Extensions.MemberAccess(
+						SF.IdentifierName(resultsVariable),
+						SF.IdentifierName("Key")
+					)
+				)
+			);
+
+			return items.ToArray();
+		}
+		private StatementSyntax[] getStandardTests(Type t, SyntaxToken resultsVariable, String status, SyntaxToken keyVariableName)
+		{
+			var items = new List<StatementSyntax>();
+			items.Add(
+				assertStatment(
+					Extensions.MemberAccess(
+						SF.IdentifierName("RequestStatus"),
+						SF.IdentifierName(status)
+					)
+					, Extensions.MemberAccess(
+						SF.IdentifierName(resultsVariable),
+						SF.IdentifierName("Status")
+					)
+				)
+			);
+			items.Add(
+				assertIsNull(
+					Extensions.MemberAccess(
+						SF.IdentifierName(resultsVariable),
+						SF.IdentifierName("Data")
+					),
+					"Data should not be null"
+				)
+			);
+
+			items.Add(
+				assertStatment(
+					SF.IdentifierName(keyVariableName),
 					Extensions.MemberAccess(
 						SF.IdentifierName(resultsVariable),
 						SF.IdentifierName("Key")
@@ -561,7 +613,8 @@ namespace Sannel.House.Generator
 							)
 						)
 					)
-				)
+				),
+				assertIsTrue(SF.IdentifierName(methodHit), "Method not called")
 			);
 
 			method = method.AddBodyStatements(
@@ -579,7 +632,7 @@ namespace Sannel.House.Generator
 						SF.IdentifierName(methodHit),
 						SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)
 					)
-				).WithLeadingTrivia(SF.Comment("// Exception ")),
+				).WithLeadingTrivia(SF.Comment("// COMException ")),
 				SF.ExpressionStatement(
 					SF.InvocationExpression(
 						Extensions.MemberAccess(
@@ -615,15 +668,115 @@ namespace Sannel.House.Generator
 							SF.Parameter(uri)
 						)
 					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(results),
+						SF.AwaitExpression(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									SF.IdentifierName(serverContext),
+									SF.IdentifierName($"Get{t.Name}Async")
+								)
+							).AddArgumentListArguments(
+								SF.Argument(SF.IdentifierName(key))
+							)
+						)
+					)
+				),
+				assertIsTrue(SF.IdentifierName(methodHit), "Method not called")
+			);
+			method = method.AddBodyStatements(
+				getStandardTests(t, results, "Exception", key) 
+			);
+			method = method.AddBodyStatements(
+				assertStatment(SF.IdentifierName(expectedException),
+					Extensions.MemberAccess(
+						SF.IdentifierName(results),
+						SF.IdentifierName("Exception")
+					)
+				)
+			);
+
+			method = method.AddBodyStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(methodHit),
+						SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)
+					)
+				).WithLeadingTrivia(SF.Comment("// Exception ")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("GetAsync")
+						)
+					).AddArgumentListArguments(
+						generateRunTaskWrapper(
+							SF.Block(
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(methodHit),
+										SF.LiteralExpression(SyntaxKind.TrueLiteralExpression)
+									)
+								),
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(expectedException),
+										SF.ObjectCreationExpression(SF.ParseTypeName("Exception"))
+										.AddArgumentListArguments(
+											SF.Argument("Message3".ToLiteral())
+										)
+									)
+								),
+								SF.ThrowStatement(
+									SF.IdentifierName(expectedException)
+								),
+								SF.ReturnStatement(
+									SF.ObjectCreationExpression(SF.ParseTypeName("HttpClientResult"))
+									.AddArgumentListArguments()
+								)
+							),
+							SF.Parameter(uri)
+						)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(results),
+						SF.AwaitExpression(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									SF.IdentifierName(serverContext),
+									SF.IdentifierName($"Get{t.Name}Async")
+								)
+							).AddArgumentListArguments(
+								SF.Argument(SF.IdentifierName(key))
+							)
+						)
+					)
+				),
+				assertIsTrue(SF.IdentifierName(methodHit), "Method not called")
+			);
+			method = method.AddBodyStatements(
+				getStandardTests(t, results, "Exception", key) 
+			);
+			method = method.AddBodyStatements(
+				assertStatment(SF.IdentifierName(expectedException),
+					Extensions.MemberAccess(
+						SF.IdentifierName(results),
+						SF.IdentifierName("Exception")
+					)
 				)
 			);
 			/*
+			methodHit = false;
 			client.GetAsync((uri) =>
 			{
 				return Task.Run(() =>
 				{
 					methodHit = true;
-					expectedException = new COMException("Message2");
+					expectedException = new Exception("Message3");
 					throw expectedException;
 					return new HttpClientResult();
 				}).AsAsyncOperation();
@@ -639,6 +792,7 @@ namespace Sannel.House.Generator
 
 			return method;
 		}
+
 
 		public void AddType(String propertyName, Type t)
 		{
