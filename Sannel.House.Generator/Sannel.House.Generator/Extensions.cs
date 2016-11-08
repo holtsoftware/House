@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -58,14 +59,20 @@ namespace Sannel.House.Generator
 
 			foreach (var p in props)
 			{
-				var attr = p.GetCustomAttribute(typeof(KeyAttribute));
-				if (attr != null)
+				if (p.IsKey())
 				{
 					return p;
 				}
 			}
 
 			return null;
+		}
+
+		public static bool IsKey(this PropertyInfo info)
+		{
+			var attr = info.GetCustomAttribute(typeof(KeyAttribute));
+
+			return attr != null;
 		}
 
 		public static TypeSyntax GetTypeSyntax(this PropertyInfo info)
@@ -111,7 +118,7 @@ namespace Sannel.House.Generator
 			return syntax.AddArguments(SF.Argument(SF.IdentifierName(name)));
 		}
 
-		public static ExpressionSyntax GetRandomValue(TypeSyntax t)
+		public static ExpressionSyntax GetRandomValue(this TypeSyntax t, Random rand)
 		{
 			String type = t.ToString();
 			if (t is NullableTypeSyntax)
@@ -128,6 +135,29 @@ namespace Sannel.House.Generator
 							SF.IdentifierName("Guid"),
 							SF.IdentifierName("NewGuid"))
 						).AddArgumentListArguments();
+
+				case "Int16":
+				case "Int32":
+				case "Int64":
+					return rand.Next(1, 200).ToLiteral();
+
+				case "Float":
+				case "Double":
+				case "Decimal":
+					return rand.NextDouble().ToLiteral();
+
+				case "Boolean":
+					return (rand.NextDouble() > 0.5).ToLiteral();
+
+				case "String":
+					StringBuilder value = new StringBuilder();
+					int count = rand.Next(10, 30);
+					for(int i = 0; i < count; i++)
+					{
+						char c = (char)rand.Next((int)'a', (int)'z');
+						value.Append(c);
+					}
+					return value.ToString().ToLiteral();
 			}
 
 			return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
@@ -321,10 +351,36 @@ namespace Sannel.House.Generator
 		{
 			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
 		}
+		public static LiteralExpressionSyntax ToLiteral(this short number)
+		{
+			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
+		}
+
+		public static LiteralExpressionSyntax ToLiteral(this long number)
+		{
+			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
+		}
+		public static LiteralExpressionSyntax ToLiteral(this float number)
+		{
+			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
+		}
+		public static LiteralExpressionSyntax ToLiteral(this double number)
+		{
+			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
+		}
+		public static LiteralExpressionSyntax ToLiteral(this decimal number)
+		{
+			return SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(number));
+		}
 
 		public static LiteralExpressionSyntax ToLiteral(this String value)
 		{
 			return SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(value));
+		}
+
+		public static LiteralExpressionSyntax ToLiteral(this bool value)
+		{
+			return (value) ? SF.LiteralExpression(SyntaxKind.TrueLiteralExpression) : SF.LiteralExpression(SyntaxKind.FalseLiteralExpression);
 		}
 
 		public static StringToken ToStringToken(this SyntaxToken token)
