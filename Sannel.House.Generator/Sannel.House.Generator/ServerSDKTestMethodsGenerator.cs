@@ -182,7 +182,7 @@ namespace Sannel.House.Generator
 						SF.IdentifierName(resultsVariable),
 						SF.IdentifierName("Data")
 					),
-					"Data should not be null"
+					"Data should be null"
 				)
 			);
 
@@ -769,25 +769,74 @@ namespace Sannel.House.Generator
 					)
 				)
 			);
+			method = method.AddBodyStatements(
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(methodHit),
+						SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)
+					)
+				).WithLeadingTrivia(SF.Comment("// Unauthorized ")),
+				SF.ExpressionStatement(
+					SF.InvocationExpression(
+						Extensions.MemberAccess(
+							SF.IdentifierName(httpClient),
+							SF.IdentifierName("GetAsync")
+						)
+					).AddArgumentListArguments(
+						generateRunTaskWrapper(
+							SF.Block(
+								SF.ExpressionStatement(
+									SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										SF.IdentifierName(methodHit),
+										SF.LiteralExpression(SyntaxKind.TrueLiteralExpression)
+									)
+								),
+								SF.ReturnStatement(
+									SF.ObjectCreationExpression(SF.ParseTypeName("HttpClientResult"))
+									.AddArgumentListArguments()
+									.WithInitializer(
+										SF.InitializerExpression(SyntaxKind.ObjectInitializerExpression)
+										.AddExpressions(
+											SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+												SF.IdentifierName("StatusCode"),
+												Extensions.MemberAccess(
+													SF.IdentifierName("HttpStatusCode"),
+													SF.IdentifierName("Unauthorized")
+												)
+											),
+											SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+												SF.IdentifierName("Content"),
+												"{Test: 'cheese'".ToLiteral()
+											)
+										)
+									)
+								)
+							),
+							SF.Parameter(uri)
+						)
+					)
+				),
+				SF.ExpressionStatement(
+					SF.AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						SF.IdentifierName(results),
+						SF.AwaitExpression(
+							SF.InvocationExpression(
+								Extensions.MemberAccess(
+									SF.IdentifierName(serverContext),
+									SF.IdentifierName($"Get{t.Name}Async")
+								)
+							).AddArgumentListArguments(
+								SF.Argument(SF.IdentifierName(key))
+							)
+						)
+					)
+				),
+				assertIsTrue(SF.IdentifierName(methodHit), "Method not called")
+			);
+			method = method.AddBodyStatements(
+				getStandardTests(t, results, "Error", key) 
+			);
 			/*
-			methodHit = false;
-			client.GetAsync((uri) =>
-			{
-				return Task.Run(() =>
-				{
-					methodHit = true;
-					expectedException = new Exception("Message3");
-					throw expectedException;
-					return new HttpClientResult();
-				}).AsAsyncOperation();
-			});
-
-			result = await serverContext.GetTemperatureEntryAsync(key);
-			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.Exception, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(expectedException, result.Exception);
 			 */
 
 			return method;
