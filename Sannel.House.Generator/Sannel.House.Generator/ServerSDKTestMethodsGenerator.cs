@@ -862,17 +862,32 @@ namespace Sannel.House.Generator
 				)
 			);
 
+			var exp = Identifier("exp");
 			var expected = Identifier("expected");
 			method = method.AddBodyStatements(
 				LocalDeclarationStatement(
 					Extensions.VariableDeclaration(
-						expected.Text,
+						exp.Text,
 						EqualsValueClause(
 							ObjectCreationExpression(ParseTypeName($"StubI{t.Name}"))
 							.AddArgumentListArguments()
 						)
 					)
 				).WithLeadingTrivia(Comment("// Success Test"))
+			);
+
+			var jobj = Identifier("jobj");
+			var blocks = Block();
+
+			blocks = blocks.AddStatements(
+				LocalDeclarationStatement(
+					Extensions.VariableDeclaration(
+						jobj.Text,
+						EqualsValueClause(
+							ObjectCreationExpression(ParseTypeName("JObject"))
+						)
+					)
+				)
 			);
 
 
@@ -884,7 +899,7 @@ namespace Sannel.House.Generator
 						ExpressionStatement(
 							InvocationExpression(
 								Extensions.MemberAccess(
-									IdentifierName(expected),
+									IdentifierName(exp),
 									IdentifierName($"{prop.Name}_Get")
 								)
 							)
@@ -897,19 +912,65 @@ namespace Sannel.House.Generator
 							)
 						)
 					);
+					//jobj.Add(new JProperty(nameof(expected.Id), expected.Id));
+					blocks = blocks.AddStatements(
+						ExpressionStatement(
+							InvocationExpression(
+								Extensions.MemberAccess(
+									IdentifierName(jobj),
+									IdentifierName("Add")
+								)
+							)
+							.AddArgumentListArguments(
+								Argument(
+									ObjectCreationExpression(
+										ParseTypeName("JProperty")
+									).AddArgumentListArguments(
+										Argument(
+											InvocationExpression(IdentifierName("nameof"))
+											.AddArgumentListArguments(
+												Argument(
+													Extensions.MemberAccess(
+														IdentifierName(expected),
+														IdentifierName(prop.Name)
+													)
+												)
+											)
+										),
+										Argument(
+											Extensions.MemberAccess(
+												IdentifierName(expected),
+												IdentifierName(prop.Name)
+											)
+										)
+									)
+								)
+							)
+						)
+					);		
 				}
 			}
+
+			method = method.AddBodyStatements(
+				LocalDeclarationStatement(
+					Extensions.VariableDeclaration(
+						expected.Text,
+						EqualsValueClause(
+							IdentifierName(exp)
+						),
+						$"I{t.Name}"
+					)
+				)
+			);
+
+			method = method.AddBodyStatements(blocks.Statements.ToArray());
+
 			/*
-			 * 
-			Assert.IsInstanceOfType(result.Exception, typeof(Newtonsoft.Json.JsonReaderException));
-			var exp = new StubITemperatureEntry();
-			exp.CreatedDateTime_Get(() => DateTimeOffset.Parse(DateTimeOffset.Now.ToString()));
-			exp.Id_Get(() => key);
-			exp.DeviceId_Get(() => 2);
-			exp.TemperatureCelsius_Get(() => 4.5);
-			exp.Humidity_Get(() => 1.2);
-			exp.Pressure_Get(() => 3.5);
-			ITemperatureEntry expected = exp;
+			jobj.Add(new JProperty(nameof(expected.DeviceId), expected.DeviceId));
+			jobj.Add(new JProperty(nameof(expected.TemperatureCelsius), expected.TemperatureCelsius));
+			jobj.Add(new JProperty(nameof(expected.Humidity), expected.Humidity));
+			jobj.Add(new JProperty(nameof(expected.Pressure), expected.Pressure));
+			jobj.Add(new JProperty(nameof(expected.CreatedDateTime), expected.CreatedDateTime.ToString()));
 			 */
 
 			return method;

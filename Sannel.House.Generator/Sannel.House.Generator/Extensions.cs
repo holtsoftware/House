@@ -158,9 +158,37 @@ namespace Sannel.House.Generator
 						value.Append(c);
 					}
 					return value.ToString().ToLiteral();
+
+				case "DateTimeOffset":
+					new DateTimeOffset(2000, 2, 3, 3, 12, 13, TimeSpan.FromHours(-6));
+					return SF.ObjectCreationExpression(SF.ParseTypeName("DateTimeOffset"))
+						.AddArgumentListArguments(
+							SF.Argument(rand.Next(1980, 2016).ToLiteral()), // Year
+							SF.Argument(rand.Next(1,12).ToLiteral()), // Month
+							SF.Argument(rand.Next(1, 28).ToLiteral()), // Day
+							SF.Argument(rand.Next(1,24).ToLiteral()), // Hour
+							SF.Argument(rand.Next(1, 60).ToLiteral()), // Minutes
+							SF.Argument(rand.Next(1, 60).ToLiteral()), // seconds
+							SF.Argument(
+								SF.InvocationExpression(
+									Extensions.MemberAccess(
+										SF.IdentifierName("TimeSpan"),
+										SF.IdentifierName("FromHours")
+									)
+								)
+								.AddArgumentListArguments(
+									SF.Argument(
+										rand.Next(-7, -4).ToLiteral()
+									)
+								)
+							) // Offset
+						);
+
+				default:
+					return $"{type} is not suppored please add support or change its type".ToLiteral();
+
 			}
 
-			return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
 		}
 
 		public static String GetTypeString(this TypeSyntax t)
