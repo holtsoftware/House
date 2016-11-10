@@ -8,17 +8,20 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+#if PORTABLE
+using System.Net;
+#else
 using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
-
+#endif
 namespace Sannel.House.ServerSDK
 {
 	/// <summary>
 	/// This class is used to connect and make calls to the server.
 	/// </summary>
-	public sealed class ServerContext : IDisposable
+	public sealed partial class ServerContext : IDisposable
 	{
 		private String cookieValue;
 		private IServerSettings settings;
@@ -92,73 +95,90 @@ namespace Sannel.House.ServerSDK
 		/// <returns>First part of the Tuple is true if authenticated false if unable to authenticate for some reason
 		/// The second part of the Tuple is a String the represents the authz token value if we were able to login to the server
 		///		or The error message if we were unable to authenticate to the server.</returns>
+#if PORTABLE
+		public async Task<LoginResult> LoginAsync(String username, String password)
+		{
+#else
 		public IAsyncOperation<LoginResult> LoginAsync(String username, String password)
 		{
 			return Task.Run(async () =>
 			{
-				if (settings.ServerUri == null)
+#endif
+			if (settings.ServerUri == null)
+			{
+				return new LoginResult(LoginStatus.ServerUriNotSet, "Server Uri is not set");
+			}
+			if (username == null)
+			{
+				return new LoginResult(LoginStatus.UsernameIsNull, "Username cannot be null");
+			}
+			if (password == null)
+			{
+				return new LoginResult(LoginStatus.PasswordIsNull, "Password cannot be null");
+			}
+			UriBuilder builder;
+			try
+			{
+				builder = new UriBuilder(settings.ServerUri);
+			}
+			catch
+			{
+				return new LoginResult(LoginStatus.ServerUriIsNotValid, "Server Uri is not valid");
+			}
+
+			builder.Path = "/Account/LoginFromDevice";
+
+			HttpClientResult result = null;
+			try
+			{
+				var dict = new Dictionary<String, String>();
+				dict.Add("Email", username);
+				dict.Add("Password", password);
+				dict.Add("RememberMe", "true");
+				result = await client.PostAsync(builder.Uri, dict);
+			}
+#if PORTABLE
+			catch(Exception e)
+			{
+				return new LoginResult(LoginStatus.Exception, e.ToString());
+			}
+#else
+			catch (COMException ce)
+			{
+				if (ce.HResult == -2147012867)
 				{
-					return new LoginResult(LoginStatus.ServerUriNotSet, "Server Uri is not set");
-				}
-				if (username == null)
-				{
-					return new LoginResult(LoginStatus.UsernameIsNull, "Username cannot be null");
-				}
-				if (password == null)
-				{
-					return new LoginResult(LoginStatus.PasswordIsNull, "Password cannot be null");
-				}
-				UriBuilder builder;
-				try
-				{
-					builder = new UriBuilder(settings.ServerUri);
-				}
-				catch (UriFormatException)
-				{
-					return new LoginResult(LoginStatus.ServerUriIsNotValid, "Server Uri is not valid");
+					return new LoginResult(LoginStatus.UnableToConnectToServer, "Unable to connect to server");
 				}
 
-				builder.Path = "/Account/LoginFromDevice";
+				return new LoginResult(LoginStatus.Exception, ce.ToString());
+			}
+#endif
+#if PORTABLE
+			if(result.StatusCode == HttpStatusCode.OK)
+#else
+			if (result.StatusCode == HttpStatusCode.Ok)
+#endif
+			{
+				var value = client.GetCookieValue(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"), authzCookieName);
 
-				var content = new Windows.Web.Http.HttpFormUrlEncodedContent(new KeyValuePair<String, String>[]
+				cookieValue = value;
+
+				if (value != null)
 				{
-				});
-				HttpClientResult result = null;
-				try
-				{
-					var dict = new Dictionary<String, String>();
-					dict.Add("Email", username);
-					dict.Add("Password", password);
-					dict.Add("RememberMe", "true");
-					result = await client.PostAsync(builder.Uri, dict);
+					return new LoginResult(LoginStatus.Success, cookieValue);
 				}
-				catch (COMException ce)
+				else
 				{
-					if (ce.HResult == -2147012867)
-					{
-						return new LoginResult(LoginStatus.UnableToConnectToServer, "Unable to connect to server");
-					}
-
-					return new LoginResult(LoginStatus.Exception, ce.ToString());
+					return new LoginResult(LoginStatus.Error, "Error Authenticating");
 				}
-				if (result.StatusCode == HttpStatusCode.Ok)
-				{
-					var value = client.GetCookieValue(new Uri($"{builder.Scheme}://{builder.Host}:{builder.Port}"), authzCookieName);
-
-					cookieValue = value;
-
-					if (value != null)
-					{
-						return new LoginResult(LoginStatus.Success, cookieValue);
-					}
-					else
-					{
-						return new LoginResult(LoginStatus.Error, "Error Authenticating");
-					}
-				}
-				return new LoginResult(LoginStatus.Error, "Request Error");
-			}).AsAsyncOperation();
+			}
+			return new LoginResult(LoginStatus.Error, "Request Error");
+#if PORTABLE
 		}
+#else
+		}).AsAsyncOperation();
+		}
+#endif
 
 		private Tuple<RequestStatus, UriBuilder> checkCommon()
 		{
@@ -181,85 +201,13 @@ namespace Sannel.House.ServerSDK
 			{
 				return new Tuple<RequestStatus, UriBuilder>(RequestStatus.ServerUriIsNotValid, null);
 			}
-			catch (UriFormatException)
+			catch
 			{
 				return new Tuple<RequestStatus, UriBuilder>(RequestStatus.ServerUriIsNotValid, null);
 			}
 
 			return new Tuple<RequestStatus, UriBuilder>(RequestStatus.Success, builder);
 		}
-
-		#region TemperatureEntry
-		/// <summary>
-		/// Gets the temperature entry asynchronous.
-		/// </summary>
-		/// <param name="key">The key.</param>
-		/// <returns></returns>
-		public IAsyncOperation<TemperatureEntryResult> GetTemperatureEntryAsync(Guid key)
-		{
-			return Task.Run(async () =>
-			{
-
-				var check = checkCommon();
-				if(check.Item1 != RequestStatus.Success)
-				{
-					return new TemperatureEntryResult(check.Item1, null, default(Guid));
-				}
-				var builder = check.Item2;
-				builder.Path = $"/api/TemperatureEntry/{key}";
-				HttpClientResult result = null;
-				try
-				{
-					result = await client.GetAsync(builder.Uri);
-				}
-				catch (COMException ce)
-				{
-					if (ce.HResult == -2147012867)
-					{
-						return new TemperatureEntryResult(RequestStatus.UnableToConnectToServer, null, key, ce);
-					}
-
-					return new TemperatureEntryResult(RequestStatus.Exception, null, key, ce);
-				}
-				catch (Exception ce)
-				{
-					return new TemperatureEntryResult(RequestStatus.Exception, null, key, ce);
-				}
-
-				if (result.StatusCode == HttpStatusCode.Ok)
-				{
-					var res = result.Content;
-					try
-					{
-						var token = JObject.Parse(res);
-						var item = helper.CreateTemperatureEntry();
-						if (token.Type == JTokenType.Object)
-						{
-							item.Id = token.GetPropertyValue<Guid>(nameof(item.Id));
-							item.DeviceId = token.GetPropertyValue<Int32>(nameof(item.DeviceId));
-							item.TemperatureCelsius = token.GetPropertyValue<Double>(nameof(item.TemperatureCelsius));
-							item.Humidity = token.GetPropertyValue<Double>(nameof(item.Humidity));
-							item.Pressure = token.GetPropertyValue<Double>(nameof(item.Pressure));
-							item.CreatedDateTime = token.GetPropertyValue<DateTimeOffset>(nameof(item.CreatedDateTime));
-						}
-
-						return new TemperatureEntryResult(RequestStatus.Success, item, item.Id);
-					}
-					catch (Exception ex)
-					{
-						return new TemperatureEntryResult(RequestStatus.Exception, null, key, ex);
-					}
-				}
-				else
-				{
-					return new TemperatureEntryResult(RequestStatus.Error, null, key);
-				}
-			}
-
-			).AsAsyncOperation();
-		}
-		#endregion
-
 
 	}
 }

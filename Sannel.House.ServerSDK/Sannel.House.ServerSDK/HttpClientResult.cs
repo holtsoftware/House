@@ -12,7 +12,11 @@
    See the License for the specific language governing permissions and
    limitations under the License.*/
 using System;
+#if PORTABLE
+using System.Net;
+#else
 using Windows.Web.Http;
+#endif
 
 namespace Sannel.House.ServerSDK
 {

@@ -1,8 +1,7 @@
 ﻿{
   "dependencies": {
-			"Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-						"Etg.SimpleStubs": "2.1.0"
-
+    "Etg.SimpleStubs": "2.3.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
   },
   "frameworks": {
     "uap10.0": {}
