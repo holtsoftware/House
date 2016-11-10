@@ -69,7 +69,7 @@ namespace Sannel.House.Web.Base.Models
 		/// The date created.
 		/// </value>
 		[JsonProperty("DateCreated")]
-		public DateTime DateCreated { get; set; }
+		public DateTimeOffset DateCreated { get; set; }
 
 		/// <summary>
 		/// Gets or sets if this device is readonly

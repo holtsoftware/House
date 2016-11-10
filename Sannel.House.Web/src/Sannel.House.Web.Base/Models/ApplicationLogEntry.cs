@@ -50,7 +50,7 @@ namespace Sannel.House.Web.Base.Models
 		}
 #if !LOGGING_SDK
 		[Required]
-		public DateTime CreatedDate
+		public DateTimeOffset CreatedDate
 		{
 			get;
 			set;
