@@ -56,79 +56,74 @@ namespace Sannel.House.ServerSDK.Tests
 			Assert.IsNotNull(result.Message);
 		}
 
+
+		#region TemperatureEntry
 		[TestMethod]
 		public async Task GetTemperatureEntryAsyncTest()
 		{
-			var item = new StubITemperatureEntry();
-			Guid id = Guid.Empty;
-			item.Id_Get(() => id);
-			item.Id_Set((v) => id = v);
-			int deviceId = 0;
-			item.DeviceId_Get(() => deviceId);
-			item.DeviceId_Set((v) => deviceId = v);
-			double temperatureCelsius = 0;
-			item.TemperatureCelsius_Get(() => temperatureCelsius);
-			item.TemperatureCelsius_Set((v) => temperatureCelsius = v);
-			double humidity = 0;
-			item.Humidity_Get(() => humidity);
-			item.Humidity_Set((v) => humidity = v);
-			double pressure = 0;
-			item.Pressure_Get(() => pressure);
-			item.Pressure_Set((v) => pressure = v);
-			DateTimeOffset createDateTime = DateTimeOffset.MinValue;
-			item.CreatedDateTime_Get(() => createDateTime);
-			item.CreatedDateTime_Set((v) => createDateTime = v);
-
-			var sett = new StubIServerSettings();
-			sett.ServerUri_Get(() => null);
+			Guid _Id = Guid.Empty;
+			Int32 _DeviceId = 0;
+			Double _TemperatureCelsius = 0;
+			Double _Humidity = 0;
+			Double _Pressure = 0;
+			DateTimeOffset _CreatedDateTime = DateTimeOffset.MinValue;
+			// Setup Stub
+			var stub = new StubITemperatureEntry();
+			stub.Id_Get(() => _Id);
+			stub.Id_Set((v) => _Id = v);
+			stub.DeviceId_Get(() => _DeviceId);
+			stub.DeviceId_Set((v) => _DeviceId = v);
+			stub.TemperatureCelsius_Get(() => _TemperatureCelsius);
+			stub.TemperatureCelsius_Set((v) => _TemperatureCelsius = v);
+			stub.Humidity_Get(() => _Humidity);
+			stub.Humidity_Set((v) => _Humidity = v);
+			stub.Pressure_Get(() => _Pressure);
+			stub.Pressure_Set((v) => _Pressure = v);
+			stub.CreatedDateTime_Get(() => _CreatedDateTime);
+			stub.CreatedDateTime_Set((v) => _CreatedDateTime = v);
+			// create helper
 			var create = new StubICreateHelper();
-			create.CreateTemperatureEntry(() => item);
-			var client = new StubIHttpClient();
-
-			var serverContext = new ServerContext(sett, create, client);
-
-			var key = Guid.NewGuid();
-			var result = await serverContext.GetTemperatureEntryAsync(key);
-			Assert.AreEqual(TemperatureEntryStatus.ServerUriNotSet, result.Status);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(Guid.Empty, result.Key);
-
-			sett.ServerUri_Get(() => new Uri("/Cheader", UriKind.Relative));
-
-			result = await serverContext.GetTemperatureEntryAsync(key);
-			Assert.AreEqual(TemperatureEntryStatus.NotLoggedIn, result.Status);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(Guid.Empty, result.Key);
-
-			sett.ServerUri_Get(() => new Uri("http://test"));
-			client.PostAsync((uri, dict) =>
+			create.CreateTemperatureEntry(() => stub);
+			// settings 
+			var settings = new StubIServerSettings();
+			settings.ServerUri_Get(() => null);
+			// Http Client
+			var httpClient = new StubIHttpClient();
+			// Server 
+			var serverContext = new ServerContext(settings, create, httpClient);
+			Guid key = Guid.NewGuid();
+			// leading
+			var results = await serverContext.GetTemperatureEntryAsync(key);
+			Assert.AreEqual(RequestStatus.ServerUriNotSet, results.Status);
+			Assert.IsNull(results.Data, "Data should not be null");
+			Assert.AreEqual(Guid.Empty, results.Key);
+			// login exception
+			settings.ServerUri_Get(() => new Uri("http://test"));
+			httpClient.PostAsync((uri, d) =>
 			{
 				return Task.Run(() =>
 				{
-					return new HttpClientResult()
-					{
-						StatusCode = Windows.Web.Http.HttpStatusCode.Ok,
-						Content = ""
-					};
-				}).AsAsyncOperation();
-			});
-			client.GetCookieValue((u, name) =>
-			{
-				return "value";
-			});
-			await serverContext.LoginAsync("test", "test");
-			sett.ServerUri_Get(() => new Uri("/Cheader", UriKind.Relative));
+					return new HttpClientResult { StatusCode = HttpStatusCode.Ok, Content = "" };
+				}
 
-			result = await serverContext.GetTemperatureEntryAsync(key);
-			Assert.AreEqual(TemperatureEntryStatus.ServerUriIsNotValid, result.Status);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(Guid.Empty, result.Key);
+				).AsAsyncOperation();
+			}
 
+			);
+			httpClient.GetCookieValue((u, name) => "Value");
+			await serverContext.LoginAsync("user", "pass");
+			settings.ServerUri_Get(() => new Uri("/cheese", UriKind.Relative));
+			// invalid uri
+			results = await serverContext.GetTemperatureEntryAsync(key);
+			Assert.AreEqual(RequestStatus.ServerUriIsNotValid, results.Status);
+			Assert.IsNull(results.Data, "Data should not be null");
+			Assert.AreEqual(Guid.Empty, results.Key);
+			// Unable to connect to server
 			key = Guid.NewGuid();
-			sett.ServerUri_Get(() => new Uri("http://test"));
+			settings.ServerUri_Get(() => new Uri("http://test"));
 			Exception expectedException = null;
 			bool methodHit = false;
-			client.GetAsync((uri) =>
+			httpClient.GetAsync((uri) =>
 			{
 				return Task.Run(() =>
 				{
@@ -137,18 +132,21 @@ namespace Sannel.House.ServerSDK.Tests
 					expectedException = new COMException("Message1", -2147012867);
 					throw expectedException;
 					return new HttpClientResult();
-				}).AsAsyncOperation();
-			});
+				}
 
-			result = await serverContext.GetTemperatureEntryAsync(key);
+				).AsAsyncOperation();
+			}
+
+			);
+			results = await serverContext.GetTemperatureEntryAsync(key);
 			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.UnableToConnectToServer, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(expectedException, result.Exception);
-
+			Assert.AreEqual(RequestStatus.UnableToConnectToServer, results.Status);
+			Assert.IsNull(results.Data, "Data should not be null");
+			Assert.AreEqual(key, results.Key);
+			Assert.AreEqual(expectedException, results.Exception);
+			// COMException 
 			methodHit = false;
-			client.GetAsync((uri) =>
+			httpClient.GetAsync((uri) =>
 			{
 				return Task.Run(() =>
 				{
@@ -156,18 +154,21 @@ namespace Sannel.House.ServerSDK.Tests
 					expectedException = new COMException("Message2");
 					throw expectedException;
 					return new HttpClientResult();
-				}).AsAsyncOperation();
-			});
+				}
 
-			result = await serverContext.GetTemperatureEntryAsync(key);
+				).AsAsyncOperation();
+			}
+
+			);
+			results = await serverContext.GetTemperatureEntryAsync(key);
 			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.Exception, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(expectedException, result.Exception);
-
+			Assert.AreEqual(RequestStatus.Exception, results.Status);
+			Assert.IsNull(results.Data, "Data should be null");
+			Assert.AreEqual(key, results.Key);
+			Assert.AreEqual(expectedException, results.Exception);
+			// Exception 
 			methodHit = false;
-			client.GetAsync((uri) =>
+			httpClient.GetAsync((uri) =>
 			{
 				return Task.Run(() =>
 				{
@@ -175,95 +176,75 @@ namespace Sannel.House.ServerSDK.Tests
 					expectedException = new Exception("Message3");
 					throw expectedException;
 					return new HttpClientResult();
-				}).AsAsyncOperation();
-			});
+				}
 
-			result = await serverContext.GetTemperatureEntryAsync(key);
+				).AsAsyncOperation();
+			}
+
+			);
+			results = await serverContext.GetTemperatureEntryAsync(key);
 			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.Exception, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.AreEqual(expectedException, result.Exception);
-			
+			Assert.AreEqual(RequestStatus.Exception, results.Status);
+			Assert.IsNull(results.Data, "Data should be null");
+			Assert.AreEqual(key, results.Key);
+			Assert.AreEqual(expectedException, results.Exception);
+			// Unauthorized 
 			methodHit = false;
-			client.GetAsync((uri) =>
+			httpClient.GetAsync((uri) =>
 			{
 				return Task.Run(() =>
 				{
 					methodHit = true;
 					return new HttpClientResult()
-					{
-						StatusCode = Windows.Web.Http.HttpStatusCode.Unauthorized,
-						Content = "{test: 'cheese'"
-					};
-				}).AsAsyncOperation();
-			});
+					{ StatusCode = HttpStatusCode.Unauthorized, Content = "{Test: 'cheese'" };
+				}
 
-			result = await serverContext.GetTemperatureEntryAsync(key);
+				).AsAsyncOperation();
+			}
+
+			);
+			results = await serverContext.GetTemperatureEntryAsync(key);
 			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.Error, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Data, "Data should be null");
-			
-			methodHit = false;
-			client.GetAsync((uri) =>
-			{
-				return Task.Run(() =>
-				{
-					methodHit = true;
-					return new HttpClientResult()
-					{
-						StatusCode = Windows.Web.Http.HttpStatusCode.Ok,
-						Content = "{test: 'cheese'"
-					};
-				}).AsAsyncOperation();
-			});
-
-			result = await serverContext.GetTemperatureEntryAsync(key);
-			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.Exception, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Data, "Data should be null");
-			Assert.IsInstanceOfType(result.Exception, typeof(Newtonsoft.Json.JsonReaderException));
-
+			Assert.AreEqual(RequestStatus.Error, results.Status);
+			Assert.IsNull(results.Data, "Data should be null");
+			Assert.AreEqual(key, results.Key);
+			Assert.IsInstanceOfType(results.Exception, typeof(JsonReaderException));
+			// Success Test
 			var exp = new StubITemperatureEntry();
-			exp.CreatedDateTime_Get(() => DateTimeOffset.Parse(DateTimeOffset.Now.ToString()));
 			exp.Id_Get(() => key);
-			exp.DeviceId_Get(() => 2);
-			exp.TemperatureCelsius_Get(() => 4.5);
-			exp.Humidity_Get(() => 1.2);
-			exp.Pressure_Get(() => 3.5);
+			exp.DeviceId_Get(() => 180);
+			exp.TemperatureCelsius_Get(() => 0.39166543138756671);
+			exp.Humidity_Get(() => 0.7764159984776825);
+			exp.Pressure_Get(() => 0.36414104437648365);
+			exp.CreatedDateTime_Get(() => new DateTimeOffset(1987, 10, 8, 10, 49, 23, TimeSpan.FromHours(-6)));
 			ITemperatureEntry expected = exp;
-
 			var jobj = new JObject();
 			jobj.Add(new JProperty(nameof(expected.Id), expected.Id));
 			jobj.Add(new JProperty(nameof(expected.DeviceId), expected.DeviceId));
 			jobj.Add(new JProperty(nameof(expected.TemperatureCelsius), expected.TemperatureCelsius));
 			jobj.Add(new JProperty(nameof(expected.Humidity), expected.Humidity));
 			jobj.Add(new JProperty(nameof(expected.Pressure), expected.Pressure));
-			jobj.Add(new JProperty(nameof(expected.CreatedDateTime), expected.CreatedDateTime.ToString()));
-
+			jobj.Add(new JProperty(nameof(expected.CreatedDateTime), expected.CreatedDateTime));
 			methodHit = false;
-			client.GetAsync((uri) =>
+			httpClient.GetAsync((uri) =>
 			{
 				return Task.Run(() =>
 				{
 					methodHit = true;
-					return new HttpClientResult()
-					{
-						StatusCode = Windows.Web.Http.HttpStatusCode.Ok,
-						Content = jobj.ToString()
-					};
-				}).AsAsyncOperation();
-			});
+					return new HttpClientResult { StatusCode = HttpStatusCode.Ok, Content = jobj.ToString() };
+				}
 
-			result = await serverContext.GetTemperatureEntryAsync(key);
+				).AsAsyncOperation();
+			}
+
+			);
+			results = await serverContext.GetTemperatureEntryAsync(key);
 			Assert.IsTrue(methodHit, "Method not called");
-			Assert.AreEqual(TemperatureEntryStatus.Success, result.Status);
-			Assert.AreEqual(key, result.Key);
-			Assert.IsNull(result.Exception, "Exception should be null");
-			Assert.IsNotNull(result.Data, "Data should not be null");
-			var actual = result.Data;
+			Assert.AreEqual(RequestStatus.Success, results.Status);
+			Assert.AreEqual(key, results.Key);
+			Assert.IsNull(results.Exception, "Exception should be null");
+			Assert.IsNotNull(results.Data, "Data should not be null");
+			var actual = results.Data;
 			Assert.AreEqual(expected.Id, actual.Id);
 			Assert.AreEqual(expected.DeviceId, actual.DeviceId);
 			Assert.AreEqual(expected.TemperatureCelsius, actual.TemperatureCelsius);
@@ -271,5 +252,6 @@ namespace Sannel.House.ServerSDK.Tests
 			Assert.AreEqual(expected.Pressure, actual.Pressure);
 			Assert.AreEqual(expected.CreatedDateTime, actual.CreatedDateTime);
 		}
+		#endregion
 	}
 }

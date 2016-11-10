@@ -214,10 +214,21 @@ namespace Sannel.House.Generator
 			return items.ToArray();
 		}
 
+		private AttributeSyntax getTestAttribute()
+		{
+			return Attribute(IdentifierName("TestMethod"));
+		}
+
 		public MemberDeclarationSyntax createGetMethod(Type t, PropertyInfo[] pi)
 		{
 			var method = MethodDeclaration(ParseTypeName("Task"), $"Get{t.Name}AsyncTest")
-				.AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.AsyncKeyword));
+				.AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.AsyncKeyword))
+				.AddAttributeLists(
+					AttributeList()
+					.AddAttributes(
+						getTestAttribute()
+					)
+				);
 
 			foreach (var p in pi)
 			{
@@ -432,19 +443,22 @@ namespace Sannel.House.Generator
 									InitializerExpression(SyntaxKind.ObjectInitializerExpression)
 									.AddExpressions(
 										AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-											IdentifierName("Status"),
+											IdentifierName("StatusCode"),
 											Extensions.MemberAccess(
 												IdentifierName("HttpStatusCode"),
 												IdentifierName("Ok")
 											)
 										),
 										AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-											IdentifierName("Conent"),
+											IdentifierName("Content"),
 											LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(""))
 										)
 									)
 								)
-						)))
+						)),
+							Parameter(Identifier("uri")),
+							Parameter(Identifier("d"))
+						)
 					)
 				),
 				ExpressionStatement(
@@ -541,7 +555,7 @@ namespace Sannel.House.Generator
 				ExpressionStatement(
 					InvocationExpression(
 						Extensions.MemberAccess(
-							IdentifierName(serverContext),
+							IdentifierName(settings),
 							IdentifierName("ServerUri_Get")
 						)
 					).AddArgumentListArguments(
@@ -1001,7 +1015,7 @@ namespace Sannel.House.Generator
 								ExpressionStatement(
 									AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
 										IdentifierName(methodHit),
-										false.ToLiteral()
+										true.ToLiteral()
 									)
 								),
 								ReturnStatement(
