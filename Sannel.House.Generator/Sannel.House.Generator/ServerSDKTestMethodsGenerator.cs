@@ -77,6 +77,21 @@ namespace Sannel.House.Generator
 				)
 			);
 		}
+		private StatementSyntax assertIsNotNull(ExpressionSyntax test, String message)
+		{
+			return ExpressionStatement(
+				InvocationExpression(
+					Extensions.MemberAccess(
+						IdentifierName("Assert"),
+						IdentifierName("IsNotNull")
+					)
+				)
+				.AddArgumentListArguments(
+					Argument(test),
+					Argument(LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(message)))
+				)
+			);
+		}
 		private StatementSyntax assertIsTrue(ExpressionSyntax test, string v)
 		{
 			return ExpressionStatement(
@@ -689,7 +704,7 @@ namespace Sannel.House.Generator
 				assertIsTrue(IdentifierName(methodHit), "Method not called")
 			);
 			method = method.AddBodyStatements(
-				getStandardTests(t, results, "Exception", key) 
+				getStandardTests(t, results, "Exception", key)
 			);
 			method = method.AddBodyStatements(
 				assertStatment(IdentifierName(expectedException),
@@ -761,7 +776,7 @@ namespace Sannel.House.Generator
 				assertIsTrue(IdentifierName(methodHit), "Method not called")
 			);
 			method = method.AddBodyStatements(
-				getStandardTests(t, results, "Exception", key) 
+				getStandardTests(t, results, "Exception", key)
 			);
 			method = method.AddBodyStatements(
 				assertStatment(IdentifierName(expectedException),
@@ -836,7 +851,7 @@ namespace Sannel.House.Generator
 				assertIsTrue(IdentifierName(methodHit), "Method not called")
 			);
 			method = method.AddBodyStatements(
-				getStandardTests(t, results, "Error", key) 
+				getStandardTests(t, results, "Error", key)
 			);
 			method = method.AddBodyStatements(
 				ExpressionStatement(
@@ -885,15 +900,16 @@ namespace Sannel.House.Generator
 						jobj.Text,
 						EqualsValueClause(
 							ObjectCreationExpression(ParseTypeName("JObject"))
+							.AddArgumentListArguments()
 						)
 					)
 				)
 			);
 
 
-			foreach(var prop in pi)
+			foreach (var prop in pi)
 			{
-				if(!prop.ShouldIgnore())
+				if (!prop.ShouldIgnore())
 				{
 					method = method.AddBodyStatements(
 						ExpressionStatement(
@@ -906,7 +922,7 @@ namespace Sannel.House.Generator
 							.AddArgumentListArguments(
 								Argument(
 									ParenthesizedLambdaExpression(
-										(prop.IsKey())?IdentifierName(key):prop.GetTypeSyntax().GetRandomValue(rand)										
+										(prop.IsKey()) ? IdentifierName(key) : prop.GetTypeSyntax().GetRandomValue(rand)
 									)
 								)
 							)
@@ -947,7 +963,7 @@ namespace Sannel.House.Generator
 								)
 							)
 						)
-					);		
+					);
 				}
 			}
 
@@ -965,12 +981,146 @@ namespace Sannel.House.Generator
 
 			method = method.AddBodyStatements(blocks.Statements.ToArray());
 
+			method = method.AddBodyStatements(
+				ExpressionStatement(
+					AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						IdentifierName(methodHit),
+						false.ToLiteral()
+					)
+				),
+				ExpressionStatement(
+					InvocationExpression(
+						Extensions.MemberAccess(
+							IdentifierName(httpClient),
+							IdentifierName("GetAsync")
+						)
+					)
+					.AddArgumentListArguments(
+						generateRunTaskWrapper(
+							Block().AddStatements(
+								ExpressionStatement(
+									AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+										IdentifierName(methodHit),
+										false.ToLiteral()
+									)
+								),
+								ReturnStatement(
+									ObjectCreationExpression(
+										ParseTypeName("HttpClientResult")
+									)
+									.WithInitializer(
+										InitializerExpression(SyntaxKind.ObjectInitializerExpression)
+										.AddExpressions(
+											AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+												IdentifierName("StatusCode"),
+												Extensions.MemberAccess(
+													IdentifierName("HttpStatusCode"),
+													IdentifierName("Ok")
+												)
+											),
+											AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+												IdentifierName("Content"),
+												InvocationExpression(
+													Extensions.MemberAccess(
+														IdentifierName(jobj),
+														IdentifierName("ToString")
+													)
+												).AddArgumentListArguments()
+											)
+										)
+									)
+								)
+							),
+							Parameter(Identifier("uri"))
+						)
+					)
+				)
+			);
+
+			var actual = Identifier("actual");
+
+			method = method.AddBodyStatements(
+				ExpressionStatement(
+					AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+						IdentifierName(results),
+						AwaitExpression(
+							InvocationExpression(
+								Extensions.MemberAccess(
+									IdentifierName(serverContext),
+									IdentifierName($"Get{t.Name}Async")
+								)
+							)
+							.AddArgumentListArguments(
+								Argument(IdentifierName(key))
+							)
+						)
+					)
+				),
+				assertIsTrue(IdentifierName(methodHit), "Method not called"),
+				assertStatment(
+					Extensions.MemberAccess(
+						IdentifierName("RequestStatus"),
+						IdentifierName("Success")
+					),
+					Extensions.MemberAccess(
+						IdentifierName(results),
+						IdentifierName("Status")
+					)
+				),
+				assertStatment(
+					IdentifierName(key),
+					Extensions.MemberAccess(
+						IdentifierName(results),
+						IdentifierName("Key")
+					)
+				),
+				assertIsNull(
+					Extensions.MemberAccess(
+						IdentifierName(results),
+						IdentifierName("Exception")
+					),
+					"Exception should be null"
+				),
+				assertIsNotNull(
+					Extensions.MemberAccess(
+						IdentifierName(results),
+						IdentifierName("Data")
+					),
+					"Data should not be null"
+				),
+				LocalDeclarationStatement(
+					Extensions.VariableDeclaration(
+						actual.Text,
+						EqualsValueClause(
+							Extensions.MemberAccess(
+								IdentifierName(results),
+								IdentifierName("Data")
+							)
+						)
+					)
+				)
+			);
+
+			foreach(var prop in pi)
+			{
+				if (!prop.ShouldIgnore())
+				{
+					method = method.AddBodyStatements(
+						assertStatment(
+							Extensions.MemberAccess(
+								IdentifierName(expected),
+								IdentifierName(prop.Name)
+							),
+							Extensions.MemberAccess(
+								IdentifierName(actual),
+								IdentifierName(prop.Name)
+							)
+						)
+					);
+				}
+			}
+
 			/*
-			jobj.Add(new JProperty(nameof(expected.DeviceId), expected.DeviceId));
-			jobj.Add(new JProperty(nameof(expected.TemperatureCelsius), expected.TemperatureCelsius));
-			jobj.Add(new JProperty(nameof(expected.Humidity), expected.Humidity));
-			jobj.Add(new JProperty(nameof(expected.Pressure), expected.Pressure));
-			jobj.Add(new JProperty(nameof(expected.CreatedDateTime), expected.CreatedDateTime.ToString()));
 			 */
 
 			return method;
