@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Sannel.House.Web.Base.Interfaces;
 using Sannel.House.Web.Mocks;
 using System;
@@ -10,7 +10,7 @@ namespace Sannel.House.Web.Tests
 {
 	public abstract class TestBase
 	{
-		[TearDown]
+		[TestCleanup]
 		public void CleanUp()
 		{
 			using (IDataContext context = new MockDataContext())
