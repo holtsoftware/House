@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Sannel.House.Generator.Common;
 using Sannel.House.Web.Base;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,12 @@ namespace Sannel.House.Generator
 {
 	public static class Extensions
 	{
+		public static String ReplaceKeys(this String path, PropertyWithName pwn, RunConfig config)
+		{
+			path = path.Replace("{TypeName}", pwn.Type.Name);
+			return path;
+		}
+
 		public static PropertyInfo GetSortProperty(this PropertyInfo[] props, out bool isForward)
 		{
 			isForward = true;

@@ -1,0 +1,76 @@
+﻿{
+	"Generators": {
+		"ControllerGenerator": {
+			"Type": "PerType",
+			"Class": "Sannel.House.Generator.Generators.ControllerGenerator"
+		},
+		"ControllerTestsGenerator":  {
+			"Type":  "PerType",
+			"Class":  "Sannel.House.Generator.Generators.ControllerTestsGenerator"
+		},
+		"ServerInterfaceGenerator": {
+			"Type":  "PerType",
+			"Class":  "Sannel.House.Generator.Generators.InterfaceGenerator"
+		},
+		"ServerResultGenerator":  {
+			"Type":  "PerType",
+			"Class":  "Sannel.House.Generator.Generators.ResultGenerator"
+		},
+		"ServerResultsGenerator":  {
+			"Type":  "PerType",
+			"Class":  "Sannel.House.Generator.Generators.ResultsGenerator"
+		}
+	},
+	"TestBuilders":  {
+		"XUnit": {
+			"Class":  "Sannel.House.Generator.Common.XUnitTestBuilder"
+		}
+	},
+	"HttpBuilders":  {
+		"UWPHttpBuilder":  {
+			"Class":  "Sannel.House.Generator.Common.UWPHttpClientBuilder"
+		}
+	},
+	"Run": [
+		{
+			"Name":  "Controller",
+			"Directory":  "Web\\Controllers",
+			"FileName":  "{TypeName}Controller.cs",
+			"Generator":  "ControllerGenerator",
+			"TestBuilder": null,
+			"HttpBuilder": null
+		},
+		{
+			"Name":  "ControllerTests",
+			"Directory":  "Web\\Tests",
+			"FileName":  "{TypeName}ControllerTests.cs",
+			"Generator":  "ControllerTestsGenerator",
+			"TestBuilder": "XUnit",
+			"HttpBuilder": null
+		},
+		{
+			"Name":  "Server Interfaces",
+			"Directory":  "ServerSDK\\Interfaces",
+			"FileName":  "I{TypeName}.cs",
+			"Generator":  "ServerInterfaceGenerator",
+			"TestBuilder": null,
+			"HttpBuilder": null
+		},
+		{
+			"Name":  "Result Generator",
+			"Directory":  "ServerSDK\\Results",
+			"FileName":  "{TypeName}Result.cs",
+			"Generator":  "ServerResultGenerator",
+			"TestBuilder": null,
+			"HttpBuilder": null
+		},
+		{
+			"Name":  "Results Generator",
+			"Directory":  "ServerSDK\\Results",
+			"FileName":  "{TypeName}Results.cs",
+			"Generator":  "ServerResultsGenerator",
+			"TestBuilder": null,
+			"HttpBuilder": null
+		}
+	]
+}

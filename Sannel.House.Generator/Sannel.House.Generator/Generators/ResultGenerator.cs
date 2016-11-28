@@ -8,28 +8,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
 using System.Reflection;
+using Sannel.House.Generator.Common;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Generators
 {
 	public class ResultGenerator : GeneratorBase
 	{
-		public override string DirectoryName
-		{
-			get
-			{
-				return "ServerSDK";
-			}
-		}
-
-		protected String filename;
-		public override string FileName
-		{
-			get
-			{
-				return filename;
-			}
-		}
-
+		private String filename;
 		protected String StatusText
 		{
 			get

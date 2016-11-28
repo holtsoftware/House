@@ -13,6 +13,7 @@
    limitations under the License.*/
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Sannel.House.Generator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,31 +21,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Common
 {
-	public abstract class GeneratorBase
+	public abstract class GeneratorBase : IPerTypeGenerator
 	{
-		public abstract String DirectoryName
+		protected ITestBuilder TestBuilder
 		{
 			get;
+			private set;
 		}
 
-		public abstract String FileName
+		protected IHttpClientBuilder HttpBuilder
 		{
 			get;
-		}
+			private set;
+		} 
 
-		public void Generate(String propertyName, Type t, String saveFolder)
+		public void Generate(PropertyWithName pwn, String baseSaveFolder, RunConfig config)
 		{
-			var sf = Path.Combine(saveFolder, DirectoryName);
+			TestBuilder = config.TestBuilder;
+			HttpBuilder = config.HttpBuilder;
+
+			var sf = Path.Combine(baseSaveFolder, config.Directory.ReplaceKeys(pwn, config));
 			if (!Directory.Exists(sf))
 			{
 				Directory.CreateDirectory(sf);
 			}
 
-			var syntax = internalGenerate(propertyName, t).NormalizeWhitespace("\t", true);
+			var syntax = internalGenerate(pwn.PropertyName, pwn.Type).NormalizeWhitespace("\t", true);
 
-			var file = Path.Combine($"{sf}\\{FileName}.cs");
+			var file = Path.Combine(sf, config.FileName.ReplaceKeys(pwn, config));
 			if (File.Exists(file))
 			{
 				File.Delete(file);

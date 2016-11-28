@@ -8,29 +8,12 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
 using System.Reflection;
+using Sannel.House.Generator.Common;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Generators
 {
 	public class ControllerTestsGenerator : GeneratorBase
 	{
-		public override string DirectoryName
-		{
-			get
-			{
-				return "Tests";
-			}
-		}
-
-		private String filename;
-
-		public override string FileName
-		{
-			get
-			{
-				return filename;
-			}
-		}
-
 		private StatementSyntax[] generateCompare(SyntaxToken expected, SyntaxToken actual, PropertyInfo[] props)
 		{
 			List<StatementSyntax> statements = new List<StatementSyntax>();
@@ -40,15 +23,11 @@ namespace Sannel.House.Generator
 				if (!prop.ShouldIgnore())
 				{
 					var exp = SF.ExpressionStatement(
-						SF.InvocationExpression(
-							Extensions.MemberAccess("Assert", "AreEqual")
-							).WithArgumentList(
-								SF.ArgumentList()
-									.AddArguments(
-										SF.Argument(Extensions.MemberAccess(expected.Text, prop.Name)),
-										SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
-							)
-						);
+						TestBuilder.AssertAreEqual(
+							Extensions.MemberAccess(expected.Text, prop.Name),
+							Extensions.MemberAccess(actual.Text, prop.Name)
+						)
+					);
 					if (isfirst)
 					{
 						exp = exp.WithLeadingTrivia(SF.Comment($"// {expected.Text} -> {actual.Text}"));
@@ -117,7 +96,7 @@ namespace Sannel.House.Generator
 				else
 				{
 					String dtType = "DateTimeOffset";
-					if(prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+					if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
 					{
 						dtType = "DateTime";
 					}
@@ -190,8 +169,15 @@ namespace Sannel.House.Generator
 			var context = SF.Identifier("context");
 			var controller = SF.Identifier("controller");
 			var method = SF.MethodDeclaration(SF.ParseTypeName("void"), "GetTest")
-				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("Test"))))
 				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+
+			var att = TestBuilder.GetMethodAttribute();
+			if(att != null)
+			{
+				method = method.AddAttributeLists(
+					SF.AttributeList().AddAttributes(att)
+				);
+			}
 
 			SyntaxToken var1, var2, var3;
 			PropertyInfo[] props;
@@ -213,12 +199,7 @@ namespace Sannel.House.Generator
 				).WithLeadingTrivia(SF.Comment("//call get method"))
 				),
 				SF.ExpressionStatement(
-					SF.InvocationExpression(
-						Extensions.MemberAccess("Assert", "IsNotNull")
-					).WithArgumentList(
-						SF.ArgumentList()
-							.AddArguments(SF.Argument(SF.IdentifierName(results)))
-					)
+					TestBuilder.AssertIsNotNull(SF.IdentifierName(results))
 				),
 				SF.LocalDeclarationStatement(
 					Extensions.VariableDeclaration(
@@ -235,17 +216,9 @@ namespace Sannel.House.Generator
 				)
 				);
 
-
 			blocks = blocks.AddStatements(SF.ExpressionStatement(
-				SF.InvocationExpression(
-					Extensions.MemberAccess("Assert", "AreEqual")
-					).WithArgumentList(
-						SF.ArgumentList()
-							.AddArguments(
-								SF.Argument(3.ToLiteral()),
-								SF.Argument(Extensions.MemberAccess(list.Text, "Count")))
-					)
-				));
+				TestBuilder.AssertAreEqual(3.ToLiteral(), Extensions.MemberAccess(list.Text, "Count"))
+			));
 
 			var one = SF.Identifier("one");
 			blocks = blocks.AddStatements(SF.LocalDeclarationStatement(
@@ -309,8 +282,13 @@ namespace Sannel.House.Generator
 			var context = SF.Identifier("context");
 			var controller = SF.Identifier("controller");
 			var method = SF.MethodDeclaration(SF.ParseTypeName("void"), "GetWithIdTest")
-				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("Test"))))
 				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword));
+
+			var att = TestBuilder.GetMethodAttribute();
+			if (att != null)
+			{
+				method = method.AddAttributeLists(SF.AttributeList().AddAttributes(att));
+			}
 
 			SyntaxToken var1, var2, var3;
 			PropertyInfo[] props;
@@ -339,14 +317,9 @@ namespace Sannel.House.Generator
 			);
 
 			blocks = blocks.AddStatements(SF.ExpressionStatement(
-				SF.InvocationExpression(
-					Extensions.MemberAccess("Assert", "IsNotNull")
-					).WithArgumentList(
-						SF.ArgumentList()
-							.AddArguments(
-								SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
-					)
-				));
+				TestBuilder.AssertIsNotNull(Extensions.MemberAccess(actual.Text, prop.Name))
+			));
+
 			blocks = blocks.AddStatements(generateCompare(var1, actual, props));
 
 			blocks = blocks.AddStatements(
@@ -368,15 +341,11 @@ namespace Sannel.House.Generator
 				).WithLeadingTrivia(SF.Comment($"// Verify {var2.Text}"))
 			);
 
-			blocks = blocks.AddStatements(SF.ExpressionStatement(
-				SF.InvocationExpression(
-					Extensions.MemberAccess("Assert", "IsNotNull")
-					).WithArgumentList(
-						SF.ArgumentList()
-							.AddArguments(
-								SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
-					)
-				));
+			blocks = blocks.AddStatements(
+				SF.ExpressionStatement(
+					Extensions.MemberAccess(actual.Text, prop.Name)
+				)
+			);
 			blocks = blocks.AddStatements(generateCompare(var2, actual, props));
 
 			blocks = blocks.AddStatements(
@@ -398,15 +367,11 @@ namespace Sannel.House.Generator
 				).WithLeadingTrivia(SF.Comment($"// Verify {var3.Text}"))
 			);
 
-			blocks = blocks.AddStatements(SF.ExpressionStatement(
-				SF.InvocationExpression(
-					Extensions.MemberAccess("Assert", "IsNotNull")
-					).WithArgumentList(
-						SF.ArgumentList()
-							.AddArguments(
-								SF.Argument(Extensions.MemberAccess(actual.Text, prop.Name)))
-					)
-				));
+			blocks = blocks.AddStatements(
+				SF.ExpressionStatement(
+					Extensions.MemberAccess(actual.Text, prop.Name)
+				)
+			);
 			blocks = blocks.AddStatements(generateCompare(var3, actual, props));
 
 			var @using2 = SF.UsingStatement(blocks)
@@ -425,7 +390,7 @@ namespace Sannel.House.Generator
 		protected override CompilationUnitSyntax internalGenerate(string propertyName, Type t)
 		{
 			var controllerName = $"{t.Name}Controller";
-			filename = $"{controllerName}Tests";
+			var filename = $"{controllerName}Tests";
 			var unit = SF.CompilationUnit();
 
 			unit = unit.AddUsing("System").WithLeadingTrivia(GetLicenseComment());
@@ -441,8 +406,15 @@ namespace Sannel.House.Generator
 
 			var @class = SF.ClassDeclaration(filename)
 				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
-				.AddBaseListTypes(SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName("TestBase")))
-				.AddAttributeLists(SF.AttributeList().AddAttributes(SF.Attribute(SF.IdentifierName("TestFixture"))));
+				.AddBaseListTypes(SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName("TestBase")));
+
+			var att = TestBuilder.GetClassAttribute();
+			if (att != null)
+			{
+				@class = @class.AddAttributeLists(
+					SF.AttributeList().AddAttributes(att)
+				);
+			}
 
 			@class = @class.AddMembers(generateGetTest(controllerName, propertyName, t));
 			@class = @class.AddMembers(generateGetByIdTest(controllerName, propertyName, t));

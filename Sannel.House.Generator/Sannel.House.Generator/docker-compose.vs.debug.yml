@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  sannel.house.generator:
+    image: user/sannel.house.generator:dev
+    volumes:
+      - .:/app
+      - ~/.nuget/packages:/root/.nuget/packages:ro
+      - ~/clrdbg:/clrdbg:ro
+    entrypoint: tail -f /dev/null
+    labels:
+      - "com.microsoft.visualstudio.targetoperatingsystem=linux"

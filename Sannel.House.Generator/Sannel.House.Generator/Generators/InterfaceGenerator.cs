@@ -8,32 +8,15 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
 using System.Reflection;
+using Sannel.House.Generator.Common;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Generators
 {
 	public class InterfaceGenerator : GeneratorBase
 	{
-		public override string DirectoryName
-		{
-			get
-			{
-				return "ServerSDK";
-			}
-		}
-
-		private String fileName;
-
-		public override string FileName
-		{
-			get
-			{
-				return fileName;
-			}
-		}
-
 		protected override CompilationUnitSyntax internalGenerate(string propertyName, Type t)
 		{
-			fileName = $"I{t.Name}";
+			var fileName = $"I{t.Name}";
 			var unit = SF.CompilationUnit();
 
 			unit = unit.AddUsing("System").WithLeadingTrivia(GetLicenseComment());

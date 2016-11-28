@@ -22,7 +22,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
 using System.Reflection;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Generators
 {
 	public class ServerSDKMethodsGenerator : IDisposable
 	{

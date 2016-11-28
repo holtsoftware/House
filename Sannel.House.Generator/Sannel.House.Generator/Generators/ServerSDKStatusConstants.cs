@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Generators
 {
 	public static class ServerSDKStatusConstants
 	{

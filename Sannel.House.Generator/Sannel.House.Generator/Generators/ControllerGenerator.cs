@@ -8,32 +8,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
 using System.Reflection;
+using Sannel.House.Generator.Common;
 
-namespace Sannel.House.Generator
+namespace Sannel.House.Generator.Generators
 {
 	public class ControllerGenerator : GeneratorBase
 	{
 		public ControllerGenerator()
 		{
 
-		}
-
-		public override string DirectoryName
-		{
-			get
-			{
-				return "Controllers";
-			}
-		}
-
-		private String fileName;
-
-		public override string FileName
-		{
-			get
-			{
-				return fileName;
-			}
 		}
 
 		private ConstructorDeclarationSyntax generateConstructor(SyntaxToken name, Type t)
@@ -154,7 +137,7 @@ namespace Sannel.House.Generator
 
 		protected override CompilationUnitSyntax internalGenerate(string propertyName, Type t)
 		{
-			fileName = $"{t.Name}Controller";
+			var fileName = $"{t.Name}Controller";
 			var unit = SF.CompilationUnit();
 
 			unit = unit.AddUsings(SF.UsingDirective(SF.IdentifierName("System"))).WithLeadingTrivia(GetLicenseComment());
