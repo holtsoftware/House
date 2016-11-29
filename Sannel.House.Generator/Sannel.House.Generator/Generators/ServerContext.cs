@@ -21,31 +21,15 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.IO;
 using System.Reflection;
+using Sannel.House.Generator.Interfaces;
+using Sannel.House.Generator.Common;
 
 namespace Sannel.House.Generator.Generators
 {
-	public class ServerSDKMethodsGenerator : IDisposable
+	public class ServerContext : ICombinedGenerator
 	{
-		private StreamWriter writer;
 		private SyntaxToken keyName = Identifier("key");
 		private SyntaxToken helperName = Identifier("helper");
-		public ServerSDKMethodsGenerator(String baseDirectory)
-		{
-			var path = Path.Combine(baseDirectory, "ServerSDK");
-			if (!Directory.Exists(path))
-			{
-				Directory.CreateDirectory(path);
-			}
-
-			var serverContext = Path.Combine(path, "ServerContext.cs");
-
-			if (File.Exists(serverContext))
-			{
-				File.Delete(serverContext);
-			}
-
-			writer = new StreamWriter(File.OpenWrite(serverContext));
-		}
 
 		private StatementSyntax[] createCommonResultIfStatments(Type t, PropertyInfo[] pi, String resultName)
 		{
@@ -561,15 +545,32 @@ namespace Sannel.House.Generator.Generators
 				)
 				);
 
-			cu.NormalizeWhitespace("\t", true).WriteTo(writer);
+			/*cu.NormalizeWhitespace("\t", true).WriteTo(writer);
 			writer.WriteLine();
-			writer.WriteLine();
+			writer.WriteLine();*/
 
 		}
 
-		public void Dispose()
+		public void Generate(IList<PropertyWithName> props, String baseSaveDirectory, RunConfig config)
 		{
-			writer.Dispose();
+			var dir = Path.Combine(baseSaveDirectory, config.Directory);
+			if(!Directory.Exists(dir))
+			{
+				Directory.CreateDirectory(dir);
+			}
+
+			var unit = CompilationUnit();
+			unit = unit.AddUsing("System").WithLeadingTrivia(new SyntaxTriviaList().Add(GeneratorBase.GetLicenseComment()));
+			unit = unit.AddUsings(config.HttpBuilder.Namespace);
+
+			var names = NamespaceDeclaration(IdentifierName("Sannel.House.ServerSDK"));
+			unit = unit.AddMembers(names);
+
+			unit = unit.NormalizeWhitespace("\t", true);
+			using(var writer = new StreamWriter(File.OpenWrite(Path.Combine(dir, config.FileName))))
+			{
+				unit.WriteTo(writer);
+			}
 		}
 	}
 }
