@@ -31,6 +31,5 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Sannel.House.Web\src\Sannel.House.Web.Base\Sannel.House.Web.Base.csproj" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
