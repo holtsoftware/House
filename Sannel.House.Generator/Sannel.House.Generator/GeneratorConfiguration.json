@@ -19,6 +19,10 @@
 		"ServerResultsGenerator":  {
 			"Type":  "PerType",
 			"Class":  "Sannel.House.Generator.Generators.ResultsGenerator"
+		},
+		"ServerContextGenerator":  {
+			"Type":  "Combined",
+			"Class":  "Sannel.House.Generator.Generators.ServerContextGenerator"
 		}
 	},
 	"TestBuilders":  {
@@ -71,6 +75,14 @@
 			"Generator":  "ServerResultsGenerator",
 			"TestBuilder": null,
 			"HttpBuilder": null
+		},
+		{
+			"Name":  "Server Context Generator (UWP)",
+			"Directory":  "ServerSDK\\UWP",
+			"FileName":  "ServerContext.Generator.cs",
+			"Generator":  "ServerContextGenerator",
+			"TestBuilder":  null,
+			"HttpBuilder": "UWPHttpBuilder"
 		}
 	]
 }

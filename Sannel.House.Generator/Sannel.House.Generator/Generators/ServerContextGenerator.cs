@@ -26,7 +26,7 @@ using Sannel.House.Generator.Common;
 
 namespace Sannel.House.Generator.Generators
 {
-	public class ServerContext : ICombinedGenerator
+	public class ServerContextGenerator : ICombinedGenerator
 	{
 		private SyntaxToken keyName = Identifier("key");
 		private SyntaxToken helperName = Identifier("helper");
@@ -524,26 +524,27 @@ namespace Sannel.House.Generator.Generators
 			);
 		}
 
-		public void AddType(String propertyName, Type t)
+		private ClassDeclarationSyntax addType(PropertyWithName pwn, ClassDeclarationSyntax @class)
 		{
-			var cu = CompilationUnit();
-			var tn = ParseTypeName(t.Name);
-			var pi = t.GetProperties();
+			var tn = ParseTypeName(pwn.Type.Name);
+			var pi = pwn.Type.GetProperties();
 
-			cu = cu.AddMembers(createGetMethod(t, pi))
+			var method = createGetMethod(pwn.Type, pi)
 				.WithLeadingTrivia(Trivia(RegionDirectiveTrivia(true)
 					.WithEndOfDirectiveToken(
-						Token(TriviaList().Add(PreprocessingMessage(t.Name)),
+						Token(TriviaList().Add(PreprocessingMessage(pwn.Type.Name)),
 							SyntaxKind.EndOfDirectiveToken,
 							TriviaList())
 					)
 				));
 
-			cu = cu.WithTrailingTrivia(
+			method = method.WithTrailingTrivia(
 				Trivia(
 					EndRegionDirectiveTrivia(true)
 				)
 				);
+
+			return @class.AddMembers(method);
 
 			/*cu.NormalizeWhitespace("\t", true).WriteTo(writer);
 			writer.WriteLine();
@@ -564,6 +565,20 @@ namespace Sannel.House.Generator.Generators
 			unit = unit.AddUsings(config.HttpBuilder.Namespace);
 
 			var names = NamespaceDeclaration(IdentifierName("Sannel.House.ServerSDK"));
+
+			var @class = ClassDeclaration("ServerContext")
+				.AddModifiers(
+					Token(SyntaxKind.PublicKeyword),
+					Token(SyntaxKind.PartialKeyword)
+				);
+
+			foreach(var prop in props)
+			{
+				@class = addType(prop, @class);
+			}
+
+			names = names.AddMembers(@class);
+
 			unit = unit.AddMembers(names);
 
 			unit = unit.NormalizeWhitespace("\t", true);

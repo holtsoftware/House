@@ -3,7 +3,7 @@
   <PropertyGroup Condition="'$(NuGetPackageRoot)' == ''">
     <NuGetPackageRoot>$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
   </PropertyGroup>
-  <ImportGroup>
-    <Import Project="$(NuGetPackageRoot)\Etg.SimpleStubs\2.3.0\build\Etg.SimpleStubs.targets" Condition="Exists('$(NuGetPackageRoot)\Etg.SimpleStubs\2.3.0\build\Etg.SimpleStubs.targets')" />
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)etg.simplestubs\2.3.0\build\Etg.SimpleStubs.targets" Condition="Exists('$(NuGetPackageRoot)etg.simplestubs\2.3.0\build\Etg.SimpleStubs.targets')" />
   </ImportGroup>
 </Project>

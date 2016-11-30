@@ -144,6 +144,15 @@ namespace Sannel.House.Generator
 				else if (combinedGenerators.ContainsKey(run.Generator))
 				{
 					var generator = combinedGenerators[run.Generator];
+					if (run.TestBuilder != null && testBuilders.ContainsKey(run.TestBuilder))
+					{
+						r.TestBuilder = testBuilders[run.TestBuilder];
+					}
+					if (run.HttpBuilder != null && httpBuilders.ContainsKey(run.HttpBuilder))
+					{
+						r.HttpBuilder = httpBuilders[run.HttpBuilder];
+					}
+					generator.Generate(propWithNames, path, r);
 				}
 			}
 		}
