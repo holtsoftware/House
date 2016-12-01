@@ -24,6 +24,12 @@ namespace Sannel.House.Generator.Common
 			set;
 		} = new Dictionary<string, GeneratorConfiguration>();
 
+		public Dictionary<String, GeneratorConfiguration> TaskBuilders
+		{
+			get;
+			set;
+		} = new Dictionary<string, GeneratorConfiguration>();
+
 		public List<RunConfiguration> Run
 		{
 			get;

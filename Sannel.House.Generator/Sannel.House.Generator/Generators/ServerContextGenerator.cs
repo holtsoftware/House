@@ -30,6 +30,8 @@ namespace Sannel.House.Generator.Generators
 	{
 		private SyntaxToken keyName = Identifier("key");
 		private SyntaxToken helperName = Identifier("helper");
+		private IHttpClientBuilder httpBuilder;
+		private ITaskBuilder taskBuilder;
 
 		private StatementSyntax[] createCommonResultIfStatments(Type t, PropertyInfo[] pi, String resultName)
 		{
@@ -471,11 +473,8 @@ namespace Sannel.House.Generator.Generators
 
 			var key = pi.GetKeyProperty();
 			var method = MethodDeclaration(
-				GenericName(Identifier("IAsyncOperation"),
-					TypeArgumentList().AddArguments(
-						ParseTypeName($"{t.Name}Result")
-						)
-				),
+				null,
+
 				$"Get{t.Name}Async"
 			).WithModifiers(
 					TokenList(
@@ -559,6 +558,8 @@ namespace Sannel.House.Generator.Generators
 			{
 				Directory.CreateDirectory(dir);
 			}
+			httpBuilder = config.HttpBuilder;
+			taskBuilder = config.TaskBuilder;
 
 			var unit = CompilationUnit();
 			unit = unit.AddUsing("System").WithLeadingTrivia(new SyntaxTriviaList().Add(GeneratorBase.GetLicenseComment()));

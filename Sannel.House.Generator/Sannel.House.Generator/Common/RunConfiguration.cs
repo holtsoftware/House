@@ -12,6 +12,8 @@ namespace Sannel.House.Generator.Common
 		public String Generator { get; set; }
 		public String TestBuilder { get; set; }
 		public String HttpBuilder { get; set; }
+
+		public String TaskBuilder { get; set; }
 										   /*"Name":  "Controller",
 											   "Directory":  "Web\\Controllers",
 											   "FileName":  "{TypeName}Controller.cs",

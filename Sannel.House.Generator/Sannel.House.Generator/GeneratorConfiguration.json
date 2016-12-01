@@ -35,6 +35,14 @@
 			"Class":  "Sannel.House.Generator.Common.UWPHttpClientBuilder"
 		}
 	},
+	"TaskBuilders":  {
+		"UWPTaskBuilder": {
+			"Class":  "Sannel.House.Generator.Common.UWPTaskBuilder"
+		},
+		"TaskBuilder": {
+			"Class":  "Sannel.House.Generator.Common.TaskBuilder"
+		}
+	},
 	"Run": [
 		{
 			"Name":  "Controller",
@@ -82,7 +90,8 @@
 			"FileName":  "ServerContext.Generator.cs",
 			"Generator":  "ServerContextGenerator",
 			"TestBuilder":  null,
-			"HttpBuilder": "UWPHttpBuilder"
+			"HttpBuilder": "UWPHttpBuilder",
+			"TaskBuilder":  "UWPTaskBuilder"
 		}
 	]
 }

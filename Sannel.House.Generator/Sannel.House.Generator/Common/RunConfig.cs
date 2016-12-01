@@ -12,5 +12,6 @@ namespace Sannel.House.Generator.Common
 		public String FileName { get; set; }
 		public ITestBuilder TestBuilder { get; set; }
 		public IHttpClientBuilder HttpBuilder { get; set; }
+		public ITaskBuilder TaskBuilder { get; set; }
     }
 }

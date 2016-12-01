@@ -95,6 +95,17 @@ namespace Sannel.House.Generator
 				}
 			}
 
+			var taskBuilders = new Dictionary<String, ITaskBuilder>();
+			foreach(var taskBuilder in config.TaskBuilders)
+			{
+				Console.WriteLine($"Loading TaskBuilder {taskBuilder.Key}");
+				var c = createInstance<ITaskBuilder>(taskBuilder.Value.Class);
+				if(c != null)
+				{
+					taskBuilders.Add(taskBuilder.Key, c);
+				}
+			}
+
 			var propWithNames = new List<PropertyWithName>();
 			var t = typeof(IDataContext);
 			var ti = t.GetTypeInfo();
@@ -135,6 +146,10 @@ namespace Sannel.House.Generator
 					{
 						r.HttpBuilder = httpBuilders[run.HttpBuilder];
 					}
+					if(run.TaskBuilder != null && taskBuilders.ContainsKey(run.TaskBuilder))
+					{
+						r.TaskBuilder = taskBuilders[run.TaskBuilder];
+					}
 					foreach(var pwn in propWithNames)
 					{
 						Console.WriteLine($"\tGenerating {r.Name} {pwn.PropertyName}");
@@ -151,6 +166,10 @@ namespace Sannel.House.Generator
 					if (run.HttpBuilder != null && httpBuilders.ContainsKey(run.HttpBuilder))
 					{
 						r.HttpBuilder = httpBuilders[run.HttpBuilder];
+					}
+					if(run.TaskBuilder != null && taskBuilders.ContainsKey(run.TaskBuilder))
+					{
+						r.TaskBuilder = taskBuilders[run.TaskBuilder];
 					}
 					generator.Generate(propWithNames, path, r);
 				}
