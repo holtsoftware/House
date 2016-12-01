@@ -472,55 +472,22 @@ namespace Sannel.House.Generator.Generators
 		{
 
 			var key = pi.GetKeyProperty();
-			var method = MethodDeclaration(
-				null,
-
-				$"Get{t.Name}Async"
-			).WithModifiers(
-					TokenList(
-						Token(
-						TriviaList(
-								Trivia(
-									DocumentationCommentTrivia(SyntaxKind.SingleLineDocumentationCommentTrivia)
-									.AddContent(XmlElement(XmlElementStartTag(XmlName("summary")), XmlElementEndTag(XmlName("summary")))
-										.AddContent(
-											XmlText($"Gets the I{t.Name} asynchronous.")
-										),
-										XmlElement(XmlElementStartTag(XmlName("param")), XmlElementEndTag(XmlName("param")))
-											.AddStartTagAttributes(XmlNameAttribute(keyName.Text)),
-										XmlElement(XmlElementStartTag(XmlName("returns")), XmlElementEndTag(XmlName("returns"))),
-										XmlText().AddTextTokens(XmlTextNewLine(Environment.NewLine))
-									)
-								)
-						),
-						SyntaxKind.PublicKeyword,
-						TriviaList())
-				));
-
-			method = method.AddParameterListParameters(
-				Parameter(keyName).WithType(ParseTypeName(pi.GetKeyProperty().PropertyType.Name)));
-
 			var body = new List<StatementSyntax>();
 			body.AddRange(createCommonResultIfStatments(t, pi, $"{t.Name}Result"));
 			body.AddRange(createGetCall(t, pi));
 
-			var amethod = ParenthesizedLambdaExpression(Block(body.ToArray()))
-				.WithAsyncKeyword(Token(SyntaxKind.AsyncKeyword));
+			var method = taskBuilder.AsyncMethod(
+				TypeArgumentList().AddArguments(ParseTypeName($"I{t.Name}")),
+				$"Get{t.Name}Async",
+				Block().AddStatements(body.ToArray())
+				);
 
-			return method.AddBodyStatements(
-				ReturnStatement().WithExpression(
-					InvocationExpression(
-					MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-						InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-							IdentifierName("Task"),
-							IdentifierName("Run")
-						)).WithArgumentList(
-							ArgumentList().AddArguments(Argument(amethod))
-						),
-						IdentifierName("AsAsyncOperation")
-					))
-				)
-			);
+			method = method.AddParameterListParameters(
+				Parameter(keyName).WithType(ParseTypeName(key.PropertyType.Name)));
+
+			method = method.WithModifiers(method.Modifiers.Insert(0, Token(SyntaxKind.PublicKeyword)));
+
+			return method;
 		}
 
 		private ClassDeclarationSyntax addType(PropertyWithName pwn, ClassDeclarationSyntax @class)

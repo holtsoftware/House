@@ -92,6 +92,15 @@
 			"TestBuilder":  null,
 			"HttpBuilder": "UWPHttpBuilder",
 			"TaskBuilder":  "UWPTaskBuilder"
+		},
+		{
+			"Name":  "Server Context Generator (Portable)",
+			"Directory":  "ServerSDK\\Portable",
+			"FileName":  "ServerContext.Generator.cs",
+			"Generator":  "ServerContextGenerator",
+			"TestBuilder":  null,
+			"HttpBuilder": "UWPHttpBuilder",
+			"TaskBuilder":  "TaskBuilder"
 		}
 	]
 }

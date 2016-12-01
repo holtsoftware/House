@@ -4,14 +4,34 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Sannel.House.Generator.Common
 {
 	public class UWPTaskBuilder : ITaskBuilder
 	{
-		public MethodDeclarationSyntax AsyncMethod(TypeArgumentListSyntax list, string name, params StatementSyntax[] statments)
+		public MethodDeclarationSyntax AsyncMethod(TypeArgumentListSyntax list, string name, BlockSyntax body)
 		{
-			return null;
+			var amethod = ParenthesizedLambdaExpression(body)
+				.WithAsyncKeyword(Token(SyntaxKind.AsyncKeyword));
+
+			return MethodDeclaration(
+				GenericName(Identifier("IAsyncOperation"))
+				.WithTypeArgumentList(list),
+				Identifier(name)
+				).AddBodyStatements(
+				ReturnStatement().WithExpression(
+					InvocationExpression(
+					MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+						InvocationExpression(MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
+							IdentifierName("Task"),
+							IdentifierName("Run")
+						)).WithArgumentList(
+							ArgumentList().AddArguments(Argument(amethod))
+						),
+						IdentifierName("AsAsyncOperation")
+					)
+				)));
 		}
 	}
 }

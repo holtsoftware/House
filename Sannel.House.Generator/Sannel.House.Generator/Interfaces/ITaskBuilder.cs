@@ -8,6 +8,6 @@ namespace Sannel.House.Generator.Interfaces
 {
     public interface ITaskBuilder
     {
-		MethodDeclarationSyntax AsyncMethod(TypeArgumentListSyntax list, String name, params StatementSyntax[] statments);		
+		MethodDeclarationSyntax AsyncMethod(TypeArgumentListSyntax list, String name, BlockSyntax body);		
     }
 }
