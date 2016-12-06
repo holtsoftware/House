@@ -24,12 +24,12 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Sannel.House.Generator.Generators
 {
-	public class ServerSDKTestMethodsGenerator : IDisposable
+	public class ServerContextTestsGenerator : IDisposable
 	{
 		private StreamWriter writer;
 		private readonly SyntaxToken key = Identifier("key");
 
-		public ServerSDKTestMethodsGenerator(String baseDirectory)
+		public ServerContextTestsGenerator(String baseDirectory)
 		{
 			var path = Path.Combine(baseDirectory, "ServerSDKTests");
 			if (!Directory.Exists(path))

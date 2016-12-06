@@ -5,16 +5,15 @@ using System.Text;
 
 namespace Sannel.House.Generator.Common
 {
-	public class UWPHttpClientBuilder : IHttpClientBuilder
+	public class HttpClientBuilder : IHttpClientBuilder
 	{
-		public String[] Namespace
+		public string[] Namespace
 		{
 			get
 			{
 				return new String[]
 				{
-					"Windows.Web.Http",
-					"Windows.Web.Http.Filters"
+					"System.Net.Http"
 				};
 			}
 		}
@@ -23,8 +22,9 @@ namespace Sannel.House.Generator.Common
 		{
 			if(String.Compare(code, "ok", true) == 0)
 			{
-				return "Ok";
+				return "OK";
 			}
+
 			return code;
 		}
 	}

@@ -23,6 +23,10 @@
 		"ServerContextGenerator":  {
 			"Type":  "Combined",
 			"Class":  "Sannel.House.Generator.Generators.ServerContextGenerator"
+		},
+		"ServerContextTestsGenerator":  {
+			"Type":  "Combined",
+			"Class":  "Sannel.House.Generator.Generators.ServerContextTestsGenerator"
 		}
 	},
 	"TestBuilders":  {
@@ -33,6 +37,9 @@
 	"HttpBuilders":  {
 		"UWPHttpBuilder":  {
 			"Class":  "Sannel.House.Generator.Common.UWPHttpClientBuilder"
+		},
+		"HttpBuilder":  {
+			"Class":  "Sannel.House.Generator.Common.HttpClientBuilder"
 		}
 	},
 	"TaskBuilders":  {
@@ -102,8 +109,35 @@
 			"FileName":  "ServerContext.Generator.cs",
 			"Generator":  "ServerContextGenerator",
 			"TestBuilder":  null,
-			"HttpBuilder": "UWPHttpBuilder",
-			"TaskBuilder":  "TaskBuilder"
+			"HttpBuilder": "HttpBuilder",
+			"TaskBuilder":  "TaskBuilder",
+			"Variables":  {
+				"IsUWP":  "0"
+			}
+		},
+		{
+			"Name":  "Server Context Tests Generator (UWP)",
+			"Directory":  "ServerSDK\\Tests\\UWP",
+			"FileName":  "ServerContextTests.Generated.cs",
+			"Generator":  "ServerContextTestsGenerator",
+			"TestBuilder":  "XUnintTestBuilder",
+			"HttpBuilder":  "UWPHttpBuilder",
+			"TaskBuilder":  "UWPTaskBuilder",
+			"Variables":  {
+				"IsUWP":  "1"
+			}
+		},
+		{
+			"Name":  "Server Context Tests Generator (Portable)",
+			"Directory":  "ServerSDK\\Tests\\Portable",
+			"FileName":  "ServerContextTests.Generated.cs",
+			"Generator":  "ServerContextTestsGenerator",
+			"TestBuilder":  "XUnintTestBuilder",
+			"HttpBuilder":  "HttpBuilder",
+			"TaskBuilder":  "TaskBuilder",
+			"Variables":  {
+				"IsUWP":  "1"
+			}
 		}
 	]
 }

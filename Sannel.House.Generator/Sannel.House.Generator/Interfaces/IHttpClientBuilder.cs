@@ -10,5 +10,7 @@ namespace Sannel.House.Generator.Interfaces
 		{
 			get;
 		}
+
+		String GetStatusCode(String code);
     }
 }

@@ -302,6 +302,8 @@ namespace Sannel.House.Generator.Generators
 					)
 				).WithTrailingTrivia(Whitespace(Environment.NewLine + Environment.NewLine));
 
+			list.Add(tryStatment);
+
 			var res = Identifier("res");
 			var token = Identifier("token");
 			var item = Identifier("item");
@@ -442,7 +444,7 @@ namespace Sannel.House.Generator.Generators
 					),
 					MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
 						IdentifierName("HttpStatusCode"),
-						IdentifierName("Ok")
+						IdentifierName(httpBuilder.GetStatusCode("Ok"))
 					)
 				),
 				block
