@@ -22,6 +22,20 @@ namespace Sannel.House.Generator
 			return path;
 		}
 
+		public static TValue GetValue<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+		{
+			if(dict == null)
+			{
+				return default(TValue);
+			}
+			if (dict.ContainsKey(key))
+			{
+				return dict[key];
+			}
+
+			return default(TValue);
+		}
+
 		public static PropertyInfo GetSortProperty(this PropertyInfo[] props, out bool isForward)
 		{
 			isForward = true;

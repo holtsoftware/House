@@ -14,6 +14,7 @@ namespace Sannel.House.Generator.Common
 		public String HttpBuilder { get; set; }
 
 		public String TaskBuilder { get; set; }
+		public Dictionary<String, String> Variables { get; set; } = new Dictionary<String, String>();
 										   /*"Name":  "Controller",
 											   "Directory":  "Web\\Controllers",
 											   "FileName":  "{TypeName}Controller.cs",

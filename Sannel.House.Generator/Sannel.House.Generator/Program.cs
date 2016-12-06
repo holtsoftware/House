@@ -135,6 +135,7 @@ namespace Sannel.House.Generator
 				r.Directory = run.Directory;
 				r.FileName = run.FileName;
 				r.Name = run.Name;
+				r.Variables = run.Variables;
 				if (perTypeGenerators.ContainsKey(run.Generator))
 				{
 					var generator = perTypeGenerators[run.Generator];

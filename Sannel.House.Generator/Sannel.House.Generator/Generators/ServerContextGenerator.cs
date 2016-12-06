@@ -32,6 +32,7 @@ namespace Sannel.House.Generator.Generators
 		private SyntaxToken helperName = Identifier("helper");
 		private IHttpClientBuilder httpBuilder;
 		private ITaskBuilder taskBuilder;
+		private Dictionary<String, String> variables { get; set; }
 
 		private StatementSyntax[] createCommonResultIfStatments(Type t, PropertyInfo[] pi, String resultName)
 		{
@@ -182,7 +183,7 @@ namespace Sannel.House.Generator.Generators
 
 			var ce = Identifier("ce");
 
-			list.Add(TryStatement()
+			var tryStatment = TryStatement()
 				.WithBlock(
 					Block(
 					ExpressionStatement(
@@ -205,8 +206,10 @@ namespace Sannel.House.Generator.Generators
 								)
 							)
 					)
-				)))
-				.AddCatches(
+				)));
+			if(String.Compare(variables.GetValue("IsUWP"), "1") == 0)
+			{
+				tryStatment = tryStatment.AddCatches(
 					CatchClause()
 					.WithDeclaration(
 						CatchDeclaration(IdentifierName("COMException"))
@@ -267,7 +270,9 @@ namespace Sannel.House.Generator.Generators
 								)
 							)
 						)
-					),
+					));
+			}
+			tryStatment = tryStatment.AddCatches(
 				CatchClause()
 					.WithDeclaration(
 						CatchDeclaration(IdentifierName("Exception"))
@@ -295,8 +300,7 @@ namespace Sannel.House.Generator.Generators
 							)
 						)
 					)
-				).WithTrailingTrivia(Whitespace(Environment.NewLine + Environment.NewLine))
-			);
+				).WithTrailingTrivia(Whitespace(Environment.NewLine + Environment.NewLine));
 
 			var res = Identifier("res");
 			var token = Identifier("token");
@@ -539,6 +543,7 @@ namespace Sannel.House.Generator.Generators
 					Token(SyntaxKind.PublicKeyword),
 					Token(SyntaxKind.PartialKeyword)
 				);
+			variables = config.Variables;
 
 			foreach(var prop in props)
 			{

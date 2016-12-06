@@ -13,5 +13,6 @@ namespace Sannel.House.Generator.Common
 		public ITestBuilder TestBuilder { get; set; }
 		public IHttpClientBuilder HttpBuilder { get; set; }
 		public ITaskBuilder TaskBuilder { get; set; }
+		public Dictionary<String, String> Variables { get; set; } = new Dictionary<String, String>();
     }
 }

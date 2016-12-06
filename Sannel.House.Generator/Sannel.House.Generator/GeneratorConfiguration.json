@@ -91,7 +91,10 @@
 			"Generator":  "ServerContextGenerator",
 			"TestBuilder":  null,
 			"HttpBuilder": "UWPHttpBuilder",
-			"TaskBuilder":  "UWPTaskBuilder"
+			"TaskBuilder":  "UWPTaskBuilder",
+			"Variables": {
+				"IsUWP":  "1"
+			}
 		},
 		{
 			"Name":  "Server Context Generator (Portable)",
