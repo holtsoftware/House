@@ -14,6 +14,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Sannel.House.Generator.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,91 +22,44 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using Sannel.House.Generator.Common;
 
 namespace Sannel.House.Generator.Generators
 {
-	public class ServerContextTestsGenerator : IDisposable
+	public class ServerContextTestsGenerator : ICombinedGenerator
 	{
-		private StreamWriter writer;
 		private readonly SyntaxToken key = Identifier("key");
+		private Dictionary<String, String> variables;
+		private IHttpClientBuilder clientBuilder;
+		private ITaskBuilder taskBuilder;
+		private ITestBuilder testBuilder;
 
-		public ServerContextTestsGenerator(String baseDirectory)
+		public ServerContextTestsGenerator()
 		{
-			var path = Path.Combine(baseDirectory, "ServerSDKTests");
-			if (!Directory.Exists(path))
-			{
-				Directory.CreateDirectory(path);
-			}
-
-			var serverContext = Path.Combine(path, "ServerContextTests.cs");
-
-			if (File.Exists(serverContext))
-			{
-				File.Delete(serverContext);
-			}
-
-			writer = new StreamWriter(File.OpenWrite(serverContext));
 		}
 
 		private StatementSyntax assertStatment(ExpressionSyntax expected, ExpressionSyntax actual, String method = "AreEqual")
 		{
-			return ExpressionStatement(InvocationExpression(
-				MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
-					IdentifierName("Assert"),
-					IdentifierName(method)
-				)
-			)
-			.AddArgumentListArguments(
-				Argument(expected),
-				Argument(actual)
-			)
-			);
+			if(String.Compare(method, "AreNotEqual", true) == 0)
+			{
+				return ExpressionStatement(testBuilder.AssertAreNotEqual(expected, actual));
+			}
+			return ExpressionStatement(testBuilder.AssertAreEqual(expected, actual));
 		}
 
 		private StatementSyntax assertIsNull(ExpressionSyntax test, String message)
 		{
-			return ExpressionStatement(
-				InvocationExpression(
-					Extensions.MemberAccess(
-						IdentifierName("Assert"),
-						IdentifierName("IsNull")
-					)
-				)
-				.AddArgumentListArguments(
-					Argument(test),
-					Argument(LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(message)))
-				)
-			);
+			return ExpressionStatement(testBuilder.AssertIsNull(test, message));
 		}
+
 		private StatementSyntax assertIsNotNull(ExpressionSyntax test, String message)
 		{
-			return ExpressionStatement(
-				InvocationExpression(
-					Extensions.MemberAccess(
-						IdentifierName("Assert"),
-						IdentifierName("IsNotNull")
-					)
-				)
-				.AddArgumentListArguments(
-					Argument(test),
-					Argument(LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(message)))
-				)
-			);
+			return ExpressionStatement(testBuilder.AssertIsNotNull(test, message));
 		}
+
 		private StatementSyntax assertIsTrue(ExpressionSyntax test, string v)
 		{
-			return ExpressionStatement(
-				InvocationExpression(
-					Extensions.MemberAccess(
-						IdentifierName("Assert"),
-						IdentifierName("IsTrue")
-					)
-				)
-				.AddArgumentListArguments(
-					Argument(test),
-					Argument(v.ToLiteral())
-				)
-			);
+			return ExpressionStatement(testBuilder.AssertIsTrue(test, v));
 		}
 
 		private ArgumentSyntax generateRunTaskWrapper(BlockSyntax blocks, params ParameterSyntax[] parameters)
@@ -176,6 +130,7 @@ namespace Sannel.House.Generator.Generators
 
 			return items.ToArray();
 		}
+
 		private StatementSyntax[] getStandardTests(Type t, SyntaxToken resultsVariable, String status, SyntaxToken keyVariableName)
 		{
 			var items = new List<StatementSyntax>();
@@ -1141,36 +1096,65 @@ namespace Sannel.House.Generator.Generators
 		}
 
 
-		public void AddType(String propertyName, Type t)
+		private ClassDeclarationSyntax addType(PropertyWithName p, ClassDeclarationSyntax @class)
 		{
-			var cu = CompilationUnit();
-			var tn = ParseTypeName(t.Name);
-			var pi = t.GetProperties();
-
-			cu = cu.AddMembers(createGetMethod(t, pi))
+			var tn = ParseTypeName(p.PropertyName);
+			var pi = p.Type.GetProperties();
+			var method = createGetMethod(p.Type, pi)
 				.WithLeadingTrivia(Trivia(RegionDirectiveTrivia(true)
 					.WithEndOfDirectiveToken(
-						Token(TriviaList().Add(PreprocessingMessage(t.Name)),
+						Token(TriviaList().Add(PreprocessingMessage(p.PropertyName)),
 							SyntaxKind.EndOfDirectiveToken,
 							TriviaList())
 					)
 				));
 
-			cu = cu.WithTrailingTrivia(
+			method = method.WithTrailingTrivia(
 				Trivia(
 					EndRegionDirectiveTrivia(true)
 				)
-				);
+			);
 
-			cu.NormalizeWhitespace("\t", true).WriteTo(writer);
-			writer.WriteLine();
-			writer.WriteLine();
-
+			return @class.AddMembers(method);
 		}
 
-		public void Dispose()
+		public void Generate(IList<PropertyWithName> props, string baseSaveDirectory, RunConfig config)
 		{
-			writer.Dispose();
+			var dir = Path.Combine(baseSaveDirectory, config.Directory);
+			if(!Directory.Exists(dir))
+			{
+				Directory.CreateDirectory(dir);
+			}
+
+			clientBuilder = config.HttpBuilder;
+			taskBuilder = config.TaskBuilder;
+			testBuilder = config.TestBuilder;
+
+			var cu = CompilationUnit();
+			cu = cu.AddUsing("System").WithLeadingTrivia(GeneratorBase.GetLicenseComment());
+			cu = cu.AddUsings(clientBuilder.Namespace);
+			cu = cu.AddUsings(testBuilder.Namespaces);
+
+			var namesp = NamespaceDeclaration(IdentifierName("Sannel.House.ServerSDK.Tests"));
+
+			var @class = ClassDeclaration("ServerContextTests")
+				.AddModifiers(Token(SyntaxKind.PublicKeyword),
+				Token(SyntaxKind.PartialKeyword));
+
+			variables = config.Variables;
+
+			foreach(var prop in props)
+			{
+				@class = addType(prop, @class);
+			}
+
+			namesp = namesp.AddMembers(@class);
+
+			cu = cu.AddMembers(namesp).NormalizeWhitespace("\t", true);
+			using(var writer = new StreamWriter(File.OpenWrite(Path.Combine(dir, config.FileName))))
+			{
+				cu.WriteTo(writer);
+			}
 		}
 	}
 }

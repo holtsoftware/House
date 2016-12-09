@@ -9,6 +9,14 @@ namespace Sannel.House.Generator.Common
 {
 	public class XUnitTestBuilder : ITestBuilder
 	{
+		public string[] Namespaces
+		{
+			get
+			{
+				return new String[]{ "XUnit"};
+			}
+		}
+
 		public ExpressionSyntax AssertAreEqual(ExpressionSyntax expected, ExpressionSyntax actual)
 		{
 			return InvocationExpression(
@@ -49,6 +57,16 @@ namespace Sannel.House.Generator.Common
 				);
 		}
 
+		public ExpressionSyntax AssertIsFalse(ExpressionSyntax expression)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ExpressionSyntax AssertIsFalse(ExpressionSyntax expression, string message)
+		{
+			throw new NotImplementedException();
+		}
+
 		public ExpressionSyntax AssertIsNotNull(ExpressionSyntax expression)
 		{
 			return InvocationExpression(
@@ -83,6 +101,20 @@ namespace Sannel.House.Generator.Common
 				).AddArgumentListArguments(
 					Argument(expression)
 				);
+		}
+
+		public ExpressionSyntax AssertIsTrue(ExpressionSyntax expression)
+		{
+			return InvocationExpression(
+					Extensions.MemberAccess("Assert", "True")
+				).AddArgumentListArguments(
+					Argument(expression)
+				);
+		}
+
+		public ExpressionSyntax AssertIsTrue(ExpressionSyntax expression, string message)
+		{
+			return AssertIsTrue(expression);
 		}
 
 		public AttributeSyntax GetClassAttribute()

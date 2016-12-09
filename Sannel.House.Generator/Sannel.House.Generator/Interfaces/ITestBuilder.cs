@@ -7,6 +7,11 @@ namespace Sannel.House.Generator.Interfaces
 {
     public interface ITestBuilder
     {
+		String[] Namespaces
+		{
+			get;
+		}
+
 		AttributeSyntax GetClassAttribute();
 
 		AttributeSyntax GetMethodAttribute();
@@ -19,5 +24,10 @@ namespace Sannel.House.Generator.Interfaces
 		ExpressionSyntax AssertIsNull(ExpressionSyntax expression, String message);
 		ExpressionSyntax AssertIsNotNull(ExpressionSyntax expression);
 		ExpressionSyntax AssertIsNotNull(ExpressionSyntax expression, String message);
+
+		ExpressionSyntax AssertIsTrue(ExpressionSyntax expression);
+		ExpressionSyntax AssertIsTrue(ExpressionSyntax expression, String message);
+		ExpressionSyntax AssertIsFalse(ExpressionSyntax expression);
+		ExpressionSyntax AssertIsFalse(ExpressionSyntax expression, String message);
     }
 }
