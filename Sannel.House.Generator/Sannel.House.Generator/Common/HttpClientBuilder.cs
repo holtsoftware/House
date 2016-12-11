@@ -13,6 +13,7 @@ namespace Sannel.House.Generator.Common
 			{
 				return new String[]
 				{
+					"System.Net",
 					"System.Net.Http"
 				};
 			}

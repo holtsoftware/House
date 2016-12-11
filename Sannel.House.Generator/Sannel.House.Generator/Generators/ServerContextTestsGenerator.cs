@@ -64,32 +64,9 @@ namespace Sannel.House.Generator.Generators
 
 		private ArgumentSyntax generateRunTaskWrapper(BlockSyntax blocks, params ParameterSyntax[] parameters)
 		{
-			return Argument(
-					ParenthesizedLambdaExpression(
-						Block(
-							ReturnStatement(
-								InvocationExpression(
-									Extensions.MemberAccess(
-										InvocationExpression(
-											Extensions.MemberAccess(
-												IdentifierName("Task"),
-												IdentifierName("Run")
-											)
-										).AddArgumentListArguments(
-											Argument(
-												ParenthesizedLambdaExpression(
-													blocks
-												)
-											)
-										),
-										IdentifierName("AsAsyncOperation")
-									)
-								).AddArgumentListArguments()
-							)
-						)
-					).AddParameterListParameters(
-						parameters
-					)
+			return Argument(taskBuilder
+					.ParenthesizedLambdaExpression(blocks)
+					.AddParameterListParameters(parameters)
 				);
 		}
 
@@ -171,7 +148,7 @@ namespace Sannel.House.Generator.Generators
 
 		private AttributeSyntax getTestAttribute()
 		{
-			return Attribute(IdentifierName("TestMethod"));
+			return testBuilder.GetMethodAttribute();
 		}
 
 		public MemberDeclarationSyntax createGetMethod(Type t, PropertyInfo[] pi)

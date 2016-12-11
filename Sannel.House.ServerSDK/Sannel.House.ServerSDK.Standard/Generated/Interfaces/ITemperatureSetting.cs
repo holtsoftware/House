@@ -1,4 +1,4 @@
-﻿/* Copyright 2016 Sannel Software, L.L.C.
+/* Copyright 2016 Sannel Software, L.L.C.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -11,37 +11,70 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using System;
-#if STANDARD
-using System.Net;
-#else
-using Windows.Web.Http;
-#endif
+using Newtonsoft.Json;
+using System;
 
 namespace Sannel.House.ServerSDK
 {
-	public sealed class HttpClientResult
+	public interface ITemperatureSetting
 	{
-		/// <summary>
-		/// Gets or sets the status.
-		/// </summary>
-		/// <value>
-		/// The status.
-		/// </value>
-		public HttpStatusCode StatusCode
+		Int64 Id
 		{
 			get;
 			set;
 		}
 
+		Int32? DayOfWeek
+		{
+			get;
+			set;
+		}
 
-		/// <summary>
-		/// Gets or sets the content.
-		/// </summary>
-		/// <value>
-		/// The content.
-		/// </value>
-		public String Content
+		Int32? Month
+		{
+			get;
+			set;
+		}
+
+		Boolean IsTimeOnly
+		{
+			get;
+			set;
+		}
+
+		DateTimeOffset? StartTime
+		{
+			get;
+			set;
+		}
+
+		DateTimeOffset? EndTime
+		{
+			get;
+			set;
+		}
+
+		Double HeatTemperatureC
+		{
+			get;
+			set;
+		}
+
+		Double CoolTemperatureC
+		{
+			get;
+			set;
+		}
+
+		DateTimeOffset DateCreated
+		{
+			get;
+			set;
+		}
+
+		DateTimeOffset DateModified
 		{
 			get;
 			set;

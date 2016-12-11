@@ -17,9 +17,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if STANDARD
+using System.Net.Http;
+using System.Net;
+#else
 using Windows.Foundation;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
+#endif
 
 namespace Sannel.House.ServerSDK
 {
@@ -30,7 +35,11 @@ namespace Sannel.House.ServerSDK
 	/// <seealso cref="System.IDisposable" />
 	public sealed class ServerHttpClient : IHttpClient, IDisposable
 	{
+#if STANDARD
+		private HttpClientHandler httpFilter = new HttpClientHandler();
+#else
 		private HttpBaseProtocolFilter httpFilter = new HttpBaseProtocolFilter();
+#endif
 		private HttpClient client;
 
 		/// <summary>
@@ -51,10 +60,18 @@ namespace Sannel.House.ServerSDK
 		/// </summary>
 		/// <param name="requestUri">The request URI.</param>
 		/// <returns></returns>
-		public IAsyncOperation<HttpClientResult> GetAsync(Uri requestUri)
+		public
+#if STANDARD
+			async Task<HttpClientResult>
+#else
+			IAsyncOperation<HttpClientResult>
+#endif
+			GetAsync(Uri requestUri)
 		{
+#if !STANDARD
 			return Task.Run(async () =>
 			{
+#endif
 				var result = await client.GetAsync(requestUri);
 				var data = await result.Content.ReadAsStringAsync();
 				return new HttpClientResult()
@@ -62,7 +79,9 @@ namespace Sannel.House.ServerSDK
 					StatusCode = result.StatusCode,
 					Content = data
 				};
+#if !STANDARD
 			}).AsAsyncOperation();
+#endif
 		}
 
 		/// <summary>
@@ -71,8 +90,25 @@ namespace Sannel.House.ServerSDK
 		/// <param name="requestUri">The request URI.</param>
 		/// <param name="data">The data allowed to be null</param>
 		/// <returns></returns>
-		public IAsyncOperation<HttpClientResult> PostAsync(Uri requestUri, IDictionary<string, string> data)
+		public
+#if STANDARD
+			async Task<HttpClientResult>
+#else
+			IAsyncOperation<HttpClientResult>
+#endif
+			PostAsync(Uri requestUri, IDictionary<string, string> data)
 		{
+#if STANDARD
+			FormUrlEncodedContent content;
+			if(data != null)
+			{
+				content = new FormUrlEncodedContent(data);
+			}
+			else
+			{
+				content = new FormUrlEncodedContent(new Dictionary<String, String>());
+			}
+#else
 			return Task.Run(async () =>
 			{
 				HttpFormUrlEncodedContent content;
@@ -84,8 +120,9 @@ namespace Sannel.House.ServerSDK
 				{
 					content = new HttpFormUrlEncodedContent(new Dictionary<String, String>());
 				}
+#endif
 
-				var result = await client.PostAsync(requestUri, content);
+			var result = await client.PostAsync(requestUri, content);
 				var rdata = await result.Content.ReadAsStringAsync();
 
 				return new HttpClientResult()
@@ -93,7 +130,9 @@ namespace Sannel.House.ServerSDK
 					StatusCode = result.StatusCode,
 					Content = rdata
 				};
+#if !STANDARD
 			}).AsAsyncOperation();
+#endif
 		}
 
 		/// <summary>
@@ -105,8 +144,23 @@ namespace Sannel.House.ServerSDK
 		/// <exception cref="NotImplementedException"></exception>
 		public string GetCookieValue(Uri uri, string cookieName)
 		{
+#if STANDARD
+			var cookies = httpFilter.CookieContainer.GetCookies(uri);
+			Cookie c = null;
+			foreach(Cookie cc in cookies)
+#else
 			var cookies = httpFilter.CookieManager.GetCookies(uri);
-			var c = cookies.FirstOrDefault(i => String.Compare(i.Name, cookieName, true) == 0);
+			HttpCookie c = null;
+			foreach(HttpCookie cc in cookies)
+#endif
+			{
+				if(String.Compare(cc.Name, cookieName, true) == 0)
+				{
+					c = cc;
+					break;
+				}
+			}
+
 			if(c != null)
 			{
 				return c.Value;

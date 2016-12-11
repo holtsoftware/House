@@ -114,7 +114,7 @@ namespace Sannel.House.Generator.Generators
 			var con = SF.ConstructorDeclaration(filename);
 			con = con.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
 				.AddParameterListParameters(
-					SF.Parameter(status).WithType(SF.ParseTypeName($"{t.Name}Status")),
+					SF.Parameter(status).WithType(SF.ParseTypeName(ServerSDKStatusConstants.EnumName)),
 					SF.Parameter(item).WithType(getDataType(t)),
 					SF.Parameter(keyName).WithType(SF.ParseTypeName(key.PropertyType.Name)),
 					SF.Parameter(exceptionName).WithType(SF.ParseTypeName("Exception"))
@@ -149,7 +149,7 @@ namespace Sannel.House.Generator.Generators
 
 		protected virtual PropertyDeclarationSyntax createStatusProperty(Type t)
 		{
-			var prop = SF.PropertyDeclaration(SF.ParseTypeName($"{t.Name}Status"), StatusText)
+			var prop = SF.PropertyDeclaration(SF.ParseTypeName(ServerSDKStatusConstants.EnumName), StatusText)
 				.AddModifiers(SF.Token(SyntaxKind.PublicKeyword))
 				.AddAccessorListAccessors(
 					SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration).WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken)),

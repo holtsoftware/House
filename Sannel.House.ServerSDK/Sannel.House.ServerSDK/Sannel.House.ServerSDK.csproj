@@ -112,22 +112,32 @@
       <Link>Extensions.cs</Link>
     </Compile>
     <Compile Include="Enums.cs" />
+    <Compile Include="Generated\Interfaces\IApplicationLogEntry.cs" />
+    <Compile Include="Generated\Interfaces\ICreateHelper.cs" />
+    <Compile Include="Generated\Interfaces\IDevice.cs" />
+    <Compile Include="Generated\Interfaces\ITemperatureEntry.cs" />
+    <Compile Include="Generated\Interfaces\ITemperatureSetting.cs" />
+    <Compile Include="Generated\Results\ApplicationLogEntryResult.cs" />
+    <Compile Include="Generated\Results\ApplicationLogEntryResults.cs" />
+    <Compile Include="Generated\Results\DeviceResult.cs" />
+    <Compile Include="Generated\Results\DeviceResults.cs" />
+    <Compile Include="Generated\Results\TemperatureEntryResult.cs" />
+    <Compile Include="Generated\Results\TemperatureEntryResults.cs" />
+    <Compile Include="Generated\Results\TemperatureSettingResult.cs" />
+    <Compile Include="Generated\Results\TemperatureSettingResults.cs" />
+    <Compile Include="Generated\ServerContext.Generator.cs" />
     <Compile Include="HttpClientResult.cs" />
-    <Compile Include="ICreateHelper.cs" />
-    <Compile Include="IHttpClient.cs" />
-    <Compile Include="IServerContext.cs" />
-    <Compile Include="IServerSettings.cs" />
-    <Compile Include="ITemperatureEntry.cs" />
+    <Compile Include="Interfaces\IHttpClient.cs" />
+    <Compile Include="Interfaces\IServerContext.cs" />
+    <Compile Include="Interfaces\IServerSettings.cs" />
     <Compile Include="LocalExtensions.cs" />
     <Compile Include="LoginResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestStatus.cs" />
     <Compile Include="ServerContext.cs" />
-    <Compile Include="ServerContext.Generated.cs" />
     <Compile Include="ServerHttpClient.cs" />
-    <Compile Include="TemperatureEntryResult.cs" />
-    <Compile Include="TemperatureEntryResults.cs" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

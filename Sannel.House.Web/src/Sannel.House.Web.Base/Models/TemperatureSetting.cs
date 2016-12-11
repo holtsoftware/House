@@ -48,7 +48,7 @@ namespace Sannel.House.Web.Base.Models
 			}
 		}
 
-		private DayOfWeek? dayOfWeek;
+		private int? dayOfWeek;
 		/// <summary>
 		/// Gets or sets the day of week.
 		/// </summary>
@@ -56,7 +56,7 @@ namespace Sannel.House.Web.Base.Models
 		/// The day of week.
 		/// </value>
 		[JsonProperty(nameof(DayOfWeek))]
-		public DayOfWeek? DayOfWeek
+		public int? DayOfWeek
 		{
 			get
 			{
@@ -212,7 +212,7 @@ namespace Sannel.House.Web.Base.Models
 			}
 		}
 
-		private DateTime dateCreated;
+		private DateTimeOffset dateCreated;
 		/// <summary>
 		/// Gets or sets the DateCreated
 		/// </summary>
@@ -221,7 +221,7 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[JsonProperty(nameof(DateCreated))]
 		[JsonConverter(typeof(UtcDateTimeOffsetConverter))]
-		public DateTime DateCreated
+		public DateTimeOffset DateCreated
 		{
 			get
 			{
@@ -234,7 +234,7 @@ namespace Sannel.House.Web.Base.Models
 		}
 
 
-		private DateTime dateModified;
+		private DateTimeOffset dateModified;
 		/// <summary>
 		/// Gets or sets the DateModified
 		/// </summary>
@@ -243,7 +243,7 @@ namespace Sannel.House.Web.Base.Models
 		/// </value>
 		[JsonProperty(nameof(DateModified))]
 		[JsonConverter(typeof(UtcDateTimeOffsetConverter))]
-		public DateTime DateModified
+		public DateTimeOffset DateModified
 		{
 			get
 			{

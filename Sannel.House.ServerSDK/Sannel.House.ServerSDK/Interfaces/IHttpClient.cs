@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-#if !PORTABLE
+#if !STANDARD
 using Windows.Foundation;
 #endif
 
@@ -41,7 +41,7 @@ namespace Sannel.House.ServerSDK
 		/// </summary>
 		/// <param name="requestUri">The request URI.</param>
 		/// <returns></returns>
-#if PORTABLE
+#if STANDARD
 		Task<HttpClientResult> GetAsync(Uri requestUri);
 #else
 		IAsyncOperation<HttpClientResult> GetAsync(Uri requestUri);
@@ -53,7 +53,7 @@ namespace Sannel.House.ServerSDK
 		/// <param name="requestUri">The request URI.</param>
 		/// <param name="data">The data allowed to be null</param>
 		/// <returns></returns>
-#if PORTABLE
+#if STANDARD
 		Task<HttpClientResult> PostAsync(Uri requestUri, IDictionary<String, String> data);
 #else
 		IAsyncOperation<HttpClientResult> PostAsync(Uri requestUri, IDictionary<String, String> data);

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
+using SF = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using Microsoft.CodeAnalysis.CSharp;
 
 namespace Sannel.House.Generator.Common
@@ -20,6 +21,28 @@ namespace Sannel.House.Generator.Common
 				.WithTypeArgumentList(list),
 				Identifier(name)
 				).WithBody(body).AddModifiers(Token(SyntaxKind.AsyncKeyword));
+		}
+
+		public ParenthesizedLambdaExpressionSyntax ParenthesizedLambdaExpression(BlockSyntax blocks)
+		{
+			return SF.ParenthesizedLambdaExpression(
+						Block(
+							ReturnStatement(
+										InvocationExpression(
+											Extensions.MemberAccess(
+												IdentifierName("Task"),
+												IdentifierName("Run")
+											)
+										).AddArgumentListArguments(
+											Argument(
+												SF.ParenthesizedLambdaExpression(
+													blocks
+												)
+											)
+										)
+							)
+						)
+				);
 		}
 	}
 }

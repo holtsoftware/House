@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-#if PORTABLE
+#if STANDARD
 using System.Net;
 #else
 using Windows.Data.Json;
@@ -95,7 +95,7 @@ namespace Sannel.House.ServerSDK
 		/// <returns>First part of the Tuple is true if authenticated false if unable to authenticate for some reason
 		/// The second part of the Tuple is a String the represents the authz token value if we were able to login to the server
 		///		or The error message if we were unable to authenticate to the server.</returns>
-#if PORTABLE
+#if STANDARD
 		public async Task<LoginResult> LoginAsync(String username, String password)
 		{
 #else
@@ -137,7 +137,7 @@ namespace Sannel.House.ServerSDK
 				dict.Add("RememberMe", "true");
 				result = await client.PostAsync(builder.Uri, dict);
 			}
-#if PORTABLE
+#if STANDARD
 			catch(Exception e)
 			{
 				return new LoginResult(LoginStatus.Exception, e.ToString());
@@ -153,7 +153,7 @@ namespace Sannel.House.ServerSDK
 				return new LoginResult(LoginStatus.Exception, ce.ToString());
 			}
 #endif
-#if PORTABLE
+#if STANDARD
 			if(result.StatusCode == HttpStatusCode.OK)
 #else
 			if (result.StatusCode == HttpStatusCode.Ok)
@@ -173,7 +173,7 @@ namespace Sannel.House.ServerSDK
 				}
 			}
 			return new LoginResult(LoginStatus.Error, "Request Error");
-#if PORTABLE
+#if STANDARD
 		}
 #else
 		}).AsAsyncOperation();

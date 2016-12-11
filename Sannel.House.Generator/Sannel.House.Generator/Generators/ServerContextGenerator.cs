@@ -78,7 +78,9 @@ namespace Sannel.House.Generator.Generators
 								Argument(Extensions.MemberAccess(
 									IdentifierName(check),
 									IdentifierName("Item1")
-								))
+								)),
+								Argument(LiteralExpression(SyntaxKind.NullLiteralExpression)),
+								Argument(IdentifierName(keyName))
 							)
 						)
 					)
@@ -483,7 +485,7 @@ namespace Sannel.House.Generator.Generators
 			body.AddRange(createGetCall(t, pi));
 
 			var method = taskBuilder.AsyncMethod(
-				TypeArgumentList().AddArguments(ParseTypeName($"I{t.Name}")),
+				TypeArgumentList().AddArguments(ParseTypeName($"{t.Name}Result")),
 				$"Get{t.Name}Async",
 				Block().AddStatements(body.ToArray())
 				);
@@ -533,9 +535,17 @@ namespace Sannel.House.Generator.Generators
 			}
 			httpBuilder = config.HttpBuilder;
 			taskBuilder = config.TaskBuilder;
+			variables = config.Variables;
 
 			var unit = CompilationUnit();
 			unit = unit.AddUsing("System").WithLeadingTrivia(new SyntaxTriviaList().Add(GeneratorBase.GetLicenseComment()));
+			unit = unit.AddUsing("System.Threading.Tasks");
+			unit = unit.AddUsing("Newtonsoft.Json.Linq");
+			if(String.Compare(variables.GetValue("IsUWP"), "1") == 0)
+			{
+				unit = unit.AddUsing("Windows.Foundation");
+				unit = unit.AddUsing("System.Runtime.InteropServices");
+			}
 			unit = unit.AddUsings(config.HttpBuilder.Namespace);
 
 			var names = NamespaceDeclaration(IdentifierName("Sannel.House.ServerSDK"));
@@ -545,7 +555,6 @@ namespace Sannel.House.Generator.Generators
 					Token(SyntaxKind.PublicKeyword),
 					Token(SyntaxKind.PartialKeyword)
 				);
-			variables = config.Variables;
 
 			foreach(var prop in props)
 			{

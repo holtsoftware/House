@@ -1,4 +1,4 @@
-﻿/* Copyright 2016 Sannel Software, L.L.C.
+/* Copyright 2016 Sannel Software, L.L.C.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -11,37 +11,51 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.*/
+
 using System;
-#if STANDARD
-using System.Net;
-#else
-using Windows.Web.Http;
-#endif
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Sannel.House.ServerSDK
 {
-	public sealed class HttpClientResult
+	public sealed class DeviceResults
 	{
-		/// <summary>
-		/// Gets or sets the status.
-		/// </summary>
-		/// <value>
-		/// The status.
-		/// </value>
-		public HttpStatusCode StatusCode
+		public DeviceResults(RequestStatus status, IList<IDevice> data, Int32 key)
+		{
+			Status = status;
+			Data = data;
+			Key = key;
+		}
+
+		public DeviceResults(RequestStatus status, IList<IDevice> data, Int32 key, Exception exception)
+		{
+			Status = status;
+			Data = data;
+			Key = key;
+			Exception = exception;
+		}
+
+		public RequestStatus Status
 		{
 			get;
 			set;
 		}
 
+		public IList<IDevice> Data
+		{
+			get;
+			set;
+		}
 
-		/// <summary>
-		/// Gets or sets the content.
-		/// </summary>
-		/// <value>
-		/// The content.
-		/// </value>
-		public String Content
+		public Int32 Key
+		{
+			get;
+			set;
+		}
+
+		public Exception Exception
 		{
 			get;
 			set;

@@ -13,43 +13,49 @@
    limitations under the License.*/
 
 using System;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Sannel.House.ServerSDK
 {
-	public interface ITemperatureEntry
+	public sealed class ApplicationLogEntryResult
 	{
-		Guid Id
+		public ApplicationLogEntryResult(RequestStatus status, IApplicationLogEntry data, Guid key)
+		{
+			Status = status;
+			Data = data;
+			Key = key;
+		}
+
+		public ApplicationLogEntryResult(RequestStatus status, IApplicationLogEntry data, Guid key, Exception exception)
+		{
+			Status = status;
+			Data = data;
+			Key = key;
+			Exception = exception;
+		}
+
+		public RequestStatus Status
 		{
 			get;
 			set;
 		}
 
-		Int32 DeviceId
+		public IApplicationLogEntry Data
 		{
 			get;
 			set;
 		}
 
-		Double TemperatureCelsius
+		public Guid Key
 		{
 			get;
 			set;
 		}
 
-		Double Humidity
-		{
-			get;
-			set;
-		}
-
-		Double Pressure
-		{
-			get;
-			set;
-		}
-
-		DateTimeOffset CreatedDateTime
+		public Exception Exception
 		{
 			get;
 			set;

@@ -27,11 +27,18 @@
 		"ServerContextTestsGenerator":  {
 			"Type":  "Combined",
 			"Class":  "Sannel.House.Generator.Generators.ServerContextTestsGenerator"
+		},
+		"ICreateGenerator": {
+			"Type": "Combined",
+			"Class":  "Sannel.House.Generator.Generators.ICreateGenerator"
 		}
 	},
 	"TestBuilders":  {
 		"XUnit": {
 			"Class":  "Sannel.House.Generator.Common.XUnitTestBuilder"
+		},
+		"UWPUnit": {
+			"Class":  "Sannel.House.Generator.Common.UWPMSTestBuilder"
 		}
 	},
 	"HttpBuilders":  {
@@ -120,7 +127,7 @@
 			"Directory":  "ServerSDK\\Tests\\UWP",
 			"FileName":  "ServerContextTests.Generated.cs",
 			"Generator":  "ServerContextTestsGenerator",
-			"TestBuilder":  "XUnit",
+			"TestBuilder":  "UWPUnit",
 			"HttpBuilder":  "UWPHttpBuilder",
 			"TaskBuilder":  "UWPTaskBuilder",
 			"Variables":  {
@@ -138,6 +145,15 @@
 			"Variables":  {
 				"IsUWP":  "1"
 			}
+		},
+		{
+			"Name": "ICreate Generator",
+			"Directory":  "ServerSDK\\Interfaces",
+			"FileName":  "ICreateHelper.cs",
+			"Generator": "ICreateGenerator",
+			"TestBuilder": null,
+			"HttpBuilder": null,
+			"TaskBuilder":  null
 		}
 	]
 }
