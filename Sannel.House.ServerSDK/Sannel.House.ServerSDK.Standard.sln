@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sannel.House.ServerSDK.Standard", "Sannel.House.ServerSDK.Standard\Sannel.House.ServerSDK.Standard.xproj", "{DD4466A9-C956-4977-BA6E-A4C3048ABF1F}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sannel.House.ServerSDK.Standard.Tests", "Sannel.House.ServerSDK.Standard.Tests\Sannel.House.ServerSDK.Standard.Tests.xproj", "{41181D30-676E-4992-A6CE-DC80996BA383}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DD4466A9-C956-4977-BA6E-A4C3048ABF1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD4466A9-C956-4977-BA6E-A4C3048ABF1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD4466A9-C956-4977-BA6E-A4C3048ABF1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41181D30-676E-4992-A6CE-DC80996BA383}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41181D30-676E-4992-A6CE-DC80996BA383}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41181D30-676E-4992-A6CE-DC80996BA383}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41181D30-676E-4992-A6CE-DC80996BA383}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
