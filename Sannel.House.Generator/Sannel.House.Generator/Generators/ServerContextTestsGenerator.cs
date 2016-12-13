@@ -454,7 +454,7 @@ namespace Sannel.House.Generator.Generators
 							InvocationExpression(
 								Extensions.MemberAccess(
 									IdentifierName(serverContext),
-									IdentifierName("GetTemperatureEntryAsync")
+									IdentifierName($"Get{t.Name}Async")
 								)
 							).AddArgumentListArguments(
 								Argument(IdentifierName(key))
@@ -476,12 +476,7 @@ namespace Sannel.House.Generator.Generators
 				ExpressionStatement(
 					AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
 						IdentifierName(key),
-						InvocationExpression(
-							Extensions.MemberAccess(
-								IdentifierName("Guid"),
-								IdentifierName("NewGuid")
-							)
-						).AddArgumentListArguments()
+						keySy.GetRandomValue(rand)
 					)
 				).WithLeadingTrivia(Comment("// Unable to connect to server")),
 				ExpressionStatement(
@@ -589,77 +584,80 @@ namespace Sannel.House.Generator.Generators
 						IdentifierName("Exception"))
 			));
 
-			method = method.AddBodyStatements(
-				ExpressionStatement(
-					AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-						IdentifierName(methodHit),
-						LiteralExpression(SyntaxKind.FalseLiteralExpression)
-					)
-				).WithLeadingTrivia(Comment("// COMException ")),
-				ExpressionStatement(
-					InvocationExpression(
-						Extensions.MemberAccess(
-							IdentifierName(httpClient),
-							IdentifierName("GetAsync")
+			if (String.Compare(variables.GetValue("IsUWP"), "1", true) == 0)
+			{
+				method = method.AddBodyStatements(
+					ExpressionStatement(
+						AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+							IdentifierName(methodHit),
+							LiteralExpression(SyntaxKind.FalseLiteralExpression)
 						)
-					).AddArgumentListArguments(
-						generateRunTaskWrapper(
-							Block(
-								ExpressionStatement(
-									AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-										IdentifierName(methodHit),
-										LiteralExpression(SyntaxKind.TrueLiteralExpression)
-									)
-								),
-								ExpressionStatement(
-									AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-										IdentifierName(expectedException),
-										ObjectCreationExpression(ParseTypeName("COMException"))
-										.AddArgumentListArguments(
-											Argument("Message2".ToLiteral())
+					).WithLeadingTrivia(Comment("// COMException ")),
+					ExpressionStatement(
+						InvocationExpression(
+							Extensions.MemberAccess(
+								IdentifierName(httpClient),
+								IdentifierName("GetAsync")
+							)
+						).AddArgumentListArguments(
+							generateRunTaskWrapper(
+								Block(
+									ExpressionStatement(
+										AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+											IdentifierName(methodHit),
+											LiteralExpression(SyntaxKind.TrueLiteralExpression)
 										)
+									),
+									ExpressionStatement(
+										AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+											IdentifierName(expectedException),
+											ObjectCreationExpression(ParseTypeName("COMException"))
+											.AddArgumentListArguments(
+												Argument("Message2".ToLiteral())
+											)
+										)
+									),
+									ThrowStatement(
+										IdentifierName(expectedException)
+									),
+									ReturnStatement(
+										ObjectCreationExpression(ParseTypeName("HttpClientResult"))
+										.AddArgumentListArguments()
 									)
 								),
-								ThrowStatement(
-									IdentifierName(expectedException)
-								),
-								ReturnStatement(
-									ObjectCreationExpression(ParseTypeName("HttpClientResult"))
-									.AddArgumentListArguments()
-								)
-							),
-							Parameter(uri)
-						)
-					)
-				),
-				ExpressionStatement(
-					AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
-						IdentifierName(results),
-						AwaitExpression(
-							InvocationExpression(
-								Extensions.MemberAccess(
-									IdentifierName(serverContext),
-									IdentifierName($"Get{t.Name}Async")
-								)
-							).AddArgumentListArguments(
-								Argument(IdentifierName(key))
+								Parameter(uri)
 							)
 						)
+					),
+					ExpressionStatement(
+						AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+							IdentifierName(results),
+							AwaitExpression(
+								InvocationExpression(
+									Extensions.MemberAccess(
+										IdentifierName(serverContext),
+										IdentifierName($"Get{t.Name}Async")
+									)
+								).AddArgumentListArguments(
+									Argument(IdentifierName(key))
+								)
+							)
+						)
+					),
+					assertIsTrue(IdentifierName(methodHit), "Method not called")
+				);
+				method = method.AddBodyStatements(
+					getStandardTests(t, results, "Exception", key)
+				);
+				method = method.AddBodyStatements(
+					assertStatment(IdentifierName(expectedException),
+						Extensions.MemberAccess(
+							IdentifierName(results),
+							IdentifierName("Exception")
+						)
 					)
-				),
-				assertIsTrue(IdentifierName(methodHit), "Method not called")
-			);
-			method = method.AddBodyStatements(
-				getStandardTests(t, results, "Exception", key)
-			);
-			method = method.AddBodyStatements(
-				assertStatment(IdentifierName(expectedException),
-					Extensions.MemberAccess(
-						IdentifierName(results),
-						IdentifierName("Exception")
-					)
-				)
-			);
+				);
+			}
 
 			method = method.AddBodyStatements(
 				ExpressionStatement(
@@ -1106,11 +1104,23 @@ namespace Sannel.House.Generator.Generators
 			clientBuilder = config.HttpBuilder;
 			taskBuilder = config.TaskBuilder;
 			testBuilder = config.TestBuilder;
+			variables = config.Variables;
 
 			var cu = CompilationUnit();
 			cu = cu.AddUsing("System").WithLeadingTrivia(GeneratorBase.GetLicenseComment());
+			cu = cu.AddUsings(new string[]
+			{
+				"System.Threading.Tasks",
+				"Newtonsoft.Json",
+				"Newtonsoft.Json.Linq"
+			});
 			cu = cu.AddUsings(clientBuilder.Namespace);
 			cu = cu.AddUsings(testBuilder.Namespaces);
+
+			if(String.Compare(variables.GetValue("IsUWP"), "1", true) == 0)
+			{
+				cu = cu.AddUsing("System.Runtime.InteropServices");
+			}
 
 			var namesp = NamespaceDeclaration(IdentifierName("Sannel.House.ServerSDK.Tests"));
 
@@ -1118,7 +1128,6 @@ namespace Sannel.House.Generator.Generators
 				.AddModifiers(Token(SyntaxKind.PublicKeyword),
 				Token(SyntaxKind.PartialKeyword));
 
-			variables = config.Variables;
 
 			foreach(var prop in props)
 			{

@@ -1,1 +1,0 @@
-../../Sannel.House.ServerSDK/Interfaces/IServerContext.cs

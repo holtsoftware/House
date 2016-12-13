@@ -38,11 +38,15 @@ namespace Sannel.House.Generator
 		public static void Main(string[] args)
 		{
 			var path = "bin\\Generated";
-			if (Directory.Exists(path))
+			try
 			{
-				Directory.Delete(path, true);
+				if (Directory.Exists(path))
+				{
+					Directory.Delete(path, true);
+				}
+				Directory.CreateDirectory(path);
 			}
-			Directory.CreateDirectory(path);
+			catch (Exception) { }
 
 			Console.WriteLine("Loading Configuration");
 			var generatorConfiguration = File.ReadAllText("GeneratorConfiguration.json");

@@ -4,6 +4,6 @@
     <NuGetPackageRoot>$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
   </PropertyGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)etg.simplestubs\2.3.0\build\Etg.SimpleStubs.targets" Condition="Exists('$(NuGetPackageRoot)etg.simplestubs\2.3.0\build\Etg.SimpleStubs.targets')" />
+    <Import Project="$(NuGetPackageRoot)etg.simplestubs\2.3.1\build\Etg.SimpleStubs.targets" Condition="Exists('$(NuGetPackageRoot)etg.simplestubs\2.3.1\build\Etg.SimpleStubs.targets')" />
   </ImportGroup>
 </Project>
