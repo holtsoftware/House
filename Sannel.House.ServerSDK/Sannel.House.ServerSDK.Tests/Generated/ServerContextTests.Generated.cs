@@ -59,7 +59,7 @@ namespace Sannel.House.ServerSDK.Tests
 			var httpClient = new StubIHttpClient();
 			// Server 
 			var serverContext = new ServerContext(settings, create, httpClient);
-			Int32 key = 172;
+			Int32 key = 179;
 			// leading
 			var results = await serverContext.GetDeviceAsync(key);
 			Assert.AreEqual(RequestStatus.ServerUriNotSet, results.Status);
@@ -87,7 +87,7 @@ namespace Sannel.House.ServerSDK.Tests
 			Assert.IsNull(results.Data, "Data should not be null");
 			Assert.AreEqual(0, results.Key);
 			// Unable to connect to server
-			key = 79;
+			key = 137;
 			settings.ServerUri_Get(() => new Uri("http://test"));
 			Exception expectedException = null;
 			bool methodHit = false;
@@ -180,10 +180,10 @@ namespace Sannel.House.ServerSDK.Tests
 			// Success Test
 			var exp = new StubIDevice();
 			exp.Id_Get(() => key);
-			exp.Name_Get(() => "tsqsmjarpjf");
-			exp.Description_Get(() => "vjajillmjmqjmc");
-			exp.DisplayOrder_Get(() => 167);
-			exp.DateCreated_Get(() => new DateTimeOffset(1982, 7, 3, 5, 27, 58, TimeSpan.FromHours(-7)));
+			exp.Name_Get(() => "gntloguqyqftfqllcsrkqtoyosk");
+			exp.Description_Get(() => "oexoalbgrnxhwvgkvhvchtgve");
+			exp.DisplayOrder_Get(() => 56);
+			exp.DateCreated_Get(() => new DateTimeOffset(1987, 6, 26, 20, 53, 50, TimeSpan.FromHours(-5)));
 			exp.IsReadOnly_Get(() => false);
 			IDevice expected = exp;
 			var jobj = new JObject();
@@ -268,7 +268,7 @@ namespace Sannel.House.ServerSDK.Tests
 			var httpClient = new StubIHttpClient();
 			// Server 
 			var serverContext = new ServerContext(settings, create, httpClient);
-			Int64 key = 139;
+			Int64 key = 51;
 			// leading
 			var results = await serverContext.GetTemperatureSettingAsync(key);
 			Assert.AreEqual(RequestStatus.ServerUriNotSet, results.Status);
@@ -296,7 +296,7 @@ namespace Sannel.House.ServerSDK.Tests
 			Assert.IsNull(results.Data, "Data should not be null");
 			Assert.AreEqual(0, results.Key);
 			// Unable to connect to server
-			key = 159;
+			key = 76;
 			settings.ServerUri_Get(() => new Uri("http://test"));
 			Exception expectedException = null;
 			bool methodHit = false;
@@ -389,15 +389,15 @@ namespace Sannel.House.ServerSDK.Tests
 			// Success Test
 			var exp = new StubITemperatureSetting();
 			exp.Id_Get(() => key);
-			exp.DayOfWeek_Get(() => 116);
-			exp.Month_Get(() => 194);
+			exp.DayOfWeek_Get(() => 9);
+			exp.Month_Get(() => 131);
 			exp.IsTimeOnly_Get(() => true);
-			exp.StartTime_Get(() => new DateTimeOffset(2007, 6, 2, 6, 34, 45, TimeSpan.FromHours(-7)));
-			exp.EndTime_Get(() => new DateTimeOffset(2005, 1, 20, 5, 40, 20, TimeSpan.FromHours(-5)));
-			exp.HeatTemperatureC_Get(() => 0.15275931412016941);
-			exp.CoolTemperatureC_Get(() => 0.46716571807263685);
-			exp.DateCreated_Get(() => new DateTimeOffset(1985, 1, 17, 23, 19, 16, TimeSpan.FromHours(-5)));
-			exp.DateModified_Get(() => new DateTimeOffset(1988, 11, 17, 13, 7, 33, TimeSpan.FromHours(-5)));
+			exp.StartTime_Get(() => new DateTimeOffset(2007, 8, 16, 6, 43, 26, TimeSpan.FromHours(-6)));
+			exp.EndTime_Get(() => new DateTimeOffset(2003, 7, 27, 5, 23, 23, TimeSpan.FromHours(-5)));
+			exp.HeatTemperatureC_Get(() => 0.29844863586986842);
+			exp.CoolTemperatureC_Get(() => 0.8659522150950284);
+			exp.DateCreated_Get(() => new DateTimeOffset(2002, 2, 7, 8, 52, 43, TimeSpan.FromHours(-6)));
+			exp.DateModified_Get(() => new DateTimeOffset(1985, 4, 19, 19, 36, 22, TimeSpan.FromHours(-7)));
 			ITemperatureSetting expected = exp;
 			var jobj = new JObject();
 			jobj.Add(new JProperty(nameof(expected.Id), expected.Id));
@@ -598,11 +598,11 @@ namespace Sannel.House.ServerSDK.Tests
 			// Success Test
 			var exp = new StubIApplicationLogEntry();
 			exp.Id_Get(() => key);
-			exp.DeviceId_Get(() => 139);
-			exp.ApplicationId_Get(() => "oymtlbfosirasfqiudldbpyig");
-			exp.Message_Get(() => "fwoocnrpllisqpfaavclgcuwr");
-			exp.Exception_Get(() => "xnsyaemruhyefdicsfybmuwaocfu");
-			exp.CreatedDate_Get(() => new DateTimeOffset(1998, 2, 4, 16, 51, 12, TimeSpan.FromHours(-6)));
+			exp.DeviceId_Get(() => 18);
+			exp.ApplicationId_Get(() => "nvnwjccgmexjlorqhcvhqlunp");
+			exp.Message_Get(() => "hjfspsjidfohinbkfoyjixrgh");
+			exp.Exception_Get(() => "btdbbagourasnfyckmcyt");
+			exp.CreatedDate_Get(() => new DateTimeOffset(1991, 3, 7, 7, 15, 33, TimeSpan.FromHours(-7)));
 			IApplicationLogEntry expected = exp;
 			var jobj = new JObject();
 			jobj.Add(new JProperty(nameof(expected.Id), expected.Id));
@@ -795,11 +795,11 @@ namespace Sannel.House.ServerSDK.Tests
 			// Success Test
 			var exp = new StubITemperatureEntry();
 			exp.Id_Get(() => key);
-			exp.DeviceId_Get(() => 139);
-			exp.TemperatureCelsius_Get(() => 0.79499042769660733);
-			exp.Humidity_Get(() => 0.579138017063559);
-			exp.Pressure_Get(() => 0.97136367669858215);
-			exp.CreatedDateTime_Get(() => new DateTimeOffset(1998, 9, 13, 2, 14, 34, TimeSpan.FromHours(-5)));
+			exp.DeviceId_Get(() => 18);
+			exp.TemperatureCelsius_Get(() => 0.781149737434997);
+			exp.Humidity_Get(() => 0.52534901980559756);
+			exp.Pressure_Get(() => 0.857609007906918);
+			exp.CreatedDateTime_Get(() => new DateTimeOffset(1999, 10, 10, 3, 7, 15, TimeSpan.FromHours(-6)));
 			ITemperatureEntry expected = exp;
 			var jobj = new JObject();
 			jobj.Add(new JProperty(nameof(expected.Id), expected.Id));

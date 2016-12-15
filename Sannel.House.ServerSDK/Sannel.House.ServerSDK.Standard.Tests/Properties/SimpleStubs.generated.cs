@@ -1,162 +1,11 @@
 using System;
 using System.Runtime.CompilerServices;
 using Etg.SimpleStubs;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Newtonsoft.Json;
-
-namespace Sannel.House.ServerSDK
-{
-    [CompilerGenerated]
-    public class StubIHttpClient : IHttpClient
-    {
-        private readonly StubContainer<StubIHttpClient> _stubs = new StubContainer<StubIHttpClient>();
-
-        string global::Sannel.House.ServerSDK.IHttpClient.GetCookieValue(global::System.Uri uri, string cookieName)
-        {
-            return _stubs.GetMethodStub<GetCookieValue_Uri_String_Delegate>("GetCookieValue").Invoke(uri, cookieName);
-        }
-
-        public delegate string GetCookieValue_Uri_String_Delegate(global::System.Uri uri, string cookieName);
-
-        public StubIHttpClient GetCookieValue(GetCookieValue_Uri_String_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-
-        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> global::Sannel.House.ServerSDK.IHttpClient.GetAsync(global::System.Uri requestUri)
-        {
-            return _stubs.GetMethodStub<GetAsync_Uri_Delegate>("GetAsync").Invoke(requestUri);
-        }
-
-        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> GetAsync_Uri_Delegate(global::System.Uri requestUri);
-
-        public StubIHttpClient GetAsync(GetAsync_Uri_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-
-        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> global::Sannel.House.ServerSDK.IHttpClient.PostAsync(global::System.Uri requestUri, global::System.Collections.Generic.IDictionary<string, string> data)
-        {
-            return _stubs.GetMethodStub<PostAsync_Uri_IDictionaryOfStringString_Delegate>("PostAsync").Invoke(requestUri, data);
-        }
-
-        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.HttpClientResult> PostAsync_Uri_IDictionaryOfStringString_Delegate(global::System.Uri requestUri, global::System.Collections.Generic.IDictionary<string, string> data);
-
-        public StubIHttpClient PostAsync(PostAsync_Uri_IDictionaryOfStringString_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-
-        void global::System.IDisposable.Dispose()
-        {
-            _stubs.GetMethodStub<IDisposable_Dispose_Delegate>("Dispose").Invoke();
-        }
-
-        public delegate void IDisposable_Dispose_Delegate();
-
-        public StubIHttpClient Dispose(IDisposable_Dispose_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-    }
-}
-
-namespace Sannel.House.ServerSDK
-{
-    [CompilerGenerated]
-    public class StubIServerContext : IServerContext
-    {
-        private readonly StubContainer<StubIServerContext> _stubs = new StubContainer<StubIServerContext>();
-
-        bool global::Sannel.House.ServerSDK.IServerContext.IsAuthenticated
-        {
-            get
-            {
-                return _stubs.GetMethodStub<IsAuthenticated_Get_Delegate>("get_IsAuthenticated").Invoke();
-            }
-        }
-
-        global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.LoginResult> global::Sannel.House.ServerSDK.IServerContext.LoginAsync(string username, string password)
-        {
-            return _stubs.GetMethodStub<LoginAsync_String_String_Delegate>("LoginAsync").Invoke(username, password);
-        }
-
-        public delegate global::Windows.Foundation.IAsyncOperation<global::Sannel.House.ServerSDK.LoginResult> LoginAsync_String_String_Delegate(string username, string password);
-
-        public StubIServerContext LoginAsync(LoginAsync_String_String_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-
-        public delegate bool IsAuthenticated_Get_Delegate();
-
-        public StubIServerContext IsAuthenticated_Get(IsAuthenticated_Get_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-
-        void global::System.IDisposable.Dispose()
-        {
-            _stubs.GetMethodStub<IDisposable_Dispose_Delegate>("Dispose").Invoke();
-        }
-
-        public delegate void IDisposable_Dispose_Delegate();
-
-        public StubIServerContext Dispose(IDisposable_Dispose_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-    }
-}
-
-namespace Sannel.House.ServerSDK
-{
-    [CompilerGenerated]
-    public class StubIServerSettings : IServerSettings
-    {
-        private readonly StubContainer<StubIServerSettings> _stubs = new StubContainer<StubIServerSettings>();
-
-        global::System.Uri global::Sannel.House.ServerSDK.IServerSettings.ServerUri
-        {
-            get
-            {
-                return _stubs.GetMethodStub<ServerUri_Get_Delegate>("get_ServerUri").Invoke();
-            }
-
-            set
-            {
-                _stubs.GetMethodStub<ServerUri_Set_Delegate>("put_ServerUri").Invoke(value);
-            }
-        }
-
-        public delegate global::System.Uri ServerUri_Get_Delegate();
-
-        public StubIServerSettings ServerUri_Get(ServerUri_Get_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-
-        public delegate void ServerUri_Set_Delegate(global::System.Uri value);
-
-        public StubIServerSettings ServerUri_Set(ServerUri_Set_Delegate del, int count = Times.Forever, bool overwrite = false)
-        {
-            _stubs.SetMethodStub(del, count, overwrite);
-            return this;
-        }
-    }
-}
 
 namespace Sannel.House.ServerSDK
 {
@@ -174,7 +23,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Id_Set_Delegate>("put_Id").Invoke(value);
+                _stubs.GetMethodStub<Id_Set_Delegate>("set_Id").Invoke(value);
             }
         }
 
@@ -187,7 +36,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DeviceId_Set_Delegate>("put_DeviceId").Invoke(value);
+                _stubs.GetMethodStub<DeviceId_Set_Delegate>("set_DeviceId").Invoke(value);
             }
         }
 
@@ -200,7 +49,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<ApplicationId_Set_Delegate>("put_ApplicationId").Invoke(value);
+                _stubs.GetMethodStub<ApplicationId_Set_Delegate>("set_ApplicationId").Invoke(value);
             }
         }
 
@@ -213,7 +62,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Message_Set_Delegate>("put_Message").Invoke(value);
+                _stubs.GetMethodStub<Message_Set_Delegate>("set_Message").Invoke(value);
             }
         }
 
@@ -226,7 +75,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Exception_Set_Delegate>("put_Exception").Invoke(value);
+                _stubs.GetMethodStub<Exception_Set_Delegate>("set_Exception").Invoke(value);
             }
         }
 
@@ -239,7 +88,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<CreatedDate_Set_Delegate>("put_CreatedDate").Invoke(value);
+                _stubs.GetMethodStub<CreatedDate_Set_Delegate>("set_CreatedDate").Invoke(value);
             }
         }
 
@@ -418,7 +267,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Id_Set_Delegate>("put_Id").Invoke(value);
+                _stubs.GetMethodStub<Id_Set_Delegate>("set_Id").Invoke(value);
             }
         }
 
@@ -431,7 +280,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Name_Set_Delegate>("put_Name").Invoke(value);
+                _stubs.GetMethodStub<Name_Set_Delegate>("set_Name").Invoke(value);
             }
         }
 
@@ -444,7 +293,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Description_Set_Delegate>("put_Description").Invoke(value);
+                _stubs.GetMethodStub<Description_Set_Delegate>("set_Description").Invoke(value);
             }
         }
 
@@ -457,7 +306,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DisplayOrder_Set_Delegate>("put_DisplayOrder").Invoke(value);
+                _stubs.GetMethodStub<DisplayOrder_Set_Delegate>("set_DisplayOrder").Invoke(value);
             }
         }
 
@@ -470,7 +319,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DateCreated_Set_Delegate>("put_DateCreated").Invoke(value);
+                _stubs.GetMethodStub<DateCreated_Set_Delegate>("set_DateCreated").Invoke(value);
             }
         }
 
@@ -483,7 +332,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<IsReadOnly_Set_Delegate>("put_IsReadOnly").Invoke(value);
+                _stubs.GetMethodStub<IsReadOnly_Set_Delegate>("set_IsReadOnly").Invoke(value);
             }
         }
 
@@ -601,7 +450,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Id_Set_Delegate>("put_Id").Invoke(value);
+                _stubs.GetMethodStub<Id_Set_Delegate>("set_Id").Invoke(value);
             }
         }
 
@@ -614,7 +463,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DeviceId_Set_Delegate>("put_DeviceId").Invoke(value);
+                _stubs.GetMethodStub<DeviceId_Set_Delegate>("set_DeviceId").Invoke(value);
             }
         }
 
@@ -627,7 +476,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<TemperatureCelsius_Set_Delegate>("put_TemperatureCelsius").Invoke(value);
+                _stubs.GetMethodStub<TemperatureCelsius_Set_Delegate>("set_TemperatureCelsius").Invoke(value);
             }
         }
 
@@ -640,7 +489,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Humidity_Set_Delegate>("put_Humidity").Invoke(value);
+                _stubs.GetMethodStub<Humidity_Set_Delegate>("set_Humidity").Invoke(value);
             }
         }
 
@@ -653,7 +502,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Pressure_Set_Delegate>("put_Pressure").Invoke(value);
+                _stubs.GetMethodStub<Pressure_Set_Delegate>("set_Pressure").Invoke(value);
             }
         }
 
@@ -666,7 +515,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<CreatedDateTime_Set_Delegate>("put_CreatedDateTime").Invoke(value);
+                _stubs.GetMethodStub<CreatedDateTime_Set_Delegate>("set_CreatedDateTime").Invoke(value);
             }
         }
 
@@ -784,7 +633,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Id_Set_Delegate>("put_Id").Invoke(value);
+                _stubs.GetMethodStub<Id_Set_Delegate>("set_Id").Invoke(value);
             }
         }
 
@@ -797,7 +646,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DayOfWeek_Set_Delegate>("put_DayOfWeek").Invoke(value);
+                _stubs.GetMethodStub<DayOfWeek_Set_Delegate>("set_DayOfWeek").Invoke(value);
             }
         }
 
@@ -810,7 +659,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<Month_Set_Delegate>("put_Month").Invoke(value);
+                _stubs.GetMethodStub<Month_Set_Delegate>("set_Month").Invoke(value);
             }
         }
 
@@ -823,7 +672,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<IsTimeOnly_Set_Delegate>("put_IsTimeOnly").Invoke(value);
+                _stubs.GetMethodStub<IsTimeOnly_Set_Delegate>("set_IsTimeOnly").Invoke(value);
             }
         }
 
@@ -836,7 +685,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<StartTime_Set_Delegate>("put_StartTime").Invoke(value);
+                _stubs.GetMethodStub<StartTime_Set_Delegate>("set_StartTime").Invoke(value);
             }
         }
 
@@ -849,7 +698,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<EndTime_Set_Delegate>("put_EndTime").Invoke(value);
+                _stubs.GetMethodStub<EndTime_Set_Delegate>("set_EndTime").Invoke(value);
             }
         }
 
@@ -862,7 +711,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<HeatTemperatureC_Set_Delegate>("put_HeatTemperatureC").Invoke(value);
+                _stubs.GetMethodStub<HeatTemperatureC_Set_Delegate>("set_HeatTemperatureC").Invoke(value);
             }
         }
 
@@ -875,7 +724,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<CoolTemperatureC_Set_Delegate>("put_CoolTemperatureC").Invoke(value);
+                _stubs.GetMethodStub<CoolTemperatureC_Set_Delegate>("set_CoolTemperatureC").Invoke(value);
             }
         }
 
@@ -888,7 +737,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DateCreated_Set_Delegate>("put_DateCreated").Invoke(value);
+                _stubs.GetMethodStub<DateCreated_Set_Delegate>("set_DateCreated").Invoke(value);
             }
         }
 
@@ -901,7 +750,7 @@ namespace Sannel.House.ServerSDK
 
             set
             {
-                _stubs.GetMethodStub<DateModified_Set_Delegate>("put_DateModified").Invoke(value);
+                _stubs.GetMethodStub<DateModified_Set_Delegate>("set_DateModified").Invoke(value);
             }
         }
 
@@ -1060,6 +909,156 @@ namespace Sannel.House.ServerSDK
         public delegate void DateModified_Set_Delegate(global::System.DateTimeOffset value);
 
         public StubITemperatureSetting DateModified_Set(DateModified_Set_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+    }
+}
+
+namespace Sannel.House.ServerSDK
+{
+    [CompilerGenerated]
+    public class StubIHttpClient : IHttpClient
+    {
+        private readonly StubContainer<StubIHttpClient> _stubs = new StubContainer<StubIHttpClient>();
+
+        string global::Sannel.House.ServerSDK.IHttpClient.GetCookieValue(global::System.Uri uri, string cookieName)
+        {
+            return _stubs.GetMethodStub<GetCookieValue_Uri_String_Delegate>("GetCookieValue").Invoke(uri, cookieName);
+        }
+
+        public delegate string GetCookieValue_Uri_String_Delegate(global::System.Uri uri, string cookieName);
+
+        public StubIHttpClient GetCookieValue(GetCookieValue_Uri_String_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+
+        global::System.Threading.Tasks.Task<global::Sannel.House.ServerSDK.HttpClientResult> global::Sannel.House.ServerSDK.IHttpClient.GetAsync(global::System.Uri requestUri)
+        {
+            return _stubs.GetMethodStub<GetAsync_Uri_Delegate>("GetAsync").Invoke(requestUri);
+        }
+
+        public delegate global::System.Threading.Tasks.Task<global::Sannel.House.ServerSDK.HttpClientResult> GetAsync_Uri_Delegate(global::System.Uri requestUri);
+
+        public StubIHttpClient GetAsync(GetAsync_Uri_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+
+        global::System.Threading.Tasks.Task<global::Sannel.House.ServerSDK.HttpClientResult> global::Sannel.House.ServerSDK.IHttpClient.PostAsync(global::System.Uri requestUri, global::System.Collections.Generic.IDictionary<string, string> data)
+        {
+            return _stubs.GetMethodStub<PostAsync_Uri_IDictionaryOfStringString_Delegate>("PostAsync").Invoke(requestUri, data);
+        }
+
+        public delegate global::System.Threading.Tasks.Task<global::Sannel.House.ServerSDK.HttpClientResult> PostAsync_Uri_IDictionaryOfStringString_Delegate(global::System.Uri requestUri, global::System.Collections.Generic.IDictionary<string, string> data);
+
+        public StubIHttpClient PostAsync(PostAsync_Uri_IDictionaryOfStringString_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+
+        void global::System.IDisposable.Dispose()
+        {
+            _stubs.GetMethodStub<IDisposable_Dispose_Delegate>("Dispose").Invoke();
+        }
+
+        public delegate void IDisposable_Dispose_Delegate();
+
+        public StubIHttpClient Dispose(IDisposable_Dispose_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+    }
+}
+
+namespace Sannel.House.ServerSDK
+{
+    [CompilerGenerated]
+    public class StubIServerContext : IServerContext
+    {
+        private readonly StubContainer<StubIServerContext> _stubs = new StubContainer<StubIServerContext>();
+
+        bool global::Sannel.House.ServerSDK.IServerContext.IsAuthenticated
+        {
+            get
+            {
+                return _stubs.GetMethodStub<IsAuthenticated_Get_Delegate>("get_IsAuthenticated").Invoke();
+            }
+        }
+
+        global::System.Threading.Tasks.Task<global::Sannel.House.ServerSDK.LoginResult> global::Sannel.House.ServerSDK.IServerContext.LoginAsync(string username, string password)
+        {
+            return _stubs.GetMethodStub<LoginAsync_String_String_Delegate>("LoginAsync").Invoke(username, password);
+        }
+
+        public delegate global::System.Threading.Tasks.Task<global::Sannel.House.ServerSDK.LoginResult> LoginAsync_String_String_Delegate(string username, string password);
+
+        public StubIServerContext LoginAsync(LoginAsync_String_String_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+
+        public delegate bool IsAuthenticated_Get_Delegate();
+
+        public StubIServerContext IsAuthenticated_Get(IsAuthenticated_Get_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+
+        void global::System.IDisposable.Dispose()
+        {
+            _stubs.GetMethodStub<IDisposable_Dispose_Delegate>("Dispose").Invoke();
+        }
+
+        public delegate void IDisposable_Dispose_Delegate();
+
+        public StubIServerContext Dispose(IDisposable_Dispose_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+    }
+}
+
+namespace Sannel.House.ServerSDK
+{
+    [CompilerGenerated]
+    public class StubIServerSettings : IServerSettings
+    {
+        private readonly StubContainer<StubIServerSettings> _stubs = new StubContainer<StubIServerSettings>();
+
+        global::System.Uri global::Sannel.House.ServerSDK.IServerSettings.ServerUri
+        {
+            get
+            {
+                return _stubs.GetMethodStub<ServerUri_Get_Delegate>("get_ServerUri").Invoke();
+            }
+
+            set
+            {
+                _stubs.GetMethodStub<ServerUri_Set_Delegate>("set_ServerUri").Invoke(value);
+            }
+        }
+
+        public delegate global::System.Uri ServerUri_Get_Delegate();
+
+        public StubIServerSettings ServerUri_Get(ServerUri_Get_Delegate del, int count = Times.Forever, bool overwrite = false)
+        {
+            _stubs.SetMethodStub(del, count, overwrite);
+            return this;
+        }
+
+        public delegate void ServerUri_Set_Delegate(global::System.Uri value);
+
+        public StubIServerSettings ServerUri_Set(ServerUri_Set_Delegate del, int count = Times.Forever, bool overwrite = false)
         {
             _stubs.SetMethodStub(del, count, overwrite);
             return this;
